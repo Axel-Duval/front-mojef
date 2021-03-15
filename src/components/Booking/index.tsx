@@ -4,7 +4,7 @@ import "./style.css";
 
 function Booking() {
   return (
-    <div className="-booking-container">
+    <div className="uk-flex uk-flex-column -fullheight">
       <div className="uk-flex uk-flex-between uk-flex-middle">
         <h1 className="uk-heading-bullet">
           Game Tavern
@@ -41,8 +41,8 @@ function Booking() {
         </li>
       </ul>
 
-      <ul className="uk-switcher uk-margin-medium-top -booking-item-container">
-        <li className="-booking-item">
+      <ul className="uk-switcher uk-margin-medium-top -flex-1">
+        <li className="-fullheight">
           <SuiviContactsNotes />
         </li>
         <li>

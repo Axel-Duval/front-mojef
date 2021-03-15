@@ -5,7 +5,7 @@ import "./style.css";
 
 function App() {
   return (
-    <div className="uk-flex" id="app-layout">
+    <div className="uk-flex uk-flex-stretch" id="app-layout">
       <div className="uk-width-1-3 uk-width-1-6@l">
         <Navbar />
       </div>

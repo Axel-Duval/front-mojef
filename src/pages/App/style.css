@@ -1,8 +1,11 @@
 #app-layout{
     height: 100vh;
-    overflow: hidden;
 }
 
-.green {
-    border: solid 1px green;
+.-fullheight{
+    height: 100%;
+}
+
+.-flex-1{
+    flex: 1;
 }

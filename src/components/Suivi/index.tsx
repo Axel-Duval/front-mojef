@@ -5,7 +5,7 @@ import "./stylesheet.css";
 
 function Suivi() {
   return (
-    <div className="uk-margin-medium-right -suivi-container">
+    <div className="uk-margin-medium-right uk-flex uk-flex-column -fullheight">
       <Heading
         title="Suivi des échanges"
         subtitle="Dernière mise a jour il y a 2h"

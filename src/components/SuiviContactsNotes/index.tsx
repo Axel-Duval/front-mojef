@@ -2,19 +2,17 @@ import React from "react";
 import Contacts from "../Contacts";
 import Notes from "../Notes";
 import Suivi from "../Suivi";
-import Timeline from "../Timeline";
 import "./stylesheet.css";
 
 function SuiviContactsNotes() {
   return (
-    <div className="uk-flex -scn-container">
-      <div className="uk-width-1-2">
+    <div className="uk-flex -fullheight">
+      <div className="-flex-1">
         <Suivi />
       </div>
-      <hr className="uk-divider-vertical"></hr>
-      <div className="uk-width-expand">
-        <Contacts />
-        <div className="uk-margin-medium-top">
+      <div className="-flex-1">
+        <div className="uk-flex uk-flex-column -fullheight">
+          <Contacts />
           <Notes />
         </div>
       </div>
