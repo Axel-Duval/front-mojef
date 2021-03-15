@@ -1,0 +1,8 @@
+.-scn-container{
+    height: 100%;
+}
+
+.-scn-container > *{
+    height: 100%;
+    overflow: hidden;
+}

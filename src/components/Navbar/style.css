@@ -1,0 +1,27 @@
+.uk-nav-default>li>a.uk-active {
+    color: #333;
+    position: relative;
+    margin-left: 5px;
+}
+.uk-nav-default>li>a.uk-active::before{
+    content: "";
+    width: 3px;
+    height: 70%;
+    background-color: #39f;
+    position: absolute;
+    top: 15%;
+    left: -5px;
+}
+.-nav-scroll-container{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.-nav-scroll-container > ul {
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.-nav-paddin-right{
+    padding-right: 5rem;
+}
