@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import "uikit/dist/css/uikit-core.min.css";
+import "uikit/dist/css/uikit.min.css";
+
 import App from "./pages/App/index";
 import Login from "./pages/Login";
 import {

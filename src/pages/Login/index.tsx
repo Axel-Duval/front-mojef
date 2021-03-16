@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { IUser } from "../../interfaces";
+import "./style.css";
+import svg from "../../assets/pictures/collaboration.svg";
+import UIkit from "uikit";
 
 interface LoginPropertiesTypes {
   loginUser: Function;
@@ -18,48 +21,105 @@ function Login({ loginUser, user }: LoginPropertiesTypes) {
     headers: { "Access-Control-Allow-Origin": "*", crossorigin: true },
   });
 
-  //id: ecc61cc7-27ae-4a35-b752-11608b8065ac
+  const validate = () => {
+    return username.length > 2 && password.length > 2;
+  };
 
   const login = () => {
-    instance
-      .post("/auth/login", {
-        username,
-        password,
-      })
-      .then((res) => {
-        const token = res.data.access_token;
-        loginUser({
+    if (validate()) {
+      instance
+        .post("/auth/login", {
           username,
           password,
-          token,
+        })
+        .then((res) => {
+          const token = res.data.access_token;
+          loginUser({
+            username,
+            password,
+            token,
+          });
+        })
+        .catch((err) => {
+          UIkit.notification({
+            message:
+              "<div class='uk-text-center'><span uk-icon='icon: ban' class='uk-margin-small-right'></span><span class='uk-text-middle'> Authentification invalide </span> </div>",
+            status: "danger",
+            pos: "top-center",
+          });
+          setPassword("");
         });
-      })
-      .catch((err) => {
-        console.log("unauthenticated");
+    } else {
+      UIkit.notification({
+        message:
+          "<div class='uk-text-center'><span uk-icon='icon: warning' class='uk-margin-small-right'></span><span class='uk-text-middle'> Champs invalides </span> </div>",
+        status: "warning",
+        pos: "top-center",
       });
+    }
   };
   if (user.username) {
     return <Redirect to="/app" />;
   } else {
     return (
-      <>
-        <h1>Login page</h1>
-        <input
-          type="text"
-          placeholder="username"
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <button onClick={login}>Login</button>
-      </>
+      <div id="login-layout">
+        <div className="uk-width-5-6 uk-width-2-3@s uk-width-1-3@m uk-width-1-4@l uk-padding">
+          <h1 className="uk-text-center uk-text-bold uk-padding-small@m">
+            Connexion
+          </h1>
+          <div className="uk-margin">
+            <label className="uk-form-label" htmlFor="input-username">
+              Identifiant
+            </label>
+            <div className="uk-form-controls">
+              <div className="uk-inline uk-width-expand">
+                <span className="uk-form-icon" uk-icon="icon: user" />
+                <input
+                  className="uk-input"
+                  id="input-username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="uk-margin">
+            <label className="uk-form-label" htmlFor="input-password">
+              Mot de passe
+            </label>
+            <div className="uk-form-controls">
+              <div className="uk-inline uk-width-expand">
+                <span className="uk-form-icon" uk-icon="icon: lock" />
+                <input
+                  className="uk-input"
+                  id="input-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={login}
+            className="uk-button uk-button-primary uk-align-center"
+          >
+            Valider
+          </button>
+        </div>
+        <div className="uk-width-1-3@l uk-visible@l">
+          <img
+            src={svg}
+            alt="Collaboration Illustration"
+            className="uk-padding-large"
+          />
+        </div>
+      </div>
     );
   }
 }
