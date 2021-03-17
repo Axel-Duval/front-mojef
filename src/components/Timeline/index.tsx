@@ -48,7 +48,7 @@ function Timeline({ exchanges }: ITimelineProps) {
     UIkit.modal.prompt("Nouvel échange", "").then((body) => {
       if (body && body.length > 0) {
         add({
-          time: new Date().toLocaleDateString(),
+          time: new Date().toLocaleString(),
           body,
         });
       }
