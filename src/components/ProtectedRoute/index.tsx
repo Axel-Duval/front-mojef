@@ -1,29 +1,31 @@
 import React from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
-import { IUser } from "../../interfaces";
+import { UserContext } from "../../context/user-context";
 
 interface ProtectedRouteProperties extends RouteProps<any, any> {
   component: React.FC;
-  user: IUser;
 }
 
 export const ProtectedRoute = ({
   component: Component,
-  user,
   ...rest
 }: ProtectedRouteProperties) => {
   return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (user.username) {
-          return <Component />;
-        } else {
-          return (
-            <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-          );
-        }
-      }}
-    />
+    <UserContext.Consumer>
+      { ctx => (
+          <Route
+            {...rest}
+            render={(props) => {
+              if (ctx.loggedIn) {
+                return <Component />;
+              } else {
+                return (
+                  <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+                );
+              }
+            }}
+          />
+      )}
+    </UserContext.Consumer>
   );
 };

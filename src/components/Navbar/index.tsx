@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import img from "../../assets/pictures/logo.png";
+import { UserContext } from "../../context/user-context";
 import "./style.css";
 
 function Navbar() {
@@ -85,10 +86,17 @@ function Navbar() {
         </li>
 
         <li>
-          <NavLink exact activeClassName="uk-active" to="/roufr">
-            <span className="uk-margin-small-right" uk-icon="icon: sign-out" />
-            Déconnexion
-          </NavLink>
+          <UserContext.Consumer>
+            {(ctx) => (
+              <a onClick={() => ctx.logout()}>
+                <span
+                  className="uk-margin-small-right"
+                  uk-icon="icon: sign-out"
+                />
+                Déconnexion
+              </a>
+            )}
+          </UserContext.Consumer>
         </li>
       </ul>
     </div>
