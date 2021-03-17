@@ -1,34 +1,67 @@
 .-timeline {
-    flex:1;
-    position: relative;
+  flex: 1;
+  position: relative;
 }
 
-.-timeline-container{
-    height: 100%;
-    width:100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: auto;
-    list-style: none;
+.-timeline-card {
+  width: fit-content;
+  border-radius: 0.7rem;
 }
 
-.-timeline-item{
-    position: relative;
-    padding-bottom: 4rem;
-    margin-right: 1rem;
-}
-.-timeline-item:first-of-type{
-    margin-top: 3rem;
-}
-.-timeline-item > p.uk-label{
-    position: absolute;
-    top: -2rem;
-    left: -2rem;
-    z-index: 2;
+.-timeline-container {
+  height: 90%;
+  width: 100%;
+  position: absolute;
+  top: 5%;
+  left: 0;
+  overflow: auto;
+  list-style: none;
 }
 
-.-timeline-container > li.uk-placeholder{
-    margin-top: 2rem;
-    cursor: pointer;
+.-timeline-item {
+  position: relative;
+  padding-bottom: 4rem;
+  margin-right: 1rem;
+}
+.-timeline-item:first-of-type {
+  margin-top: 3rem;
+}
+.-timeline-item > p.uk-label {
+  position: absolute;
+  top: -2rem;
+  left: -2rem;
+  z-index: 2;
+}
+
+.-timeline-item::before {
+  position: absolute;
+  content: "";
+  background-color: #dddddd;
+  width: 3px;
+  left: -15px;
+  height: 120%;
+  top: -40%;
+}
+
+.-timeline-item:last-child::after {
+  content: "";
+  position: absolute;
+  bottom: 20%;
+  left: -21px;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #dddddd;
+}
+
+.-timeline-hover-expand {
+  transition: opacity 0.5s ease-out;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.-timeline-card:hover .-timeline-hover-expand {
+  opacity: 1;
+  width: auto;
 }

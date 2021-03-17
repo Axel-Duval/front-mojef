@@ -1,11 +1,18 @@
-#app-layout{
-    height: 100vh;
+#app-layout {
+  height: 100vh;
 }
 
-.-fullheight{
-    height: 100%;
+.-fullheight {
+  height: 100%;
 }
 
-.-flex-1{
-    flex: 1;
+.-flex-1 {
+  flex: 1;
+}
+
+.-noselect {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  -moz-user-select: none;
+  user-select: none; /* Standard syntax */
 }

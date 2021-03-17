@@ -3,30 +3,20 @@ import React from "react";
 interface IHeadingProps {
   title: string;
   subtitle: string;
-  icon: string;
-  tooltip?: string;
-  cb?: Function;
 }
 
-function Heading({ title, subtitle, icon, tooltip, cb }: IHeadingProps) {
+const Heading: React.FC<IHeadingProps> = ({ title, subtitle, children }) => {
   return (
     <>
-      <p className="uk-text-lead uk-margin-remove-bottom">{title}</p>
-      <div className="uk-flex uk-flex-between">
-        <p className="uk-text-meta uk-margin-remove-top uk-flex-bottom">
-          {subtitle}
-        </p>
-        <span
-          className="uk-icon-link uk-margin-small-right"
-          uk-icon={"icon: " + icon + "; ratio: 0.8"}
-          uk-tooltip={"title: " + (tooltip || " ") + "; delay: 100;"}
-          onClick={() => {
-            cb && cb();
-          }}
-        />
+      <div className="uk-flex uk-flex-between uk-flex-middle">
+        <div>
+          <p className="uk-text-lead uk-margin-remove-bottom">{title}</p>
+          <p className="uk-text-meta uk-margin-remove-top">{subtitle}</p>
+        </div>
+        <div>{children}</div>
       </div>
     </>
   );
-}
+};
 
 export default Heading;

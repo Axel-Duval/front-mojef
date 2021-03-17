@@ -1,13 +1,17 @@
-.-contact-container{
-    height: 100%;
-    width:100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: auto;
+.-contact-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
 }
 
-.-contacts{
-    position: relative;
-    height: 100%;
+.-contacts {
+  position: relative;
+  height: 100%;
+}
+
+.-contact-container table tbody tr:nth-child(2n + 1) {
+  background-color: white;
 }

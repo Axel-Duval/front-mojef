@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import Heading from "../Heading";
 import "./style.css";
 
-function Notes() {
+const Notes = () => {
+  const [notes, setNotes] = useState("");
+
+  const save = () => {
+    console.log("saved");
+  };
+
   return (
     <div className="uk-margin-medium-left uk-margin-medium-top">
-      <Heading
-        title="Notes"
-        subtitle="Synchronisation automatique"
-        icon="info"
-        tooltip="Vos notes sont sauvegardées automatiquement"
-      />
+      <Heading title="Notes" subtitle="Synchronisation automatique">
+        <span
+          className="uk-icon-link"
+          uk-icon="cloud-upload"
+          uk-tooltip="Auto-sync"
+        />
+      </Heading>
       <textarea
         className="uk-textarea -notes-texarea"
         placeholder="Textarea"
         rows={6}
-      ></textarea>
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+        onBlur={save}
+      />
     </div>
   );
-}
+};
 
 export default Notes;

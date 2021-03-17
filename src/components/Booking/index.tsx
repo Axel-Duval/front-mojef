@@ -1,5 +1,9 @@
 import React from "react";
-import SuiviContactsNotes from "../SuiviContactsNotes";
+import BookingCommand from "../BookingCommand";
+import BookingGames from "../BookingGames";
+import Contacts from "../Contacts";
+import Notes from "../Notes";
+import Timeline from "../Timeline";
 import "./style.css";
 
 function Booking() {
@@ -43,13 +47,31 @@ function Booking() {
 
       <ul className="uk-switcher uk-margin-medium-top -flex-1">
         <li className="-fullheight">
-          <SuiviContactsNotes />
+          <div className="uk-flex -fullheight">
+            <div className="-flex-1">
+              <Timeline />
+            </div>
+            <hr className="uk-divider-vertical -fullheight" />
+            <div className="-flex-1">
+              <div className="uk-flex uk-flex-column -fullheight">
+                <Contacts />
+                <Notes />
+              </div>
+            </div>
+          </div>
         </li>
-        <li>
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-          nisi ut aliquip ex ea commodo consequat.
+        <li className="-fullheight">
+          <div className="uk-flex -fullheight">
+            <div className="-flex-1">
+              <BookingCommand />
+            </div>
+            <hr className="uk-divider-vertical -fullheight" />
+            <div className="-flex-1">
+              <BookingGames />
+            </div>
+          </div>
         </li>
-        <li>
+        <li className="-fullheight">
           Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
           dolore eu fugiat nulla pariatur, sed do eiusmod.
         </li>
