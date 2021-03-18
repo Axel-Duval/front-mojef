@@ -47,11 +47,11 @@ function Booking() {
 
       <ul className="uk-switcher uk-margin-medium-top -flex-1">
         <li className="-fullheight">
-          <div className="uk-flex -fullheight">
+          <div className="uk-flex -fullheight -booking-responsive">
             <div className="-flex-1">
               <Timeline />
             </div>
-            <hr className="uk-divider-vertical -fullheight" />
+            <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
             <div className="-flex-1">
               <div className="uk-flex uk-flex-column -fullheight">
                 <Contacts />

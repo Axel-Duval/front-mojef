@@ -83,7 +83,7 @@ const Timeline = () => {
   };
 
   return (
-    <div className="uk-margin-medium-right uk-flex uk-flex-column -fullheight -noselect">
+    <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading
         title="Suivi des échanges"
         subtitle="Dernière mise a jour il y a 2h"

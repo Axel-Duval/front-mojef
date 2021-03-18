@@ -8,7 +8,7 @@ const Contacts = () => {
   ]);
 
   return (
-    <div className="uk-margin-medium-left -flex-1">
+    <div className="-flex-1">
       <div className="uk-flex uk-flex-column -fullheight">
         <Heading
           title="Contacts"

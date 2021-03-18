@@ -10,7 +10,7 @@ const Notes = () => {
   };
 
   return (
-    <div className="uk-margin-medium-left uk-margin-medium-top">
+    <div className="uk-margin-medium-top">
       <Heading title="Notes" subtitle="Synchronisation automatique">
         <span
           className="uk-icon-link"
@@ -21,7 +21,7 @@ const Notes = () => {
       <textarea
         className="uk-textarea -notes-texarea"
         placeholder="Aa"
-        rows={6}
+        rows={4}
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         onBlur={save}

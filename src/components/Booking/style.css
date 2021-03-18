@@ -1,21 +1,48 @@
-.uk-tab>*>p {
-    display: block;
-    text-align: center;
-    padding: 5px 10px;
-    color: #999;
-    border-bottom: 1px solid transparent;
-    font-size: .875rem;
-    text-transform: uppercase;
-    transition: color .1s ease-in-out;
-    margin-bottom: 0;
+.uk-tab > * > p {
+  display: block;
+  text-align: center;
+  padding: 5px 10px;
+  color: #999;
+  border-bottom: 1px solid transparent;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  transition: color 0.1s ease-in-out;
+  margin-bottom: 0;
 }
 
-.uk-tab>*>p:hover{
-    color: #333;
-    cursor: pointer;
+.uk-tab > * > p:hover {
+  color: #333;
+  cursor: pointer;
 }
 
-.uk-tab>.uk-active>p {
-    color: #333;
-    border-color: #1e87f0;
+.uk-tab > .uk-active > p {
+  color: #333;
+  border-color: #1e87f0;
+}
+
+@media screen and (max-height: 700px) {
+  .-booking-responsive {
+    flex-direction: column;
+  }
+
+  .-timeline {
+    min-height: 200px;
+  }
+
+  .-contacts {
+    min-height: 150px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .-booking-responsive {
+    flex-direction: column;
+  }
+
+  .-timeline {
+    min-height: 200px;
+  }
+
+  .-contacts {
+    min-height: 150px;
+  }
 }

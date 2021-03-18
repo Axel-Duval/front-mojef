@@ -1,5 +1,16 @@
+@media screen and (min-height: 700px) {
+  #app-layout {
+    height: 100vh;
+  }
+}
+@media screen and (min-width: 1000px) {
+  #app-layout {
+    height: 100vh;
+  }
+}
+
 #app-layout {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .-fullheight {
@@ -36,4 +47,8 @@
 
 .red {
   border: solid 1px red;
+}
+
+.uk-heading-small {
+  font-size: 2rem;
 }
