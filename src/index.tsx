@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "uikit/dist/css/uikit-core.min.css";
 import "uikit/dist/css/uikit.min.css";
@@ -17,54 +17,61 @@ import {
   UserContextValue,
   UserCredentials,
 } from "./context/user-context";
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import CompaniesPage from "./pages/Companies";
 import CompanyPage from "./pages/Company";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Global() {
-  const axiosInstance = axios.create({
+function prepareLoginState(): UserCredentials {
+  const access_token = localStorage.getItem("access_token");
+  return access_token ? { access_token } : null;
+}
+
+function prepareAxiosInstance(creds: UserCredentials): AxiosInstance {
+  return axios.create({
     baseURL: "http://localhost:3001",
     timeout: 1000,
-    headers: { "Access-Control-Allow-Origin": "*", crossorigin: true },
-  });
-
-  const access_token = localStorage.getItem("access_token");
-  if (access_token) {
-    axiosInstance.defaults.headers["Authorization"] = `Bearer ${access_token}`;
-  }
-  const [userCredentials, setUserCredentials] = useState<UserCredentials>(
-    access_token ? { access_token } : null
-  );
-  const [userContext, setUserContext] = useState<UserContextValue>({
-    loggedIn: !!access_token,
-    login: async (username, password) => {
-      const { data } = await axiosInstance.post("auth/login", {
-        username,
-        password,
-      });
-      axiosInstance.defaults.headers[
-        "Authorization"
-      ] = `Bearer ${data.access_token}`;
-      setUserCredentials(data);
-    },
-    logout: () => {
-      delete axiosInstance.defaults.headers["Authorization"];
-      setUserCredentials(null);
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      crossorigin: true,
+      Authorization: creds ? `Bearer ${creds.access_token}` : undefined,
     },
   });
+}
 
-  useEffect(() => {
-    if (!userCredentials) {
-      localStorage.removeItem("access_token");
-    } else {
-      localStorage.setItem("access_token", userCredentials.access_token);
-    }
-    setUserContext((state) => ({
-      ...state,
-      loggedIn: userCredentials !== null,
-    }));
-  }, [userCredentials]);
+function Global() {
+  const [userContext, setUserContext] = useState<UserContextValue>(() => {
+    const userCredentials = prepareLoginState();
+    const axiosInstance = prepareAxiosInstance(userCredentials);
+    return {
+      loggedIn: !!userCredentials,
+      login: async (username, password) => {
+        const { data } = await userContext.axios.post("auth/login", {
+          username,
+          password,
+        });
+        localStorage.setItem("access_token", data.access_token);
+        setUserContext((currentState) => {
+          currentState.axios.defaults.headers["Authorization"] =
+            data.access_token;
+          return { ...currentState, _credentials: data, loggedIn: true };
+        });
+      },
+      logout: () => {
+        localStorage.removeItem("access_token");
+        setUserContext((currentState) => {
+          delete currentState.axios.defaults.headers["Authorization"];
+          return {
+            ...currentState,
+            _credentials: null,
+            loggedIn: false,
+          };
+        });
+      },
+      _credentials: userCredentials,
+      axios: axiosInstance,
+    };
+  });
 
   return (
     <UserContext.Provider value={userContext}>

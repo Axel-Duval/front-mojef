@@ -1,3 +1,4 @@
+import axios, { AxiosInstance } from "axios";
 import React from "react";
 
 interface UserCredentialsData {
@@ -8,13 +9,17 @@ interface UserCredentialsData {
 export type UserCredentials = UserCredentialsData | null;
 
 export interface UserContextValue {
+  _credentials: UserCredentials;
+  axios: AxiosInstance;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   loggedIn: boolean;
 }
 
 export const UserContext = React.createContext<UserContextValue>({
-    loggedIn: false,
-    login: () => Promise.reject(),
-    logout: () => {},
+  _credentials: null,
+  axios: axios.create(),
+  loggedIn: false,
+  login: () => Promise.reject(),
+  logout: () => {},
 });

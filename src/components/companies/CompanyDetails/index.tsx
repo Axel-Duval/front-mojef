@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Redirect } from "react-router";
+import { useAxios } from "../../../hooks/useAxios";
 import { Company } from "../companies.types";
 import CompanyRow from "../CompanyRow";
 
@@ -14,11 +14,7 @@ const CompanyDetails = (props: { id: string }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [redirect, setRedirect] = useState<boolean>(false);
 
-  const instance = axios.create({
-    baseURL: "http://localhost:3001/",
-    timeout: 1000,
-    headers: { "Access-Control-Allow-Origin": "*", crossorigin: true },
-  });
+  const instance = useAxios();
 
   useEffect(() => {
     instance
@@ -30,7 +26,7 @@ const CompanyDetails = (props: { id: string }) => {
       .catch((err) => {
         setRedirect(true);
       });
-  }, []);
+  }, [instance, props.id]);
 
   if (redirect) {
     return <Redirect to="/companies" />;

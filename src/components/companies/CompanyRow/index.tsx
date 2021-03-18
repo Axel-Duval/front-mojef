@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Button } from "reactstrap";
 import { Company } from "../companies.types";
 
 const CompanyRow = (props: { company: Company }) => {

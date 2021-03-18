@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
+import { useAxios } from "../../../hooks/useAxios";
 import { Company } from "../companies.types";
 import CompanyModalForm from "../CompanyModalForm";
 import CompanyRow from "../CompanyRow";
@@ -10,11 +10,7 @@ const CompaniesList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [addModal, setAddModal] = useState<boolean>(false);
 
-  const instance = axios.create({
-    baseURL: "http://localhost:3001/",
-    timeout: 1000,
-    headers: { "Access-Control-Allow-Origin": "*", crossorigin: true },
-  });
+  const instance = useAxios();
 
   useEffect(() => {
     instance
@@ -27,7 +23,7 @@ const CompaniesList = () => {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [instance]);
 
   const switchModalState = () => {
     setAddModal(!addModal);
