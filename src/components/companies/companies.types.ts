@@ -1,4 +1,4 @@
-export interface Publisher {
+export interface Company {
   id: string;
   name: string;
   address: string;

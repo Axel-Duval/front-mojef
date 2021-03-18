@@ -38,9 +38,9 @@ function Navbar() {
         <li className="uk-nav-header uk-margin-top">Ressources</li>
         <li className="uk-nav-divider"></li>
         <li>
-          <NavLink exact activeClassName="uk-active" to="/publishers">
+          <NavLink exact activeClassName="uk-active" to="/companies">
             <span className="uk-margin-small-right" uk-icon="icon: users" />
-            Editeurs
+            Sociétés
           </NavLink>
         </li>
         <li>

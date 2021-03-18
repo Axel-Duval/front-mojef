@@ -1,4 +1,4 @@
-const PublisherModalForm = (props: {
+const CompanyModalForm = (props: {
   showModal: boolean;
   setShowModal: () => void;
 }) => {
@@ -8,4 +8,4 @@ const PublisherModalForm = (props: {
     </div>
   );
 };
-export default PublisherModalForm;
+export default CompanyModalForm;

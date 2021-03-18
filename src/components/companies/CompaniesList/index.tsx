@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Publisher } from "../publisher.types";
-import PublisherModalForm from "../PublisherModalForm";
-import PublisherRow from "../PublisherRow";
+import { Company } from "../companies.types";
+import CompanyModalForm from "../CompanyModalForm";
+import CompanyRow from "../CompanyRow";
 
-const PublishersList = () => {
-  const [publishers, setPublishers] = useState<Publisher[]>([]);
+const CompaniesList = () => {
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [addModal, setAddModal] = useState<boolean>(false);
 
@@ -17,11 +17,11 @@ const PublishersList = () => {
 
   useEffect(() => {
     instance
-      .get("/api/company?publisher=true")
+      .get("/api/company")
       .then((res) => {
-        setPublishers(res.data);
+        setCompanies(res.data);
         setLoading(false);
-        console.log(publishers);
+        console.log(companies);
       })
       .catch((err) => {
         console.error(err);
@@ -36,10 +36,10 @@ const PublishersList = () => {
   return (
     <div>
       <button onClick={switchModalState}>Ajouter un éditeur</button>
-      <PublisherModalForm
+      <CompanyModalForm
         showModal={addModal}
         setShowModal={switchModalState}
-      ></PublisherModalForm>
+      ></CompanyModalForm>
       {loading ? (
         <div>...loading </div>
       ) : (
@@ -50,8 +50,8 @@ const PublishersList = () => {
             </tr>
           </thead>
           <tbody>
-            {publishers.map((publisher) => (
-              <PublisherRow publisher={publisher} />
+            {companies.map((publisher) => (
+              <CompanyRow publisher={publisher} />
             ))}
           </tbody>
         </table>
@@ -60,4 +60,4 @@ const PublishersList = () => {
   );
 };
 
-export default PublishersList;
+export default CompaniesList;

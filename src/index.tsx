@@ -18,7 +18,7 @@ import {
   UserCredentials,
 } from "./context/user-context";
 import axios from "axios";
-import Publishers from "./pages/Publishers";
+import Companies from "./pages/Companies";
 
 function Global() {
   const axiosInstance = axios.create({
@@ -83,7 +83,7 @@ function Global() {
             {userContext.loggedIn ? <Redirect to="/app" /> : <Login />}
           </Route>
           <ProtectedRoute path="/app" component={App} />
-          <ProtectedRoute path="/publishers" component={Publishers} />
+          <ProtectedRoute path="/companies" component={Companies} />
           <Redirect from="*" to="/" />
         </Switch>
       </Router>
