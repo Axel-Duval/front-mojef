@@ -47,7 +47,13 @@ const Timeline = () => {
     UIkit.modal.prompt("Nouvel échange", "").then((body) => {
       if (body && body.length > 0) {
         add({
-          time: new Date().toLocaleString(),
+          time: new Date().toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           body,
         });
       }

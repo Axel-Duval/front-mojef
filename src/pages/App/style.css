@@ -16,3 +16,24 @@
   -moz-user-select: none;
   user-select: none; /* Standard syntax */
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.red {
+  border: solid 1px red;
+}

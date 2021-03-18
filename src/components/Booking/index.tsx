@@ -71,10 +71,7 @@ function Booking() {
             </div>
           </div>
         </li>
-        <li className="-fullheight">
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur, sed do eiusmod.
-        </li>
+        <li className="-fullheight">mozrizeopri</li>
       </ul>
     </div>
   );

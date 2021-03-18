@@ -5,11 +5,11 @@ import "./style.css";
 
 function App() {
   return (
-    <div className="uk-flex uk-flex-stretch" id="app-layout">
-      <div className="uk-width-1-3 uk-width-1-6@l">
+    <div className="uk-flex" id="app-layout">
+      <aside className="">
         <Navbar />
-      </div>
-      <main className="uk-width-2-3 uk-width-5-6@l uk-background-muted uk-padding-large">
+      </aside>
+      <main className="uk-flex-1 uk-background-muted uk-padding-large">
         <Booking />
       </main>
     </div>

@@ -10,10 +10,10 @@ function Navbar() {
       <img
         src={img}
         alt="Montpellier Jeu Festival Logo"
-        className="uk-padding"
+        className="-nav-icon"
       />
 
-      <ul className="uk-nav uk-nav-default -nav-paddin-right">
+      <ul className="uk-nav uk-nav-default -nav-padding">
         <li className="uk-nav-header uk-margin-top">Organisation</li>
         <li className="uk-nav-divider"></li>
         <li>

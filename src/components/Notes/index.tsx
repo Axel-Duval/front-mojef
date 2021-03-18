@@ -15,12 +15,12 @@ const Notes = () => {
         <span
           className="uk-icon-link"
           uk-icon="cloud-upload"
-          uk-tooltip="Auto-sync"
+          uk-tooltip="auto-sync"
         />
       </Heading>
       <textarea
         className="uk-textarea -notes-texarea"
-        placeholder="Textarea"
+        placeholder="Aa"
         rows={6}
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
