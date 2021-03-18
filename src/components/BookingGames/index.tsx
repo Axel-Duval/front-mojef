@@ -4,7 +4,7 @@ import "./style.css";
 
 const BookingGames = () => {
   return (
-    <div className="uk-margin-medium-left uk-flex uk-flex-column -fullheight -noselect">
+    <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading
         title="Jeux présentés"
         subtitle="Dernière mise a jour il y a 10min"
@@ -16,8 +16,8 @@ const BookingGames = () => {
           uk-tooltip="Vous pouvez ajouter/modifier ou supprimer des jeux"
         />
       </Heading>
-      <div className="-booking-command">
-        <ul className="-booking-command-container">
+      <div className="-booking-games">
+        <ul className="-booking-games-container">
           <li>aaa</li>
         </ul>
       </div>

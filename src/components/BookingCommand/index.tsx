@@ -6,7 +6,7 @@ import selection from "../../assets/pictures/selection.svg";
 
 const Bookingcommand = () => {
   return (
-    <div className="uk-margin-medium-right uk-flex uk-flex-column -fullheight -noselect">
+    <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading title="Récapitulatif" subtitle="Dernière mise a jour il y a 2h">
         <span className="uk-icon-link uk-margin-small-right" uk-icon="plus" />
         <span
@@ -106,11 +106,10 @@ const Bookingcommand = () => {
       </div>
       <div className="uk-flex uk-flex-between">
         <label>
-          <input className="uk-checkbox" type="checkbox" checked /> Placé sur le
-          plan
+          <input className="uk-checkbox" type="checkbox" /> Placé sur le plan
         </label>
         <label>
-          <input className="uk-checkbox" type="checkbox" checked /> Sera présent
+          <input className="uk-checkbox" type="checkbox" /> Sera présent
         </label>
         <label>
           <input className="uk-checkbox" type="checkbox" /> Besoin bénévoles

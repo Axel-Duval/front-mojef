@@ -32,6 +32,18 @@
   .-contacts {
     min-height: 150px;
   }
+
+  .-booking-command {
+    min-height: 310px;
+  }
+
+  .-booking-games {
+    min-height: 200px;
+  }
+
+  .-booking-responsive hr {
+    display: none;
+  }
 }
 @media screen and (max-width: 1000px) {
   .-booking-responsive {
@@ -44,5 +56,17 @@
 
   .-contacts {
     min-height: 150px;
+  }
+
+  .-booking-command {
+    min-height: 310px;
+  }
+
+  .-booking-games {
+    min-height: 200px;
+  }
+
+  .-booking-responsive hr {
+    display: none;
   }
 }

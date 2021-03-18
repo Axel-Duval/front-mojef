@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import UIkit from "uikit";
+import { ITimelineElement } from "../../types";
 import Heading from "../Heading";
 import "./stylesheet.css";
-
-interface ITimelineElement {
-  time: string;
-  body: string;
-}
 
 const Timeline = () => {
   // eslint-disable-next-line @typescript-eslint/no-array-constructor
@@ -29,8 +25,8 @@ const Timeline = () => {
   const setTimelineFromString = (timeline: string) => {
     const result: Array<Object> = [];
     timeline.split("<#>").forEach((elt) => {
-      const [time, body] = elt.split("<$>");
-      result.push({ time, body });
+      const [datetime, body] = elt.split("<$>");
+      result.push({ datetime, body });
     });
     setTimeline(result);
   };
@@ -38,7 +34,7 @@ const Timeline = () => {
   const format = (): string => {
     return timeline
       .map((item) => {
-        return item.time + "<$>" + item.body;
+        return item.datetime + "<$>" + item.body;
       })
       .join("<#>");
   };
@@ -47,7 +43,7 @@ const Timeline = () => {
     UIkit.modal.prompt("Nouvel échange", "").then((body) => {
       if (body && body.length > 0) {
         add({
-          time: new Date().toLocaleDateString("fr-FR", {
+          datetime: new Date().toLocaleDateString("fr-FR", {
             day: "numeric",
             month: "short",
             year: "numeric",
@@ -66,7 +62,7 @@ const Timeline = () => {
         if (body && body.length > 0) {
           setTimeline(
             timeline.map((item, i) => {
-              return index !== i ? item : { time: item.time, body };
+              return index !== i ? item : { datetime: item.datetime, body };
             })
           );
           save();
@@ -106,7 +102,7 @@ const Timeline = () => {
           {timeline.map((elt, index) => {
             return (
               <li className="-timeline-item" key={index}>
-                <p className="uk-label">{elt.time}</p>
+                <p className="uk-label">{elt.datetime}</p>
                 <div className="uk-card uk-card-default uk-card-body uk-padding-small -timeline-card">
                   <div className="uk-flex uk-flex-middle">
                     <p className=" uk-margin-remove-vertical uk-width-expand">

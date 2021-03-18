@@ -4,7 +4,7 @@ import img from "../../assets/pictures/logo.png";
 import { UserContext } from "../../context/user-context";
 import "./style.css";
 
-function Navbar() {
+const Navbar = () => {
   return (
     <div className="uk-container -nav-scroll-container">
       <img
@@ -88,7 +88,7 @@ function Navbar() {
         <li>
           <UserContext.Consumer>
             {(ctx) => (
-              <a onClick={() => ctx.logout()}>
+              <a onClick={() => ctx.logout()} href=" ">
                 <span
                   className="uk-margin-small-right"
                   uk-icon="icon: sign-out"
@@ -101,6 +101,6 @@ function Navbar() {
       </ul>
     </div>
   );
-}
+};
 
 export default Navbar;

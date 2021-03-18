@@ -12,6 +12,7 @@
   height: 100%;
 }
 
-.-contact-container table tbody tr:nth-child(2n + 1) {
-  background-color: white;
+.uk-offcanvas-bar {
+  background: #fff;
+  color: #333;
 }

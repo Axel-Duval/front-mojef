@@ -1,11 +1,7 @@
 import React from "react";
+import { IHeading } from "../../types";
 
-interface IHeadingProps {
-  title: string;
-  subtitle: string;
-}
-
-const Heading: React.FC<IHeadingProps> = ({ title, subtitle, children }) => {
+const Heading: React.FC<IHeading> = ({ title, subtitle, children }) => {
   return (
     <>
       <div className="uk-flex uk-flex-between uk-flex-middle">

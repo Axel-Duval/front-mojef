@@ -1,9 +1,4 @@
-@media screen and (min-height: 700px) {
-  #app-layout {
-    height: 100vh;
-  }
-}
-@media screen and (min-width: 1000px) {
+@media screen and (min-height: 700px) and (min-width: 1000px) {
   #app-layout {
     height: 100vh;
   }

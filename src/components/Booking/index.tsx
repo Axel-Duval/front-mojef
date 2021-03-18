@@ -1,12 +1,21 @@
 import React from "react";
 import BookingCommand from "../BookingCommand";
 import BookingGames from "../BookingGames";
-import Contacts from "../Contacts";
+import BookingContacts from "../BookingContacts";
 import Notes from "../Notes";
 import Timeline from "../Timeline";
 import "./style.css";
+import { useHistory } from "react-router-dom";
 
-function Booking() {
+const Booking = () => {
+  const history = useHistory();
+  const edit = () => {
+    console.log("edit company name");
+  };
+  const remove = () => {
+    console.log("remove company");
+  };
+
   return (
     <div className="uk-flex uk-flex-column -fullheight">
       <div className="uk-flex uk-flex-between uk-flex-middle">
@@ -18,14 +27,17 @@ function Booking() {
           <span
             className="uk-icon-link uk-margin-small-right"
             uk-icon="reply"
+            onClick={history.goBack}
           />
           <span
             className="uk-icon-link uk-margin-small-right"
             uk-icon="file-edit"
+            onClick={edit}
           />
           <span
             className="uk-icon-link uk-margin-small-right"
             uk-icon="trash"
+            onClick={remove}
           />
         </div>
       </div>
@@ -54,18 +66,18 @@ function Booking() {
             <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
             <div className="-flex-1">
               <div className="uk-flex uk-flex-column -fullheight">
-                <Contacts />
+                <BookingContacts />
                 <Notes />
               </div>
             </div>
           </div>
         </li>
         <li className="-fullheight">
-          <div className="uk-flex -fullheight">
+          <div className="uk-flex -fullheight -booking-responsive">
             <div className="-flex-1">
               <BookingCommand />
             </div>
-            <hr className="uk-divider-vertical -fullheight" />
+            <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
             <div className="-flex-1">
               <BookingGames />
             </div>
@@ -75,6 +87,6 @@ function Booking() {
       </ul>
     </div>
   );
-}
+};
 
 export default Booking;
