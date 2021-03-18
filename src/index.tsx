@@ -27,17 +27,15 @@ function Global() {
     headers: { "Access-Control-Allow-Origin": "*", crossorigin: true },
   });
 
+  const access_token = localStorage.getItem("access_token");
+  if (access_token) {
+    axiosInstance.defaults.headers["Authorization"] = `Bearer ${access_token}`;
+  }
   const [userCredentials, setUserCredentials] = useState<UserCredentials>(
-    () => {
-      const access_token = localStorage.getItem("access_token");
-      if (access_token) {
-        return { access_token };
-      }
-      return null;
-    }
+    access_token ? { access_token } : null
   );
   const [userContext, setUserContext] = useState<UserContextValue>({
-    loggedIn: false,
+    loggedIn: !!access_token,
     login: async (username, password) => {
       const { data } = await axiosInstance.post("auth/login", {
         username,
@@ -53,15 +51,6 @@ function Global() {
       setUserCredentials(null);
     },
   });
-
-  useEffect(() => {
-    const access_token = localStorage.getItem("access_token");
-    if (access_token) {
-      setUserCredentials({
-        access_token,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (!userCredentials) {
