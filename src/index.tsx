@@ -18,6 +18,7 @@ import {
   UserCredentials,
 } from "./context/user-context";
 import axios from "axios";
+import Publishers from "./pages/Publishers";
 
 function Global() {
   const axiosInstance = axios.create({
@@ -65,6 +66,8 @@ function Global() {
   useEffect(() => {
     if (!userCredentials) {
       localStorage.removeItem("access_token");
+    } else {
+      localStorage.setItem("access_token", userCredentials.access_token);
     }
     setUserContext((state) => ({
       ...state,
@@ -80,6 +83,7 @@ function Global() {
             {userContext.loggedIn ? <Redirect to="/app" /> : <Login />}
           </Route>
           <ProtectedRoute path="/app" component={App} />
+          <ProtectedRoute path="/publishers" component={Publishers} />
           <Redirect from="*" to="/" />
         </Switch>
       </Router>
