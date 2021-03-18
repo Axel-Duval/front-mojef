@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
+import { Button } from "reactstrap";
 import { Company } from "../companies.types";
 
-const CompanyRow = (props: { publisher: Company }) => {
+const CompanyRow = (props: { company: Company }) => {
   return (
-    <tr key={props.publisher.id}>
-      <td>{props.publisher.name}</td>
-      <td>{props.publisher.address}</td>
-      <td>{props.publisher.isPublisher ? "Editeur" : "Non Editeur"}</td>
-      <td>{props.publisher.isExhibitor ? "Exposant" : "Non Exposant"}</td>
-      {/* <td><Link to={`/publisher/${props.publisher.id}`}></Link></td> */}
+    <tr key={props.company.id}>
+      <Link to={`/companies/${props.company.id}`}>
+        <td>{props.company.name}</td>
+      </Link>
+      <td>{props.company.address}</td>
+      <td>{props.company.isPublisher ? "Editeur" : "Non Editeur"}</td>
+      <td>{props.company.isExhibitor ? "Exposant" : "Non Exposant"}</td>
     </tr>
   );
 };

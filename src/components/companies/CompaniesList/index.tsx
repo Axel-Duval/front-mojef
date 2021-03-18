@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Button } from "reactstrap";
 import { Company } from "../companies.types";
 import CompanyModalForm from "../CompanyModalForm";
 import CompanyRow from "../CompanyRow";
@@ -21,7 +22,6 @@ const CompaniesList = () => {
       .then((res) => {
         setCompanies(res.data);
         setLoading(false);
-        console.log(companies);
       })
       .catch((err) => {
         console.error(err);
@@ -33,12 +33,25 @@ const CompaniesList = () => {
     setAddModal(!addModal);
   };
 
+  const addCompany = (company: Company) => {
+    instance
+      .post("/api/company", company)
+      .then((res) => {
+        setCompanies([...companies, res.data]);
+      })
+      .catch((err) => console.error(err));
+  };
+
   return (
     <div>
-      <button onClick={switchModalState}>Ajouter un éditeur</button>
+      <Button color="primary" onClick={switchModalState}>
+        Ajouter une société
+      </Button>
       <CompanyModalForm
         showModal={addModal}
         setShowModal={switchModalState}
+        addCompany={addCompany}
+        companies={companies}
       ></CompanyModalForm>
       {loading ? (
         <div>...loading </div>
@@ -46,12 +59,12 @@ const CompaniesList = () => {
         <table>
           <thead>
             <tr>
-              <th>éditeurs</th>
+              <th>Sociétés</th>
             </tr>
           </thead>
           <tbody>
-            {companies.map((publisher) => (
-              <CompanyRow publisher={publisher} />
+            {companies.map((company) => (
+              <CompanyRow company={company} />
             ))}
           </tbody>
         </table>

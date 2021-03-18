@@ -1,8 +1,8 @@
 export interface Company {
-  id: string;
+  id?: string;
   name: string;
   address: string;
-  isPublisher: string;
-  isExhibitor: string;
-  isActive: string;
+  isPublisher: boolean;
+  isExhibitor: boolean;
+  isActive?: boolean;
 }
