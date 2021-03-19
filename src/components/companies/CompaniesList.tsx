@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import { useAxios } from "../../hooks/useAxios";
 import { ICompany } from "../../utils/types";
+import Companies from "../Tables/Companies";
 import CompanyModalForm from "./CompanyModalForm";
-import CompanyRow from "./CompanyRow";
 
 const CompaniesList = () => {
   const [companies, setCompanies] = useState<ICompany[]>([]);
@@ -38,6 +38,16 @@ const CompaniesList = () => {
       .catch((err) => console.error(err));
   };
 
+  const handleSelect = (company: ICompany) => {
+    console.log("Select handled");
+  };
+  const handleEdit = (company: ICompany) => {
+    console.log("edit handled");
+  };
+  const handleDelete = (company: ICompany) => {
+    console.log("delete handled");
+  };
+
   return (
     <div>
       <Button color="primary" onClick={switchModalState}>
@@ -49,22 +59,12 @@ const CompaniesList = () => {
         addCompany={addCompany}
         companies={companies}
       ></CompanyModalForm>
-      {loading ? (
-        <div>...loading </div>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Sociétés</th>
-            </tr>
-          </thead>
-          <tbody>
-            {companies.map((company) => (
-              <CompanyRow company={company} />
-            ))}
-          </tbody>
-        </table>
-      )}
+      <Companies
+        companies={companies}
+        onSelect={handleSelect}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };

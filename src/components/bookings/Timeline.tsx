@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UIkit from "uikit";
-import { ITimelineElement } from "../../types";
+import { ITimelineElement } from "../../utils/types";
 import Heading from "../Heading";
 
 const Timeline = () => {

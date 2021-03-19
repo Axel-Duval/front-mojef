@@ -13,7 +13,7 @@ const Tablecontacts: React.FC<ITableContacts> = ({
           <th className="uk-table-shrink">Primaire</th>
           <th className="uk-text-nowrap">Nom</th>
           <th className="uk-table-expand">Contact</th>
-          <th className="uk-ta">Actions</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>

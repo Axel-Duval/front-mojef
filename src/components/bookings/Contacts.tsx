@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UIkit from "uikit";
-import { IContact } from "../../types";
+import { IContact } from "../../utils/types";
 import Heading from "../Heading";
 import Tablecontacts from "../Tables/Contacts";
 

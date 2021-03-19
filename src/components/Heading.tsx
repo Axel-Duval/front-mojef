@@ -1,5 +1,5 @@
 import React from "react";
-import { IHeading } from "../types";
+import { IHeading } from "../utils/types";
 
 const Heading: React.FC<IHeading> = ({ title, subtitle, children }) => {
   return (

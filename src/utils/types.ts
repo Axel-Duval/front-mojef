@@ -34,6 +34,12 @@ export interface ITimelineElement {
 /**
  * COMPANIES
  */
+export interface ITableCompanies {
+  companies: ICompany[];
+  onEdit: Function;
+  onDelete: Function;
+  onSelect: Function;
+}
 export interface ICompany {
   id?: string;
   name: string;
