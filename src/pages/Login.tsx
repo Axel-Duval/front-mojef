@@ -66,7 +66,8 @@ function Login() {
             setLoggingIn(true);
             ctx
               .login(form.username.get(), form.password.get())
-              .catch(showBadCredentialsNotification);
+              .catch(showBadCredentialsNotification)
+              .finally(() => setLoggingIn(false));
           }}
         >
           <div className="uk-width-5-6 uk-width-2-3@s uk-width-1-3@m uk-width-1-4@l uk-padding">
