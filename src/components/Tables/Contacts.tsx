@@ -1,5 +1,5 @@
 import React from "react";
-import { IContact, ITableContacts } from "../../types";
+import { IContact, ITableContacts } from "../../utils/types";
 const Tablecontacts: React.FC<ITableContacts> = ({
   contacts,
   onEdit,
@@ -16,7 +16,7 @@ const Tablecontacts: React.FC<ITableContacts> = ({
           <th className="uk-ta">Actions</th>
         </tr>
       </thead>
-      <tbody className="-table-contacts-body">
+      <tbody>
         {contacts.map((contact: IContact, index: number) => {
           return (
             <tr key={index}>
