@@ -1,6 +1,0 @@
-.-table-contacts-body tr:nth-child(2n + 1) {
-  background-color: white;
-}
-.-table-contacts-body tr:hover {
-  background-color: rgba(51, 153, 255, 0.05);
-}

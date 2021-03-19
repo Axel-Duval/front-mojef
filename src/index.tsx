@@ -3,7 +3,15 @@ import ReactDOM from "react-dom";
 import "uikit/dist/css/uikit-core.min.css";
 import "uikit/dist/css/uikit.min.css";
 
-import App from "./pages/App/index";
+/**
+ * IMPORT ALL CSS FILES IN ASSETS
+ */
+import "../src/assets/styles/main.css";
+import "../src/assets/styles/navbar.css";
+import "../src/assets/styles/bookings.css";
+import "../src/assets/styles/tables.css";
+
+import App from "./app";
 import Login from "./pages/Login";
 import {
   BrowserRouter as Router,
@@ -11,15 +19,13 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import { ProtectedRoute } from "./components/ProtectedRoute/index";
+import ProtectedRoute from "./components/ProtectedRoute";
 import {
   UserContext,
   UserContextValue,
   UserCredentials,
-} from "./context/user-context";
+} from "./utils/user-context";
 import axios, { AxiosInstance } from "axios";
-import CompaniesPage from "./pages/Companies";
-import CompanyPage from "./pages/Company";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function prepareLoginState(): UserCredentials {
@@ -81,8 +87,6 @@ function Global() {
             {userContext.loggedIn ? <Redirect to="/app" /> : <Login />}
           </Route>
           <ProtectedRoute path="/app" component={App} />
-          <ProtectedRoute path="/companies/:id" component={CompanyPage} />
-          <ProtectedRoute exact path="/companies" component={CompaniesPage} />
           <Redirect from="*" to="/" />
         </Switch>
       </Router>
