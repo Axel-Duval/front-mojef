@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import svg from "../assets/images/collaboration.svg";
 import UIkit from "uikit";
 import { UserContext } from "../utils/user-context";
+import { useForm } from "../hooks/useForm";
 
 /*
  * Here just to make html in Login component a bit shorter
@@ -22,14 +23,30 @@ function FormControl(props: { label: string; icon: string; children: any }) {
   );
 }
 
-function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [formValid, setFormValid] = useState(false);
+function minLength(n: number) {
+  return (v: string) => {
+    if (v.length < n) {
+      return {
+        minLength: true,
+      };
+    }
+    return null;
+  };
+}
 
-  useEffect(() => {
-    setFormValid(username.length > 2 && password.length > 0);
-  }, [username, password]);
+function Login() {
+  const [form, formErrors] = useForm({
+    username: {
+      default: "",
+      validators: [minLength(1)],
+    },
+    password: {
+      default: "",
+      validators: [minLength(1)]
+    },
+  });
+
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const showBadCredentialsNotification = () => {
     UIkit.notification({
@@ -46,8 +63,10 @@ function Login() {
           id="login-layout"
           onSubmit={(e) => {
             e.preventDefault();
-            setFormValid(false); // Disable button
-            ctx.login(username, password).catch(showBadCredentialsNotification);
+            setLoggingIn(true);
+            ctx
+              .login(form.username.get(), form.password.get())
+              .catch(showBadCredentialsNotification);
           }}
         >
           <div className="uk-width-5-6 uk-width-2-3@s uk-width-1-3@m uk-width-1-4@l uk-padding">
@@ -59,9 +78,9 @@ function Login() {
                 className="uk-input"
                 id="input-username"
                 type="text"
-                value={username}
+                value={form.username.get()}
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  form.username.set(e.target.value);
                 }}
               />
             </FormControl>
@@ -70,16 +89,16 @@ function Login() {
                 className="uk-input"
                 id="input-password"
                 type="password"
-                value={password}
+                value={form.password.get()}
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  form.password.set(e.target.value);
                 }}
               />
             </FormControl>
             <button
               type="submit"
               className="uk-button uk-button-primary uk-align-center"
-              disabled={!formValid}
+              disabled={!formErrors.$form.valid || loggingIn}
             >
               Se connecter
             </button>
