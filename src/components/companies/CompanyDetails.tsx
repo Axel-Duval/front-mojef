@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useAxios } from "../../hooks/useAxios";
 import { ICompany } from "../../utils/types";
-import CompanyRow from "./CompanyRow";
 
 const CompanyDetails = (props: { id: string }) => {
   const [company, setCompany] = useState<ICompany>({
@@ -31,19 +30,7 @@ const CompanyDetails = (props: { id: string }) => {
   if (redirect) {
     return <Redirect to="/companies" />;
   } else {
-    return (
-      <div>
-        {loading ? (
-          "loading ..."
-        ) : (
-          <table>
-            <tbody>
-              <CompanyRow company={company}></CompanyRow>
-            </tbody>
-          </table>
-        )}
-      </div>
-    );
+    return <div>{loading ? "loading ..." : <h1>Company details</h1>}</div>;
   }
 };
 
