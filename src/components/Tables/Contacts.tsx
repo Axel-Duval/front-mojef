@@ -1,6 +1,6 @@
 import React from "react";
 import { IContact, ITableContacts } from "../../utils/types";
-const Tablecontacts: React.FC<ITableContacts> = ({
+const ContactsTable: React.FC<ITableContacts> = ({
   contacts,
   onEdit,
   onDelete,
@@ -13,6 +13,7 @@ const Tablecontacts: React.FC<ITableContacts> = ({
           <th className="uk-table-shrink">Primaire</th>
           <th className="uk-text-nowrap">Nom</th>
           <th className="uk-table-expand">Contact</th>
+          <th>Email</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -30,6 +31,7 @@ const Tablecontacts: React.FC<ITableContacts> = ({
               </td>
               <td>{contact.firstname + " " + contact.lastname}</td>
               <td>{contact.phone}</td>
+              <td>{contact.email}</td>
               <td>
                 <span
                   className="uk-icon-link uk-margin-small-right uk-margin-small-left"
@@ -50,4 +52,4 @@ const Tablecontacts: React.FC<ITableContacts> = ({
   );
 };
 
-export default Tablecontacts;
+export default ContactsTable;

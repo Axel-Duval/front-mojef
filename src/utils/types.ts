@@ -8,10 +8,12 @@ export interface ITableContacts {
   onToggle: Function;
 }
 export interface IContact {
+  id?: string;
   firstname: string;
   lastname: string;
+  email: string;
   phone: string;
-  company: string;
+  companyId: string;
   isPrimary: boolean;
 }
 
@@ -36,9 +38,6 @@ export interface ITimelineElement {
  */
 export interface ITableCompanies {
   companies: ICompany[];
-  onEdit: Function;
-  onDelete: Function;
-  onSelect: Function;
 }
 export interface ICompany {
   id?: string;
@@ -47,4 +46,5 @@ export interface ICompany {
   isPublisher: boolean;
   isExhibitor: boolean;
   isActive?: boolean;
+  contacts?: IContact[];
 }

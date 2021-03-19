@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import { useAxios } from "../../hooks/useAxios";
 import { ICompany } from "../../utils/types";
-import Companies from "../Tables/Companies";
+import CompaniesTable from "../Tables/Companies";
 import CompanyModalForm from "./CompanyModalForm";
 
 const CompaniesList = () => {
@@ -38,16 +38,6 @@ const CompaniesList = () => {
       .catch((err) => console.error(err));
   };
 
-  const handleSelect = (company: ICompany) => {
-    console.log("Select handled");
-  };
-  const handleEdit = (company: ICompany) => {
-    console.log("edit handled");
-  };
-  const handleDelete = (company: ICompany) => {
-    console.log("delete handled");
-  };
-
   return (
     <div>
       <Button color="primary" onClick={switchModalState}>
@@ -59,12 +49,7 @@ const CompaniesList = () => {
         addCompany={addCompany}
         companies={companies}
       ></CompanyModalForm>
-      <Companies
-        companies={companies}
-        onSelect={handleSelect}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <CompaniesTable companies={companies} />
     </div>
   );
 };

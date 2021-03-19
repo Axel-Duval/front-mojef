@@ -2,23 +2,27 @@ import React, { useState } from "react";
 import UIkit from "uikit";
 import { IContact } from "../../utils/types";
 import Heading from "../Heading";
-import Tablecontacts from "../Tables/Contacts";
+import ContactsTable from "../Tables/Contacts";
 
 const Contacts = () => {
   //Fakes contacts !
-  const [contacts, setContacts] = useState([
+  const [contacts, setContacts] = useState<IContact[]>([
     {
+      id: "fakeid",
       firstname: "Axel",
       lastname: "Duval",
+      email: "axel.duval@gmail.com",
       phone: "05.65.45.67.89",
-      company: "Zendesk",
+      companyId: "companyId",
       isPrimary: true,
     },
     {
+      id: "fakeid",
       firstname: "Lilian",
       lastname: "Misser",
+      email: "axel.duval@gmail.com",
       phone: "07.67.11.40.53",
-      company: "Polytech",
+      companyId: "companyId",
       isPrimary: false,
     },
   ]);
@@ -60,7 +64,7 @@ const Contacts = () => {
         </Heading>
         <div className="-booking-contacts">
           <div className="-booking-contact-container">
-            <Tablecontacts
+            <ContactsTable
               contacts={contacts}
               onDelete={handleDelete}
               onEdit={handleEdit}

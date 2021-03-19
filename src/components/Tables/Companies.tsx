@@ -1,12 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ICompany, ITableCompanies } from "../../utils/types";
 
-const Companies: React.FC<ITableCompanies> = ({
-  companies,
-  onEdit,
-  onDelete,
-  onSelect,
-}) => {
+const CompaniesTable: React.FC<ITableCompanies> = ({ companies }) => {
   return (
     <table className="uk-table uk-table-justify uk-table-divider uk-table-small -noselect">
       <thead>
@@ -22,22 +18,12 @@ const Companies: React.FC<ITableCompanies> = ({
         {companies.map((company: ICompany, index: number) => {
           return (
             <tr key={index}>
-              <td onClick={() => onSelect(company)}>{company.name}</td>
+              <Link to={`/app/societes/${company.id}`}>
+                <td>{company.name}</td>
+              </Link>
               <td>{company.isActive}</td>
               <td>{company.isPublisher ? "Editeur" : "Non Editeur"}</td>
               <td>{company.isExhibitor ? "Exposant" : "Non Exposant"}</td>
-              <td>
-                <span
-                  className="uk-icon-link uk-margin-small-right uk-margin-small-left"
-                  uk-icon="file-edit"
-                  onClick={() => onEdit(company)}
-                />
-                <span
-                  className="uk-icon-link"
-                  uk-icon="trash"
-                  onClick={() => onDelete(company)}
-                />
-              </td>
             </tr>
           );
         })}
@@ -45,4 +31,4 @@ const Companies: React.FC<ITableCompanies> = ({
     </table>
   );
 };
-export default Companies;
+export default CompaniesTable;
