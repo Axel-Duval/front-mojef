@@ -79,7 +79,12 @@ export function useForm(
       }
       return prev;
     }, {} as Record<string, any>);
+    const formErrors = applyFormValidators();
     allErrors.$form = {};
+    if (Object.keys(formErrors).length > 0) {
+      formErrored = true;
+      allErrors.$form.errors = formErrors;
+    }
     allErrors.$form.valid = !formErrored;
     setErrors(allErrors);
   }, [formData, validators]); // Do not depend on formSpecif !!
