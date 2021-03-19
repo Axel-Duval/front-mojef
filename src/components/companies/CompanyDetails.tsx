@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useAxios } from "../../../hooks/useAxios";
-import { Company } from "../companies.types";
+import { ICompany } from "../../../utils/types";
 import CompanyRow from "../CompanyRow";
 
 const CompanyDetails = (props: { id: string }) => {
-  const [company, setCompany] = useState<Company>({
+  const [company, setCompany] = useState<ICompany>({
     name: "loading",
     address: "loading",
     isPublisher: true,

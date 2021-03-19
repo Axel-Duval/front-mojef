@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { Company } from "../companies.types";
+import { ICompany } from "../../../utils/types";
 
-const CompanyRow = (props: { company: Company }) => {
+const CompanyRow = (props: { company: ICompany }) => {
   return (
     <tr key={props.company.id}>
       <Link to={`/companies/${props.company.id}`}>

@@ -30,3 +30,15 @@ export interface ITimelineElement {
   datetime: string;
   body: string;
 }
+
+/**
+ * COMPANIES
+ */
+export interface ICompany {
+  id?: string;
+  name: string;
+  address: string;
+  isPublisher: boolean;
+  isExhibitor: boolean;
+  isActive?: boolean;
+}

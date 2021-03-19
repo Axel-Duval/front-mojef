@@ -12,13 +12,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-import { Company } from "../companies.types";
+import { ICompany } from "../../../utils/types";
 
 const CompanyModalForm = (props: {
   showModal: boolean;
   setShowModal: () => void;
-  addCompany: (company: Company) => void;
-  companies: Company[];
+  addCompany: (company: ICompany) => void;
+  companies: ICompany[];
 }) => {
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
