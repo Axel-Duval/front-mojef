@@ -20,7 +20,6 @@ const ContactModalForm = (props: {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [error, setError] = useState<string>("");
   const [isPrimary, setIsPrimary] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(true);
@@ -74,81 +73,73 @@ const ContactModalForm = (props: {
           Ajouter un contact
         </ModalHeader>
         <ModalBody>
-          <Alert
-            color="danger"
-            isOpen={visible}
-            toggle={() => setVisible(!visible)}
-            fade={false}
-          >
-            {error}
-          </Alert>
-        </ModalBody>
-        <form>
-          <fieldset className="uk-fieldset">
-            <div className="uk-margin">
-              <label className="uk-form-label" htmlFor="form-stacked-text">
-                Prénom du contact
-              </label>
-              <input
-                className={`uk-input ${
-                  validInput(firstName) ? "" : "uk-form-danger"
-                }`}
-                type="text"
-                placeholder="entrer le prénom..."
-                onChange={(e) => setFirstName(e.currentTarget.value)}
-              />
-            </div>
-            <div className="uk-margin">
-              <label className="uk-form-label" htmlFor="form-stacked-text">
-                Nom du contact
-              </label>
-              <input
-                className={`uk-input ${
-                  validInput(lastName) ? "" : "uk-form-danger"
-                }`}
-                type="text"
-                placeholder="entrer le nom..."
-                onChange={(e) => setLastName(e.currentTarget.value)}
-              />
-            </div>
-            <div className="uk-margin">
-              <label className="uk-form-label" htmlFor="form-stacked-text">
-                Mail du contact
-              </label>
-              <input
-                className={`uk-input ${
-                  validMail(email) ? "" : "uk-form-danger"
-                }`}
-                type="mail"
-                placeholder="entrer le mail..."
-                onChange={(e) => setEmail(e.currentTarget.value)}
-              />
-            </div>
-            <div className="uk-margin">
-              <label className="uk-form-label" htmlFor="form-stacked-text">
-                Numéro de téléphone du contact
-              </label>
-              <input
-                className={`uk-input ${
-                  validPhone(phone) ? "" : "uk-form-danger"
-                }`}
-                type="text"
-                placeholder="entrer le numéro..."
-                onChange={(e) => setPhone(e.currentTarget.value)}
-              />
-            </div>
-            <div className="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-              <label>
+          <form>
+            <fieldset className="uk-fieldset">
+              <div className="uk-margin">
+                <label className="uk-form-label" htmlFor="form-stacked-text">
+                  Prénom du contact
+                </label>
                 <input
-                  className="uk-checkbox"
-                  type="checkbox"
-                  onChange={() => setIsPrimary(!isPrimary)}
+                  className={`uk-input ${
+                    validInput(firstName) ? "" : "uk-form-danger"
+                  }`}
+                  type="text"
+                  placeholder="entrer le prénom..."
+                  onChange={(e) => setFirstName(e.currentTarget.value)}
                 />
-                Contact Principal?
-              </label>
-            </div>
-          </fieldset>
-        </form>
+              </div>
+              <div className="uk-margin">
+                <label className="uk-form-label" htmlFor="form-stacked-text">
+                  Nom du contact
+                </label>
+                <input
+                  className={`uk-input ${
+                    validInput(lastName) ? "" : "uk-form-danger"
+                  }`}
+                  type="text"
+                  placeholder="entrer le nom..."
+                  onChange={(e) => setLastName(e.currentTarget.value)}
+                />
+              </div>
+              <div className="uk-margin">
+                <label className="uk-form-label" htmlFor="form-stacked-text">
+                  Mail du contact
+                </label>
+                <input
+                  className={`uk-input ${
+                    validMail(email) ? "" : "uk-form-danger"
+                  }`}
+                  type="mail"
+                  placeholder="entrer le mail..."
+                  onChange={(e) => setEmail(e.currentTarget.value)}
+                />
+              </div>
+              <div className="uk-margin">
+                <label className="uk-form-label" htmlFor="form-stacked-text">
+                  Numéro de téléphone du contact
+                </label>
+                <input
+                  className={`uk-input ${
+                    validPhone(phone) ? "" : "uk-form-danger"
+                  }`}
+                  type="text"
+                  placeholder="entrer le numéro..."
+                  onChange={(e) => setPhone(e.currentTarget.value)}
+                />
+              </div>
+              <div className="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                <label>
+                  <input
+                    className="uk-checkbox"
+                    type="checkbox"
+                    onChange={() => setIsPrimary(!isPrimary)}
+                  />
+                  Contact Principal?
+                </label>
+              </div>
+            </fieldset>
+          </form>
+        </ModalBody>
         <ModalFooter>
           <button
             className="uk-button uk-button-primary"
