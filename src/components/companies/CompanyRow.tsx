@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ICompany } from "../../../utils/types";
+import { ICompany } from "../../utils/types";
 
 const CompanyRow = (props: { company: ICompany }) => {
   return (

@@ -12,7 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-import { ICompany } from "../../../utils/types";
+import { ICompany } from "../../utils/types";
 
 const CompanyModalForm = (props: {
   showModal: boolean;

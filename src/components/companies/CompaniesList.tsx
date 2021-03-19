@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import { useAxios } from "../../../hooks/useAxios";
-import { ICompany } from "../../../utils/types";
-import CompanyModalForm from "../CompanyModalForm";
-import CompanyRow from "../CompanyRow";
+import { useAxios } from "../../hooks/useAxios";
+import { ICompany } from "../../utils/types";
+import CompanyModalForm from "./CompanyModalForm";
+import CompanyRow from "./CompanyRow";
 
 const CompaniesList = () => {
   const [companies, setCompanies] = useState<ICompany[]>([]);
