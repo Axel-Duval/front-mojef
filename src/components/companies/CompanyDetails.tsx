@@ -117,12 +117,16 @@ const CompanyDetails = (props: { id: string }) => {
                 addContact={addContact}
                 companyId={company.id!}
               />
-              <ContactsTable
-                contacts={company.contacts!}
-                onEdit={editContact}
-                onDelete={deleteContact}
-                onToggle={toggleContact}
-              />
+              {company.contacts ? (
+                <ContactsTable
+                  contacts={company.contacts!}
+                  onEdit={editContact}
+                  onDelete={deleteContact}
+                  onToggle={toggleContact}
+                />
+              ) : (
+                <p>pas encore de contacts</p>
+              )}
             </div>
           </div>
         )}

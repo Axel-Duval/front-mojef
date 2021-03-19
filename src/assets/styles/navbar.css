@@ -33,3 +33,9 @@
   padding-top: 1rem;
   padding-bottom: 3rem;
 }
+
+.-wrap-text-button {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

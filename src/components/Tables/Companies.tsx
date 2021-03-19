@@ -7,11 +7,10 @@ const CompaniesTable: React.FC<ITableCompanies> = ({ companies }) => {
     <table className="uk-table uk-table-justify uk-table-divider uk-table-small -noselect">
       <thead>
         <tr>
-          <th className="uk-table-shrink">Nom</th>
+          <th>Nom</th>
           <th>Actif</th>
           <th>Editeur</th>
           <th>Exposant</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>

@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { UserContext } from "../utils/user-context";
+import Festivals from "./Festivals";
 
 const Navbar = () => {
   return (
@@ -11,8 +12,16 @@ const Navbar = () => {
         alt="Montpellier Jeu Festival Logo"
         className="-nav-icon"
       />
-
       <ul className="uk-nav uk-nav-default -nav-padding">
+        <li>
+          <Festivals />
+          <button
+            className="uk-button uk-button-small uk-button-default uk-width-small -wrap-text-button"
+            uk-toggle="target: #festivals-modal"
+          >
+            MTP 2018
+          </button>
+        </li>
         <li className="uk-nav-header uk-margin-top">Organisation</li>
         <li className="uk-nav-divider"></li>
         <li>

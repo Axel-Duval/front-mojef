@@ -36,6 +36,10 @@
   user-select: none; /* Standard syntax */
 }
 
+.-pointer {
+  cursor: pointer;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 6px;
@@ -53,10 +57,22 @@
   border-radius: 3px;
 }
 
+.uk-heading-small {
+  font-size: 2.5rem;
+}
+
+.-no-liststyle {
+  list-style: none;
+}
+
 .red {
   border: solid 1px red;
 }
 
-.uk-heading-small {
-  font-size: 2rem;
+.blue {
+  border: solid 1px blue;
+}
+
+.green {
+  border: solid 1px green;
 }

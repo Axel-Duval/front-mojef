@@ -48,3 +48,13 @@ export interface ICompany {
   isActive?: boolean;
   contacts?: IContact[];
 }
+
+/**
+ * FESTIVALS
+ */
+export interface IFestival {
+  id: string;
+  name: string;
+  date: Date;
+  isActive: boolean;
+}
