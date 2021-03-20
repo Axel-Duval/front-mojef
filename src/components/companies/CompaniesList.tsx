@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Button } from "reactstrap";
 import { useAxios } from "../../hooks/useAxios";
 import { IPartialCompany } from "../../utils/types";
 import CompaniesTable from "../Tables/Companies";
@@ -9,6 +8,7 @@ const CompaniesList = () => {
   const [companies, setCompanies] = useState<IPartialCompany[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [addModal, setAddModal] = useState<boolean>(false);
+  const addCompanyModalId = "add-company-modal";
 
   const instance = useAxios();
 
@@ -40,9 +40,9 @@ const CompaniesList = () => {
 
   return (
     <div>
-      <Button color="primary" onClick={switchModalState}>
-        Ajouter une société
-      </Button>
+      <button className="uk-button" onClick={switchModalState}>
+        Créer
+      </button>
       <CompanyModalForm
         showModal={addModal}
         setShowModal={switchModalState}

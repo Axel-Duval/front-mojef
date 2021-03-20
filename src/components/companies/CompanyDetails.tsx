@@ -89,7 +89,7 @@ const CompanyDetails = (props: { id: string }) => {
       .patch(`/api/contact/${contact.id!}`, { isPrimary: !contact.isPrimary })
       .then((res) => {
         let newCompany = company;
-        newCompany.contacts!.forEach((element) => {
+        newCompany.contacts.forEach((element: IContact) => {
           if (element.id! === contact.id) {
             element.isPrimary = !element.isPrimary;
           }
@@ -104,7 +104,23 @@ const CompanyDetails = (props: { id: string }) => {
   };
 
   const switchGameIsPrototype = (game: IGame) => {
-    console.log(`${game.name} toggled.`);
+    setLoading(true);
+    instance
+      .patch(`/api/game/${game.id}`, { isPrototype: !game.isPrototype })
+      .then((res) => {
+        let newCompany = company;
+        newCompany.games.forEach((element: IGame) => {
+          if (element.id! === res.data.id) {
+            element.isPrototype = !element.isPrototype;
+          }
+        });
+        setCompany(newCompany);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
   const addGame = (game: IGame): void => {
@@ -158,6 +174,12 @@ const CompanyDetails = (props: { id: string }) => {
             <p>{company.isActive ? "Actif" : "Inactif"}</p>
             <p>{company.isPublisher ? "Editeur" : "Non Editeur"}</p>
             <p>{company.isExhibitor ? "Exposant" : "Non Exposant"}</p>
+            <button className="uk-button uk-button-danger">
+              Supprimer la société
+            </button>
+            <button className="uk-button uk-button-default">
+              Modifier la société
+            </button>
             <div>
               <h3>Contacts</h3>
               <button
@@ -174,7 +196,7 @@ const CompanyDetails = (props: { id: string }) => {
               />
               {company.contacts.length !== 0 ? (
                 <ContactsTable
-                  contacts={company.contacts!}
+                  contacts={company.contacts}
                   onEdit={editContact}
                   onDelete={deleteContact}
                   onToggle={switchContactIsPrimary}
