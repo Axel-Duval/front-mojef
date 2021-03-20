@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
-import { UserContext } from "../utils/user-context";
+import { UserContext } from "../contexts/user";
 
 interface ProtectedRouteProperties extends RouteProps<any, any> {
   component: React.FC;

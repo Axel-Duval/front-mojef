@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
-import { UserContext } from "../utils/user-context";
+import { UserContext } from "../contexts/user";
 import Festivals from "./Festivals";
 
 const Navbar = () => {

@@ -24,7 +24,7 @@ import {
   UserContext,
   UserContextValue,
   UserCredentials,
-} from "./utils/user-context";
+} from "./contexts/user";
 import axios, { AxiosInstance } from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
