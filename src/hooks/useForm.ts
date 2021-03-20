@@ -17,7 +17,7 @@ interface FormValidator {
  * @experimental
  */
 export function useForm(
-  formSpecif: { [key: string]: FieldSpecif | string },
+  formSpecif: { [key: string]: FieldSpecif | any },
   validators?: FormValidator[]
 ): [Record<string, any>, any] {
   const defaultFormValue = Object.entries(formSpecif).reduce(
@@ -37,7 +37,7 @@ export function useForm(
 
   function getValidatorsForField(fieldName: string) {
     const specif = formSpecif[fieldName];
-    if (typeof specif === "string") {
+    if (typeof specif !== "object") {
       return [];
     }
     return specif.validators;
@@ -87,7 +87,7 @@ export function useForm(
     }
     allErrors.$form.valid = !formErrored;
     setErrors(allErrors);
-  }, [formData, validators]); // Do not depend on formSpecif !!
+  }, [formData, validators]); // Do not depend on formSpecif, applyFieldValidators, applyFormValidators !!
 
   const formAccess = Object.keys(formData).reduce((prev, fieldName) => {
     prev[fieldName] = {

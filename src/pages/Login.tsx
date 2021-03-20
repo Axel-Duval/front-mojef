@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import svg from "../assets/images/collaboration.svg";
 import UIkit from "uikit";
 import { UserContext } from "../utils/user-context";
 import { useForm } from "../hooks/useForm";
+import { required } from "../validators";
 
 /*
  * Here just to make html in Login component a bit shorter
@@ -23,26 +24,15 @@ function FormControl(props: { label: string; icon: string; children: any }) {
   );
 }
 
-function minLength(n: number) {
-  return (v: string) => {
-    if (v.length < n) {
-      return {
-        minLength: true,
-      };
-    }
-    return null;
-  };
-}
-
 function Login() {
   const [form, formErrors] = useForm({
     username: {
       default: "",
-      validators: [minLength(1)],
+      validators: [required()],
     },
     password: {
       default: "",
-      validators: [minLength(1)]
+      validators: [required()],
     },
   });
 
