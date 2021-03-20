@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import { useAxios } from "../../hooks/useAxios";
-import { ICompany } from "../../utils/types";
+import { IPartialCompany } from "../../utils/types";
 import CompaniesTable from "../Tables/Companies";
 import CompanyModalForm from "./CompanyModalForm";
 
 const CompaniesList = () => {
-  const [companies, setCompanies] = useState<ICompany[]>([]);
+  const [companies, setCompanies] = useState<IPartialCompany[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [addModal, setAddModal] = useState<boolean>(false);
 
@@ -29,7 +29,7 @@ const CompaniesList = () => {
     setAddModal(!addModal);
   };
 
-  const addCompany = (company: ICompany) => {
+  const addCompany = (company: IPartialCompany) => {
     instance
       .post("/api/company", company)
       .then((res) => {

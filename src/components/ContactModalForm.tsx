@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from "reactstrap";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { IContact } from "../utils/types";
 import * as EmailValidator from "email-validator";
 
@@ -21,7 +14,6 @@ const ContactModalForm = (props: {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isPrimary, setIsPrimary] = useState<boolean>(false);
-  const [visible, setVisible] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {

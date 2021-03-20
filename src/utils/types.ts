@@ -36,17 +36,23 @@ export interface ITimelineElement {
 /**
  * COMPANIES
  */
+
 export interface ITableCompanies {
-  companies: ICompany[];
+  companies: IPartialCompany[];
 }
-export interface ICompany {
+
+export interface IPartialCompany {
   id?: string;
   name: string;
   address: string;
   isPublisher: boolean;
   isExhibitor: boolean;
-  isActive?: boolean;
-  contacts?: IContact[];
+  isActive: boolean;
+}
+
+export interface ICompany extends IPartialCompany {
+  contacts: IContact[];
+  games: IGame[];
 }
 
 /**
@@ -57,4 +63,28 @@ export interface IFestival {
   name: string;
   date: Date;
   isActive: boolean;
+}
+
+/**
+ * GAMES
+ */
+
+export interface IGame {
+  id?: string;
+  name: string;
+  duration: string;
+  minPlayers: number;
+  maxPlayers: number;
+  minAge: number;
+  maxAge: number;
+  isPrototype: boolean;
+  publisherId: string;
+  publisher?: ICompany;
+}
+
+export interface ITableGames {
+  games: IGame[];
+  onEdit: Function;
+  onDelete: Function;
+  onToggle: Function;
 }

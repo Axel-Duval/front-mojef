@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ICompany, ITableCompanies } from "../../utils/types";
+import { IPartialCompany, ITableCompanies } from "../../utils/types";
 
 const CompaniesTable: React.FC<ITableCompanies> = ({ companies }) => {
   return (
@@ -14,13 +14,13 @@ const CompaniesTable: React.FC<ITableCompanies> = ({ companies }) => {
         </tr>
       </thead>
       <tbody>
-        {companies.map((company: ICompany, index: number) => {
+        {companies.map((company: IPartialCompany, index: number) => {
           return (
             <tr key={index}>
               <Link to={`/app/societes/${company.id}`}>
                 <td>{company.name}</td>
               </Link>
-              <td>{company.isActive}</td>
+              <td>{company.isActive ? "Actif" : "Inactif"}</td>
               <td>{company.isPublisher ? "Editeur" : "Non Editeur"}</td>
               <td>{company.isExhibitor ? "Exposant" : "Non Exposant"}</td>
             </tr>
