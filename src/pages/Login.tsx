@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import svg from "../assets/images/collaboration.svg";
 import UIkit from "uikit";
-import { UserContext } from "../utils/user-context";
+import { UserContext } from "../contexts/user";
 import { useForm } from "../hooks/useForm";
 import { required } from "../validators";
 
