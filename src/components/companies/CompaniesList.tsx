@@ -1,29 +1,24 @@
 import { useEffect, useState } from "react";
 import { useAxios } from "../../hooks/useAxios";
+import { useGet } from "../../hooks/useGet";
 import { IPartialCompany } from "../../utils/types";
 import CompaniesTable from "../Tables/Companies";
 import CompanyModalForm from "./CompanyModalForm";
 
 const CompaniesList = () => {
   const [companies, setCompanies] = useState<IPartialCompany[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [data, isLoading, isErrored] = useGet<IPartialCompany[]>(
+    "/api/company"
+  );
   const [addModal, setAddModal] = useState<boolean>(false);
-  const addCompanyModalId = "add-company-modal";
 
   const instance = useAxios();
 
   useEffect(() => {
-    instance
-      .get("/api/company")
-      .then((res) => {
-        setCompanies(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [instance]);
+    if (data) {
+      setCompanies(data);
+    }
+  }, [data]);
 
   const switchModalState = () => {
     setAddModal(!addModal);
