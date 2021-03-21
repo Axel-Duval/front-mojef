@@ -58,7 +58,10 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
     setGames((games) => {
       return games.map((g) => {
         if (g.id === game.id) {
-          g.isPrototype = !g.isPrototype;
+          return {
+            ...g,
+            isPrototype: !g.isPrototype,
+          };
         }
         return g;
       });
@@ -69,7 +72,7 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
         setGames((games) => {
           return games.map((g) => {
             if (g.id === game.id) {
-              g.isPrototype = !g.isPrototype;
+              return game;
             }
             return g;
           });
@@ -102,16 +105,12 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
           uk-tooltip="auto-sync"
         />
       </Heading>
-      <div className="-company-contacts">
-        <div className="-company-contact-container">
-          <GamesTable
-            games={games}
-            onEdit={editGame}
-            onDelete={deleteGame}
-            onToggle={switchGameIsPrototype}
-          />
-        </div>
-      </div>
+      <GamesTable
+        games={games}
+        onEdit={editGame}
+        onDelete={deleteGame}
+        onToggle={switchGameIsPrototype}
+      />
     </>
   );
 };
