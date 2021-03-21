@@ -19,7 +19,6 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
 import {
   UserContext,
   UserContextValue,
@@ -86,7 +85,7 @@ function Global() {
           <Route path="/" exact>
             {userContext.loggedIn ? <Redirect to="/app" /> : <Login />}
           </Route>
-          <ProtectedRoute path="/app" component={App} />
+          {userContext.loggedIn ? <Route path="/app" component={App} /> : null}
           <Redirect from="*" to="/" />
         </Switch>
       </Router>
