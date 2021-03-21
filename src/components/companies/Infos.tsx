@@ -9,7 +9,7 @@ interface IConpanyInfos {
 const Infos = ({ company }: IConpanyInfos) => {
   return (
     <>
-      <Heading title="Renseignements" subtitle="ozirfoi">
+      <Heading title="Renseignements" subtitle="">
         <span
           className="uk-icon-link -pointer uk-margin-small-right"
           uk-icon="info"

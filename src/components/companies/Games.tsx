@@ -1,7 +1,6 @@
-import React from "react";
 import { IGame } from "../../utils/types";
 import Heading from "../Heading";
-import TableGames from "../Tables/Games";
+import GamesTable from "../Tables/Games";
 
 interface ICompanyGames {
   games: IGame[];
@@ -29,7 +28,7 @@ const Games = ({ games }: ICompanyGames) => {
       </Heading>
       <div className="-company-contacts">
         <div className="-company-contact-container">
-          <TableGames
+          <GamesTable
             games={games}
             onEdit={() => console.log("delete")}
             onDelete={() => console.log("delete")}

@@ -1,7 +1,8 @@
 import { FC, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
-import { ICompany, IContact } from "../../utils/types";
+import { IContact } from "../../utils/types";
+import Heading from "../Heading";
 import ContactsTable from "../Tables/Contacts";
 import ContactModalForm from "./ContactModalForm";
 
@@ -17,19 +18,20 @@ const CompanyContacts: FC<{
   };
 
   const addContact = (contact: IContact) => {
-    setContacts((contacts) => {
-      return [...contacts, contact];
-    });
-    instance.post("/api/contact", contact).catch((err) => {
-      setContacts((contacts) => {
-        return contacts.filter((c) => c.id !== contact.id);
+    instance
+      .post("/api/contact", contact)
+      .then((res) =>
+        setContacts((contacts) => {
+          return [...contacts, res.data];
+        })
+      )
+      .catch((err) => {
+        UIkit.notification({
+          message: `Impossible d'ajouter ce contact : ${err}`,
+          status: "danger",
+          pos: "top-center",
+        });
       });
-      UIkit.notification({
-        message: `Impossible d'ajouter ce contact : ${err}`,
-        status: "danger",
-        pos: "top-center",
-      });
-    });
   };
 
   const deleteContact = (contact: IContact) => {
@@ -81,31 +83,44 @@ const CompanyContacts: FC<{
   };
 
   return (
-    <div>
-      <h3>Contacts</h3>
-      <button
-        className="uk-button uk-button-primary"
-        onClick={switchAddModalState}
+    <>
+      <Heading
+        title="Contacts"
+        subtitle={contacts.length + " contacts trouvés"}
       >
-        Ajout de contact
-      </button>
-      <ContactModalForm
-        showModal={addModalState}
-        setShowModal={switchAddModalState}
-        addContact={addContact}
-        companyId={companyId}
-      />
-      {contacts.length !== 0 ? (
-        <ContactsTable
-          contacts={contacts}
-          onEdit={editContact}
-          onDelete={deleteContact}
-          onToggle={switchContactIsPrimary}
+        <span
+          className="uk-icon-link uk-margin-small-right -pointer"
+          uk-icon="plus"
+          onClick={switchAddModalState}
         />
-      ) : (
-        <p>pas encore de contacts</p>
-      )}
-    </div>
+        <ContactModalForm
+          showModal={addModalState}
+          setShowModal={switchAddModalState}
+          addContact={addContact}
+          companyId={companyId}
+        />
+        <span
+          className="uk-icon-link -pointer uk-margin-small-right"
+          uk-icon="info"
+          uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des contacts"
+        />
+        <span
+          className="uk-icon-link -pointer"
+          uk-icon="cloud-upload"
+          uk-tooltip="auto-sync"
+        />
+      </Heading>
+      <div>
+        <div>
+          <ContactsTable
+            contacts={contacts}
+            onEdit={editContact}
+            onDelete={deleteContact}
+            onToggle={switchContactIsPrimary}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { IGame } from "../../utils/types";
 import GameModalForm from "../games/GameModalForm";
+import Heading from "../Heading";
 import GamesTable from "../Tables/Games";
 
 const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
@@ -17,19 +18,20 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
   };
 
   const addGame = (game: IGame): void => {
-    setGames((games) => {
-      return [...games, game];
-    });
-    instance.post("/api/game", game).catch((err) => {
-      setGames((games) => {
-        return games.filter((g) => g.id !== game.id);
+    instance
+      .post("/api/game", game)
+      .then((res) =>
+        setGames((games) => {
+          return [...games, res.data];
+        })
+      )
+      .catch((err) => {
+        UIkit.notification({
+          message: `Impossible d'ajouter ce jeu`,
+          status: "danger",
+          pos: "top-center",
+        });
       });
-      UIkit.notification({
-        message: `Impossible d'ajouter ce jeu`,
-        status: "danger",
-        pos: "top-center",
-      });
-    });
   };
 
   const editGame = (game: IGame) => {
@@ -76,31 +78,41 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
   };
 
   return (
-    <div>
-      <h3>Jeux</h3>
-      <button
-        className="uk-button uk-button-primary"
-        onClick={switchAddModalState}
-      >
+    <>
+      <Heading title="Jeux" subtitle={games.length + " jeux trouvés"}>
+        <span
+          className="uk-icon-link uk-margin-small-right -pointer"
+          uk-icon="plus"
+          onClick={switchAddModalState}
+        />
         <GameModalForm
           setShowModal={switchAddModalState}
           showModal={addModalState}
           addGame={addGame}
           companyId={companyId}
         />
-        Ajout jeu
-      </button>
-      {games.length !== 0 ? (
-        <GamesTable
-          games={games}
-          onEdit={editGame}
-          onDelete={deleteGame}
-          onToggle={switchGameIsPrototype}
+        <span
+          className="uk-icon-link -pointer uk-margin-small-right"
+          uk-icon="info"
+          uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des contacts"
         />
-      ) : (
-        <p>pas encore de jeux</p>
-      )}
-    </div>
+        <span
+          className="uk-icon-link -pointer"
+          uk-icon="cloud-upload"
+          uk-tooltip="auto-sync"
+        />
+      </Heading>
+      <div className="-company-contacts">
+        <div className="-company-contact-container">
+          <GamesTable
+            games={games}
+            onEdit={editGame}
+            onDelete={deleteGame}
+            onToggle={switchGameIsPrototype}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 
