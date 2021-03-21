@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { UserContext } from "../contexts/user";
-import Festivals from "./Festivals";
+import FestivalsModal from "./festivals/FestivalsModal";
+import NewFestivalModal from "./festivals/NewFestivalModal";
 
 const Navbar = () => {
+  const [festivalsShow, setFestivalsShow] = useState<boolean>(false);
+  const [newFestivalShow, setNewFestivalShow] = useState<boolean>(false);
   return (
     <div className="uk-container -nav-scroll-container">
       <img
@@ -14,10 +17,21 @@ const Navbar = () => {
       />
       <ul className="uk-nav uk-nav-default -nav-padding">
         <li>
-          <Festivals />
+          <FestivalsModal
+            show={festivalsShow}
+            onClose={() => setFestivalsShow(false)}
+            onAdd={() => {
+              setFestivalsShow(false);
+              setNewFestivalShow(true);
+            }}
+          />
+          <NewFestivalModal
+            show={newFestivalShow}
+            onClose={() => setNewFestivalShow(false)}
+          />
           <button
             className="uk-button uk-button-small uk-button-default uk-width-small -wrap-text-button"
-            uk-toggle="target: #festivals-modal"
+            onClick={() => setFestivalsShow(true)}
           >
             MTP 2018
           </button>

@@ -75,7 +75,7 @@ export default function FestivalForm(props: {
       </div>
       <button
         type="submit"
-        className="uk-button uk-button-primary"
+        className="uk-button uk-button-primary uk-align-center"
         disabled={!formErrors.$form.valid || loading}
       >
         Créer le festival

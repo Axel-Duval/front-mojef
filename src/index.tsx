@@ -10,6 +10,7 @@ import "../src/assets/styles/main.css";
 import "../src/assets/styles/navbar.css";
 import "../src/assets/styles/bookings.css";
 import "../src/assets/styles/tables.css";
+import "../src/assets/styles/modal.css";
 
 import App from "./app";
 import Login from "./pages/Login";
