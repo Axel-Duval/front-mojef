@@ -8,6 +8,7 @@ import "uikit/dist/css/uikit.min.css";
  */
 import "../src/assets/styles/main.css";
 import "../src/assets/styles/navbar.css";
+import "../src/assets/styles/company.css";
 import "../src/assets/styles/bookings.css";
 import "../src/assets/styles/tables.css";
 import "../src/assets/styles/modal.css";
@@ -27,10 +28,20 @@ import {
 } from "./contexts/user";
 import axios, { AxiosInstance } from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  FestivalContext,
+  FestivalContextValue,
+  FestivalData,
+} from "./contexts/festival";
 
 function prepareLoginState(): UserCredentials {
   const access_token = localStorage.getItem("access_token");
   return access_token ? { access_token } : null;
+}
+
+function prepareFestivalState(): FestivalData {
+  const festivalId = localStorage.getItem("working_festival");
+  return festivalId ? festivalId : null;
 }
 
 function prepareAxiosInstance(creds: UserCredentials): AxiosInstance {
@@ -46,6 +57,19 @@ function prepareAxiosInstance(creds: UserCredentials): AxiosInstance {
 }
 
 function Global() {
+  const [festivalContext, setFestivalContext] = useState<FestivalContextValue>(
+    () => {
+      return {
+        festivalId: prepareFestivalState(),
+        setWorkingFestival: (newFestival: string) => {
+          localStorage.setItem("working_festival", newFestival);
+          setFestivalContext((currentState) => {
+            return { ...currentState, festivalId: newFestival };
+          });
+        },
+      };
+    }
+  );
   const [userContext, setUserContext] = useState<UserContextValue>(() => {
     const userCredentials = prepareLoginState();
     const axiosInstance = prepareAxiosInstance(userCredentials);
@@ -81,15 +105,19 @@ function Global() {
 
   return (
     <UserContext.Provider value={userContext}>
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            {userContext.loggedIn ? <Redirect to="/app" /> : <Login />}
-          </Route>
-          {userContext.loggedIn ? <Route path="/app" component={App} /> : null}
-          <Redirect from="*" to="/" />
-        </Switch>
-      </Router>
+      <FestivalContext.Provider value={festivalContext}>
+        <Router>
+          <Switch>
+            <Route path="/" exact>
+              {userContext.loggedIn ? <Redirect to="/app" /> : <Login />}
+            </Route>
+            {userContext.loggedIn ? (
+              <Route path="/app" component={App} />
+            ) : null}
+            <Redirect from="*" to="/" />
+          </Switch>
+        </Router>
+      </FestivalContext.Provider>
     </UserContext.Provider>
   );
 }

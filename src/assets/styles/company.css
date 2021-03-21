@@ -1,0 +1,43 @@
+@media screen and (max-height: 700px) {
+  .-company-responsive {
+    flex-direction: column;
+  }
+
+  .-contacts {
+    min-height: 150px;
+  }
+
+  .-company-responsive hr {
+    display: none;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .-company-responsive {
+    flex-direction: column;
+  }
+
+  .-contacts {
+    min-height: 150px;
+  }
+
+  .-company-responsive hr {
+    display: none;
+  }
+}
+
+/** 
+*   COMPANY CONTACTS
+*/
+.-company-contacts {
+  position: relative;
+  height: 100%;
+}
+
+.-company-contact-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}

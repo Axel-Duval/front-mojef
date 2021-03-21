@@ -16,7 +16,7 @@ const Modal: React.FC<IModal> = ({ onClose, show, children }) => {
         <div className="-modal-close">
           <span uk-icon="icon: close" onClick={() => onClose()} />
         </div>
-        {children}
+        <div className="-modal-children">{children}</div>
       </section>
     </div>
   );

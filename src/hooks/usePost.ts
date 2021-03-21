@@ -18,7 +18,7 @@ export function usePost<Q, R>(
     axios
       .post(endpoint, data)
       .then((res) => {
-        if (res.status / 100 === 2) {
+        if (Math.floor(res.status / 100) === 2) {
           setResult(res.data);
         } else {
           throw new Error(`Got status ${res.status}\n${res}`);
