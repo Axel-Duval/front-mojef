@@ -34,6 +34,28 @@ export interface ITimelineElement {
 }
 
 /**
+ * BOOKINGS
+ */
+export interface ITableBookings {
+  bookings: IBookings[];
+}
+
+export interface IBookings {
+  id?: string;
+  notes: string;
+  needVolunteers: boolean;
+  isPresent: boolean;
+  isPlaced: boolean;
+  discount: number;
+  fees: number;
+  createdOn: Date;
+  billSentOn?: Date;
+  billPaidOn?: Date;
+  festival: string;
+  company: string;
+}
+
+/**
  * COMPANIES
  */
 

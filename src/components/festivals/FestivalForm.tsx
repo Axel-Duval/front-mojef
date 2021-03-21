@@ -32,7 +32,7 @@ export default function FestivalForm(props: {
     if (props.onSuccess && data) {
       props.onSuccess(data);
     }
-  }, [data, props.onSuccess]);
+  }, [data, props]);
 
   return (
     <form

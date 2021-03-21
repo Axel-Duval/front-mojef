@@ -9,10 +9,10 @@ import { useHistory } from "react-router-dom";
 const Booking = () => {
   const history = useHistory();
   const edit = () => {
-    console.log("edit company name");
+    console.log("edit booking name");
   };
   const remove = () => {
-    console.log("remove company");
+    console.log("remove booking");
   };
 
   return (
