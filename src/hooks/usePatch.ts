@@ -4,7 +4,7 @@ import { useAxios } from "./useAxios";
 /**
  * @experimental
  */
-export function usePost<Q, R>(
+export function usePatch<Q, R>(
   endpoint: string
 ): [R | null, (body: Q) => void, boolean, boolean] {
   const [isLoading, setLoading] = useState(false);
@@ -16,9 +16,9 @@ export function usePost<Q, R>(
     setLoading(true);
     setErrored(false);
     axios
-      .post(endpoint, data)
+      .patch(endpoint, data)
       .then((res) => {
-        if (((res.status / 100) | 0) === 2) {
+        if (Math.floor(res.status / 100) === 2) {
           setResult(res.data);
         } else {
           throw new Error(`Got status ${res.status}\n${res}`);

@@ -4,25 +4,22 @@ import { useAxios } from "./useAxios";
 /**
  * @experimental
  */
-export function useGet<T>(endpoint: string): [T | null, boolean, boolean] {
+export function useDelete(endpoint: string): [boolean, boolean] {
   const axios = useAxios();
   const [isLoading, setLoading] = useState(true);
   const [isErrored, setErrored] = useState(false);
-  const [data, setData] = useState<T | null>(null);
 
   useEffect(() => {
     axios
-      .get(endpoint)
+      .delete(endpoint)
       .then((res) => {
         if (((res.status / 100) | 0) !== 2) {
-          throw new Error(`Unable to post to ${endpoint}.\n${res}`);
-        } else {
-          setData(res.data);
+          throw new Error(`Unable to delete ${endpoint}.\n${res}`);
         }
       })
       .catch(() => setErrored(true))
       .finally(() => setLoading(false));
   }, [axios, endpoint]);
 
-  return [data, isLoading, isErrored];
+  return [isLoading, isErrored];
 }
