@@ -55,25 +55,28 @@ const CompanyContacts: FC<{
   };
 
   const switchContactIsPrimary = (contact: IContact) => {
-    setContacts((contacts) => {
-      return contacts.map((c) => {
+    setContacts((contacts) =>
+      contacts.map((c) => {
         if (c.id === contact.id) {
-          c.isPrimary = !c.isPrimary;
+          return {
+            ...c,
+            isPrimary: !contact.isPrimary,
+          };
         }
         return c;
-      });
-    });
+      })
+    );
     instance
       .patch(`/api/contact/${contact.id!}`, { isPrimary: !contact.isPrimary })
-      .catch((err) => {
-        setContacts((contacts) => {
-          return contacts.map((c) => {
+      .catch(() => {
+        setContacts((contacts) =>
+          contacts.map((c) => {
             if (c.id === contact.id) {
-              c.isPrimary = !c.isPrimary;
+              return contact;
             }
             return c;
-          });
-        });
+          })
+        );
         UIkit.notification({
           message: `Impossible de changer le statut du contact ${contact.firstname} ${contact.lastname}`,
           status: "danger",

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import Infos from "../components/companies/Infos";
-import Contacts from "../components/companies/Contacts";
 import { useAxios } from "../hooks/useAxios";
 import { ICompany } from "../utils/types";
-import Games from "../components/companies/Games";
 import UIkit from "uikit";
 import { useGet } from "../hooks/useGet";
 import CompanyGames from "../components/companies/CompanyGames";
