@@ -3,9 +3,10 @@ import { Redirect } from "react-router";
 import { useAxios } from "../../hooks/useAxios";
 import { ICompany, IContact, IGame } from "../../utils/types";
 import ContactsTable from "../Tables/Contacts";
-import ContactModalForm from "../ContactModalForm";
+import ContactModalForm from "./ContactModalForm";
 import GamesTable from "../Tables/Games";
-import GameModalForm from "../GameModalForm";
+import GameModalForm from "../games/GameModalForm";
+import DeleteValidationModal from "./DeleteValidationModal";
 
 const CompanyDetails = (props: { id: string }) => {
   const [company, setCompany] = useState<ICompany>({
@@ -22,6 +23,7 @@ const CompanyDetails = (props: { id: string }) => {
   const [redirect, setRedirect] = useState<boolean>(false);
   const [contactModalState, setContactModalState] = useState<boolean>(false);
   const [gameModalState, setGameModalState] = useState<boolean>(false);
+  const [deletionModalState, setDeletionModalState] = useState<boolean>(false);
 
   const instance = useAxios();
 
@@ -44,7 +46,7 @@ const CompanyDetails = (props: { id: string }) => {
       .post("/api/contact", contact)
       .then((res) => {
         let newCompany = company;
-        newCompany.contacts = [...newCompany.contacts!, res.data];
+        newCompany.contacts = [...newCompany.contacts, res.data];
         setCompany(newCompany);
         setLoading(false);
       })
@@ -71,12 +73,23 @@ const CompanyDetails = (props: { id: string }) => {
       });
   };
 
+  const deleteCompany = () => {
+    instance
+      .delete(`/api/company/${company.id}`)
+      .then(() => setRedirect(true))
+      .catch((err) => console.error(err));
+  };
+
   const switchContactModalState = (): void => {
     setContactModalState(!contactModalState);
   };
 
   const switchGameModalState = (): void => {
     setGameModalState(!gameModalState);
+  };
+
+  const switchDeletionModalState = (): void => {
+    setDeletionModalState(!deletionModalState);
   };
 
   const editContact = (contact: IContact) => {
@@ -174,9 +187,18 @@ const CompanyDetails = (props: { id: string }) => {
             <p>{company.isActive ? "Actif" : "Inactif"}</p>
             <p>{company.isPublisher ? "Editeur" : "Non Editeur"}</p>
             <p>{company.isExhibitor ? "Exposant" : "Non Exposant"}</p>
-            <button className="uk-button uk-button-danger">
+            <button
+              className="uk-button uk-button-danger"
+              onClick={switchDeletionModalState}
+            >
               Supprimer la société
             </button>
+            <DeleteValidationModal
+              deleteCompany={deleteCompany}
+              showModal={deletionModalState}
+              setShowModal={switchDeletionModalState}
+              company={company}
+            />
             <button className="uk-button uk-button-default">
               Modifier la société
             </button>

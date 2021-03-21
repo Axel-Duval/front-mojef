@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { IContact, IGame } from "../utils/types";
-import * as EmailValidator from "email-validator";
-import { isNumericLiteral } from "typescript";
+import { IGame, IGameType } from "../../utils/types";
+import GameTypeInputForm from "./GameTypeInputForm";
 
 const GameModalForm = (props: {
   showModal: boolean;
@@ -16,7 +15,10 @@ const GameModalForm = (props: {
   const [maxPlayers, setMaxPlayers] = useState<number>(-1);
   const [minAge, setMinAge] = useState<number>(-1);
   const [maxAge, setMaxAge] = useState<number>(-1);
+  const [manualLink, setManualLink] = useState<string | null>(null);
+  const [manualField, setManualField] = useState<boolean>(false);
   const [isPrototype, setIsPrototype] = useState<boolean>(false);
+  const [gameType, setGameType] = useState<IGameType | null>(null);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
@@ -24,13 +26,25 @@ const GameModalForm = (props: {
       areValid(minAge, maxAge) &&
       areValid(minPlayers, maxPlayers) &&
       validInput(name) &&
-      validInput(duration)
+      validInput(duration) &&
+      gameType &&
+      ((manualField && manualLink) || (!manualField && !manualLink))
     ) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [name, duration, minPlayers, maxPlayers, minAge, maxAge]);
+  }, [
+    name,
+    duration,
+    minPlayers,
+    maxPlayers,
+    minAge,
+    maxAge,
+    manualField,
+    manualLink,
+    gameType,
+  ]);
 
   const validInput = (name: string): boolean => {
     if (name.length > 2 && name.length < 40) {
@@ -51,6 +65,10 @@ const GameModalForm = (props: {
     }
   };
 
+  const validUrl = (url: string): boolean => {
+    return true;
+  };
+
   const submitForm = (): void => {
     props.addGame({
       name,
@@ -60,7 +78,10 @@ const GameModalForm = (props: {
       minAge,
       maxAge,
       isPrototype,
+      manualLink,
       publisherId: props.companyId,
+      gameTypeId: gameType!.id,
+      gameType: gameType!,
     });
     props.setShowModal();
   };
@@ -76,7 +97,7 @@ const GameModalForm = (props: {
         <ModalBody>
           <form className="uk-form uk-form-stacked">
             <fieldset className="uk-fieldset">
-              <div className="uk-form-row">
+              <div className="uk-margin">
                 <label className="uk-form-label" htmlFor="form-stacked-text">
                   Nom du jeu
                 </label>
@@ -89,7 +110,7 @@ const GameModalForm = (props: {
                   onChange={(e) => setName(e.currentTarget.value)}
                 />
               </div>
-              <div className="uk-form-row">
+              <div className="uk-margin">
                 <label className="uk-form-label" htmlFor="form-stacked-text">
                   Durée du jeu
                 </label>
@@ -102,7 +123,7 @@ const GameModalForm = (props: {
                   onChange={(e) => setDuration(e.currentTarget.value)}
                 />
               </div>
-              <div className="uk-form-row">
+              <div className="uk-margin">
                 <div className="uk-grid">
                   <div className="uk-width-1-2">
                     <label
@@ -140,7 +161,7 @@ const GameModalForm = (props: {
                   </div>
                 </div>
               </div>
-              <div className="uk-form-row">
+              <div className="uk-margin">
                 <div className="uk-grid">
                   <div className="uk-width-1-2">
                     <label
@@ -178,7 +199,8 @@ const GameModalForm = (props: {
                   </div>
                 </div>
               </div>
-              <div className="uk-form-row">
+              <GameTypeInputForm setGameType={setGameType} />
+              <div className="uk-margin">
                 <label>
                   <input
                     className="uk-checkbox"
@@ -189,6 +211,30 @@ const GameModalForm = (props: {
                   Est-ce un prototype?
                 </label>
               </div>
+              <div className="uk-margin">
+                <label>
+                  <input
+                    className="uk-checkbox"
+                    type="checkbox"
+                    onChange={() => setManualField(!manualField)}
+                    checked={manualField}
+                  />
+                  A t-il un lien de manuel?
+                </label>
+              </div>
+              <div className="uk-margin" hidden={!manualField}>
+                <label className="uk-form-label" htmlFor="form-stacked-text">
+                  Lien du manuel
+                </label>
+                <input
+                  className={`uk-input ${
+                    validUrl(name) ? "" : "uk-form-danger"
+                  }`}
+                  type="text"
+                  placeholder="entrer le lien..."
+                  onChange={(e) => setManualLink(e.currentTarget.value)}
+                />
+              </div>
             </fieldset>
           </form>
         </ModalBody>
@@ -198,7 +244,6 @@ const GameModalForm = (props: {
             onClick={submitForm}
             disabled={disabled}
           >
-            {" "}
             Créer
           </button>
         </ModalFooter>

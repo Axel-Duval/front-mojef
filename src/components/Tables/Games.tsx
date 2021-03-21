@@ -22,6 +22,7 @@ const GamesTable: React.FC<ITableGames> = ({
           <th>Durée</th>
           <th>Nombre de joueurs</th>
           <th>Age</th>
+          <th>Genre</th>
           <th>Prototype?</th>
           <th>Actions</th>
         </tr>
@@ -34,6 +35,7 @@ const GamesTable: React.FC<ITableGames> = ({
               <td>{game.duration}</td>
               <td>{formatNumberOfPlayers(game)}</td>
               <td>{`De ${game.minAge} à ${game.maxAge} ans`}</td>
+              <td>{game.gameType!.label}</td>
               <td className="uk-text-center">
                 <input
                   className="uk-checkbox"
@@ -43,6 +45,14 @@ const GamesTable: React.FC<ITableGames> = ({
                 />
               </td>
               <td>
+                {game.manualLink && (
+                  <a onClick={() => window.open(game.manualLink!)}>
+                    <span
+                      className="uk-margin-small-right"
+                      uk-icon="icon: location"
+                    />
+                  </a>
+                )}
                 <span
                   className="uk-icon-link uk-margin-small-right uk-margin-small-left"
                   uk-icon="file-edit"

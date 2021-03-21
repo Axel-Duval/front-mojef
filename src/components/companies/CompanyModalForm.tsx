@@ -91,24 +91,24 @@ const CompanyModalForm = (props: {
               ></textarea>
             </div>
             <div className="uk-margin">
-              <label>
-                <input
-                  className="uk-checkbox"
-                  type="checkbox"
-                  onChange={() => setExhibitor(!exhibitor)}
-                />
+              <label className="uk-form-label" htmlFor="form-stacked-text">
                 Est-ce un exposant?
               </label>
+              <input
+                className="uk-checkbox"
+                type="checkbox"
+                onChange={() => setExhibitor(!exhibitor)}
+              />
             </div>
             <div className="uk-margin">
-              <label>
-                <input
-                  className="uk-checkbox"
-                  type="checkbox"
-                  onChange={() => setPublisher(!publisher)}
-                />
+              <label className="uk-form-label" htmlFor="form-stacked-text">
                 Est-ce un éditeur?
               </label>
+              <input
+                className="uk-checkbox"
+                type="checkbox"
+                onChange={() => setPublisher(!publisher)}
+              />
             </div>
           </fieldset>
         </form>

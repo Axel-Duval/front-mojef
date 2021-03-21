@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { IContact } from "../utils/types";
+import { IContact } from "../../utils/types";
 import * as EmailValidator from "email-validator";
 
 const ContactModalForm = (props: {
