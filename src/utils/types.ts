@@ -80,14 +80,8 @@ export interface IGame {
   isPrototype: boolean;
   publisherId: string;
   publisher?: ICompany;
-  manualLink?: string | null;
-  gameTypeId: string;
-  gameType?: IGameType;
-}
-
-export interface IGameType {
-  id: string;
-  label: string;
+  guideLink: string | null;
+  type: string;
 }
 
 export interface ITableGames {

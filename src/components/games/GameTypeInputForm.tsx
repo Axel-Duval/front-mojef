@@ -1,19 +1,38 @@
-import { FC } from "react";
+import { wait } from "@testing-library/dom";
+import { FC, useEffect, useState } from "react";
 import { useGet } from "../../hooks/useGet";
-import { IGameType } from "../../utils/types";
+
+interface IRequestResult {
+  type: string;
+}
 
 const GameTypeInputForm: FC<{
-  setGameType: (gameTypeId: IGameType | null) => void;
-}> = ({ setGameType }) => {
-  const [gameTypes, isLoading, isErrored] = useGet<IGameType[]>(
-    "/api/game-type"
+  setType: (gameTypeId: string) => void;
+}> = ({ setType }) => {
+  const [gameTypes, isLoading, isErrored] = useGet<IRequestResult[]>(
+    "/api/game/types"
   );
+  const [userInput, setUserInput] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const handleChange = (e: any): void => {
-    if (e.currentTarget.value === "") {
-      setGameType(null);
+  useEffect(() => {
+    setType(userInput);
+    setSuggestions(findSuggestions());
+  }, [userInput]);
+
+  const findSuggestions = (): string[] => {
+    if (gameTypes) {
+      let res: string[] = [];
+      for (let i = 0; i < gameTypes.length; i++) {
+        if (
+          gameTypes[i].type.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+        ) {
+          res.push(gameTypes[i].type);
+        }
+      }
+      return res;
     } else {
-      setGameType(JSON.parse(e.currentTarget.value));
+      return [];
     }
   };
 
@@ -27,20 +46,15 @@ const GameTypeInputForm: FC<{
             Type de jeu
           </label>
           <div className="uk-form-controls">
-            <select
-              className="uk-select"
-              id="form-stacked-select"
-              onChange={handleChange}
-            >
-              <option value="">-</option>
-              {gameTypes!.map((gameType: IGameType, index: number) => {
-                return (
-                  <option value={JSON.stringify(gameType)}>
-                    {gameType.label}
-                  </option>
-                );
-              })}
-            </select>
+            <input
+              className="uk-input"
+              id="form-stacked-text"
+              type="text"
+              placeholder="entrer le type de jeu..."
+              onChange={(e) => {
+                setUserInput(e.currentTarget.value);
+              }}
+            />
           </div>
         </>
       )}

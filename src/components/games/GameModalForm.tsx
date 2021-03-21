@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { IGame, IGameType } from "../../utils/types";
+import { IGame } from "../../utils/types";
 import GameTypeInputForm from "./GameTypeInputForm";
 
 const GameModalForm = (props: {
@@ -15,10 +15,10 @@ const GameModalForm = (props: {
   const [maxPlayers, setMaxPlayers] = useState<number>(-1);
   const [minAge, setMinAge] = useState<number>(-1);
   const [maxAge, setMaxAge] = useState<number>(-1);
-  const [manualLink, setManualLink] = useState<string | null>(null);
-  const [manualField, setManualField] = useState<boolean>(false);
+  const [guideLink, setGuideLink] = useState<string | null>(null);
+  const [guideField, setGuideField] = useState<boolean>(false);
   const [isPrototype, setIsPrototype] = useState<boolean>(false);
-  const [gameType, setGameType] = useState<IGameType | null>(null);
+  const [type, setType] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
@@ -27,8 +27,8 @@ const GameModalForm = (props: {
       areValid(minPlayers, maxPlayers) &&
       validInput(name) &&
       validInput(duration) &&
-      gameType &&
-      ((manualField && manualLink) || (!manualField && !manualLink))
+      validInput(type) &&
+      ((guideField && guideLink) || (!guideField && !guideLink))
     ) {
       setDisabled(false);
     } else {
@@ -41,9 +41,9 @@ const GameModalForm = (props: {
     maxPlayers,
     minAge,
     maxAge,
-    manualField,
-    manualLink,
-    gameType,
+    guideField,
+    guideLink,
+    type,
   ]);
 
   const validInput = (name: string): boolean => {
@@ -78,10 +78,9 @@ const GameModalForm = (props: {
       minAge,
       maxAge,
       isPrototype,
-      manualLink,
+      guideLink,
       publisherId: props.companyId,
-      gameTypeId: gameType!.id,
-      gameType: gameType!,
+      type: type,
     });
     props.setShowModal();
   };
@@ -199,7 +198,7 @@ const GameModalForm = (props: {
                   </div>
                 </div>
               </div>
-              <GameTypeInputForm setGameType={setGameType} />
+              <GameTypeInputForm setType={setType} />
               <div className="uk-margin">
                 <label>
                   <input
@@ -216,13 +215,13 @@ const GameModalForm = (props: {
                   <input
                     className="uk-checkbox"
                     type="checkbox"
-                    onChange={() => setManualField(!manualField)}
-                    checked={manualField}
+                    onChange={() => setGuideField(!guideField)}
+                    checked={guideField}
                   />
                   A t-il un lien de manuel?
                 </label>
               </div>
-              <div className="uk-margin" hidden={!manualField}>
+              <div className="uk-margin" hidden={!guideField}>
                 <label className="uk-form-label" htmlFor="form-stacked-text">
                   Lien du manuel
                 </label>
@@ -232,7 +231,7 @@ const GameModalForm = (props: {
                   }`}
                   type="text"
                   placeholder="entrer le lien..."
-                  onChange={(e) => setManualLink(e.currentTarget.value)}
+                  onChange={(e) => setGuideLink(e.currentTarget.value)}
                 />
               </div>
             </fieldset>
