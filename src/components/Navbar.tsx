@@ -10,12 +10,7 @@ const Navbar = () => {
   const [festivalsShow, setFestivalsShow] = useState<boolean>(false);
   const [newFestivalShow, setNewFestivalShow] = useState<boolean>(false);
 
-  const festival = useContext(FestivalContext);
-  useEffect(() => {
-    if (!festival.festivalId) {
-      setFestivalsShow(true);
-    }
-  }, [festival]);
+  const ctx = useContext(FestivalContext);
 
   return (
     <div className="uk-container -nav-scroll-container">
@@ -38,7 +33,7 @@ const Navbar = () => {
             show={newFestivalShow}
             onClose={() => setNewFestivalShow(false)}
             onSuccess={(festival) => {
-              console.log(festival);
+              ctx.addFestival(festival);
               setNewFestivalShow(false);
               setFestivalsShow(true);
             }}
@@ -47,7 +42,9 @@ const Navbar = () => {
             className="uk-button uk-button-small uk-button-default uk-width-small -wrap-text-button"
             onClick={() => setFestivalsShow(true)}
           >
-            {festival.festivalId}
+            {ctx.currentFestival
+              ? ctx.currentFestival.name
+              : "Choisir un festival ..."}
           </button>
         </li>
         <li className="uk-nav-header uk-margin-top">Organisation</li>

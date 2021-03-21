@@ -1,13 +1,21 @@
 import React from "react";
 
-export type FestivalData = string | null;
+export interface FestivalData {
+  id: string;
+  name: string;
+  isActive: boolean;
+}
 
 export interface FestivalContextValue {
-  festivalId: FestivalData;
-  setWorkingFestival: Function;
+  festivals: FestivalData[];
+  currentFestival: FestivalData | null;
+  setCurrentFestival: (festival: FestivalData) => void;
+  addFestival: (festival: FestivalData) => void;
 }
 
 export const FestivalContext = React.createContext<FestivalContextValue>({
-  festivalId: null,
-  setWorkingFestival: () => {},
+  festivals: [],
+  currentFestival: null,
+  setCurrentFestival: () => {},
+  addFestival: () => {},
 });
