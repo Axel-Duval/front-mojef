@@ -50,6 +50,14 @@ const CompanyContacts: FC<{
     });
   };
 
+  const handleDelete = (contact: IContact) => {
+    UIkit.modal
+      .confirm(
+        `Êtes vous sûr de vouloir supprimer le contact ${contact.firstname} ${contact.lastname}?`
+      )
+      .then(() => deleteContact(contact));
+  };
+
   const editContact = (contact: IContact) => {
     console.log("edit: " + contact);
   };
@@ -118,7 +126,7 @@ const CompanyContacts: FC<{
           <ContactsTable
             contacts={contacts}
             onEdit={editContact}
-            onDelete={deleteContact}
+            onDelete={handleDelete}
             onToggle={switchContactIsPrimary}
           />
         </div>

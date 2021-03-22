@@ -54,6 +54,12 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
     });
   };
 
+  const handleDelete = (game: IGame) => {
+    UIkit.modal
+      .confirm(`Êtes vous sûr de vouloir supprimer le jeu ${game.name}?`)
+      .then(() => deleteGame(game));
+  };
+
   const switchGameIsPrototype = (game: IGame) => {
     setGames((games) => {
       return games.map((g) => {
@@ -108,7 +114,7 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
       <GamesTable
         games={games}
         onEdit={editGame}
-        onDelete={deleteGame}
+        onDelete={handleDelete}
         onToggle={switchGameIsPrototype}
       />
     </>
