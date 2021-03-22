@@ -18,6 +18,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
 
   const handleEditModeChange = (): void => {
     if (editMode === true) {
+      setEditMode(false);
       const lastAddress = company.address;
       setCompany((company) => {
         return {
@@ -35,13 +36,13 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
             };
           });
           UIkit.notification({
-            message: `Impossible de changer le statut de la société`,
+            message: `Impossible de changer l'adresse de la société.`,
             status: "danger",
             pos: "top-center",
           });
         });
     }
-    setEditMode(!editMode);
+    setEditMode(true);
   };
 
   /* const toggleField = (field: AllowedField): void => {
