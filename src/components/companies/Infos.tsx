@@ -45,9 +45,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
     setEditMode(true);
   };
 
-  const toggleProperty = (
-    field: "isExhibitor" | "isPublisher" | "isActive"
-  ): void => {
+  const toggleProperty = (field: AllowedField): void => {
     setCompany((company) => {
       return {
         ...company,
@@ -125,7 +123,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
           <input
             className="uk-checkbox"
             type="checkbox"
-            onChange={toggleProperty.bind(this, "isActive")}
+            onChange={toggleProperty.bind(this, AllowedField.isActive)}
             checked={company.isActive}
           />{" "}
           Actif
@@ -134,7 +132,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
           <input
             className="uk-checkbox"
             type="checkbox"
-            onChange={toggleProperty.bind(this, "isPublisher")}
+            onChange={toggleProperty.bind(this, AllowedField.isPublisher)}
             checked={company.isPublisher}
           />{" "}
           Editeur
@@ -143,7 +141,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
           <input
             className="uk-checkbox"
             type="checkbox"
-            onChange={toggleProperty.bind(this, "isExhibitor")}
+            onChange={toggleProperty.bind(this, AllowedField.isExhibitor)}
             checked={company.isExhibitor}
           />{" "}
           Exposant
