@@ -1,15 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UIkit from "uikit";
+import { useAxios } from "../../hooks/useAxios";
 import { ITimelineElement } from "../../utils/types";
 import Heading from "../Heading";
 
-const Timeline = () => {
-  // eslint-disable-next-line @typescript-eslint/no-array-constructor
-  const [timeline, setTimeline] = useState(new Array());
+interface ITimeline {
+  notes: string;
+  bookingId: string;
+}
+
+const Timeline = ({ notes, bookingId }: ITimeline) => {
+  const instance = useAxios();
+  const [timeline, setTimeline] = useState<ITimelineElement[]>(
+    timelineFromString(notes)
+  );
+
+  useEffect(() => {
+    console.log(timeline);
+    console.log(bookingId);
+    function format() {
+      return timeline
+        .map((item: ITimelineElement) => {
+          return item.datetime + "<$>" + item.body;
+        })
+        .join("<#>");
+    }
+    instance
+      .patch(`/api/booking/${bookingId}`, { notes: format() })
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible de sauvegarder les échanges`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+  }, [timeline, bookingId, instance]);
 
   const add = (element: ITimelineElement) => {
     setTimeline((timeline) => [element, ...timeline]);
-    save();
   };
 
   const remove = (element: ITimelineElement) => {
@@ -17,26 +45,20 @@ const Timeline = () => {
       .confirm("Etes vous sûr de vouloir supprimer cet échange ?")
       .then(() => {
         setTimeline(timeline.filter((item) => item !== element));
-        save();
       });
   };
 
-  const setTimelineFromString = (timeline: string) => {
-    const result: Array<Object> = [];
+  function timelineFromString(timeline: string) {
+    if (timeline.length < 2) {
+      return [];
+    }
+    const result: ITimelineElement[] = [];
     timeline.split("<#>").forEach((elt) => {
       const [datetime, body] = elt.split("<$>");
       result.push({ datetime, body });
     });
-    setTimeline(result);
-  };
-
-  const format = (): string => {
-    return timeline
-      .map((item) => {
-        return item.datetime + "<$>" + item.body;
-      })
-      .join("<#>");
-  };
+    return result;
+  }
 
   const addModal = () => {
     UIkit.modal.prompt("Nouvel échange", "").then((body) => {
@@ -64,19 +86,12 @@ const Timeline = () => {
               return index !== i ? item : { datetime: item.datetime, body };
             })
           );
-          save();
         } else {
           remove(item);
         }
       }
     });
   };
-
-  const save = () => {
-    const data = format();
-    console.log(data);
-  };
-
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading

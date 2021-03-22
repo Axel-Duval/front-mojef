@@ -37,7 +37,7 @@ export interface ITimelineElement {
  * BOOKINGS
  */
 export interface ITableBookings {
-  bookings: IBooking[];
+  bookings: IBookingJoinCompany[];
 }
 
 export interface IBooking {
@@ -52,7 +52,22 @@ export interface IBooking {
   billSentOn?: Date;
   billPaidOn?: Date;
   festival: string;
-  company: string;
+  companyId: string;
+}
+
+export interface IBookingJoinCompany {
+  id?: string;
+  notes: string;
+  needVolunteers: boolean;
+  isPresent: boolean;
+  isPlaced: boolean;
+  discount: number;
+  fees: number;
+  createdOn: Date;
+  billSentOn?: Date;
+  billPaidOn?: Date;
+  festival: string;
+  company: ICompany;
 }
 
 /**

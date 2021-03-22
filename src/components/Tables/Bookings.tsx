@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { IBooking, ITableBookings } from "../../utils/types";
+import { IBookingJoinCompany, ITableBookings } from "../../utils/types";
 
 const Bookings = ({ bookings }: ITableBookings) => {
   const history = useHistory();
@@ -15,15 +15,15 @@ const Bookings = ({ bookings }: ITableBookings) => {
         </tr>
       </thead>
       <tbody>
-        {bookings.map((booking: IBooking, index: number) => {
+        {bookings.map((booking: IBookingJoinCompany, index: number) => {
           return (
             <tr
               key={index}
               onClick={() => history.push("/app/reservations/" + booking.id)}
             >
-              <td>{booking.company}</td>
+              <td>{booking.company.name}</td>
               <td>
-                {booking.createdOn.toLocaleDateString("fr-FR", {
+                {new Date(booking.createdOn).toLocaleDateString("fr-FR", {
                   day: "numeric",
                   month: "numeric",
                   year: "numeric",
