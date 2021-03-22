@@ -45,122 +45,24 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
     setEditMode(true);
   };
 
-  /* const toggleField = (field: AllowedField): void => {
+  const toggleProperty = (
+    field: "isExhibitor" | "isPublisher" | "isActive"
+  ): void => {
     setCompany((company) => {
       return {
         ...company,
-        isActive:
-          field === AllowedField.isActive
-            ? !company.isActive
-            : company.isActive,
-        isExhibitor:
-          field === AllowedField.isExhibitor
-            ? !company.isExhibitor
-            : company.isExhibitor,
-        isPublisher:
-          field === AllowedField.isPublisher
-            ? !company.isPublisher
-            : company.isPublisher,
+        [field]: !company[field],
       };
     });
     instance
       .patch(`/api/company/${company.id!}`, {
-        isActive: company.isActive,
-        isPublisher: company.isPublisher,
-        isExhibitor: company.isExhibitor,
-      })
-      .catch((error) => {
-        setCompany((company) => {
-          return {
-            ...company,
-            isActive:
-              field === AllowedField.isActive
-                ? !company.isActive
-                : company.isActive,
-            isExhibitor:
-              field === AllowedField.isExhibitor
-                ? !company.isExhibitor
-                : company.isExhibitor,
-            isPublisher:
-              field === AllowedField.isPublisher
-                ? !company.isPublisher
-                : company.isPublisher,
-          };
-        });
-        UIkit.notification({
-          message: `Impossible de changer le statut de la société`,
-          status: "danger",
-          pos: "top-center",
-        });
-      });
-  }; */
-
-  const toggleIsActive = (): void => {
-    setCompany((company) => {
-      return {
-        ...company,
-        isActive: !company.isActive,
-      };
-    });
-    instance
-      .patch(`/api/company/${company.id!}`, { isActive: !company.isActive })
-      .catch(() => {
-        setCompany((company) => {
-          return {
-            ...company,
-            isActive: !company.isActive,
-          };
-        });
-        UIkit.notification({
-          message: `Impossible de changer le statut de la société`,
-          status: "danger",
-          pos: "top-center",
-        });
-      });
-  };
-
-  const toggleIsPublisher = (): void => {
-    setCompany((company) => {
-      return {
-        ...company,
-        isPublisher: !company.isPublisher,
-      };
-    });
-    instance
-      .patch(`/api/company/${company.id!}`, {
-        isPublisher: !company.isPublisher,
+        [field]: !company[field],
       })
       .catch(() => {
         setCompany((company) => {
           return {
             ...company,
-            isPublisher: !company.isPublisher,
-          };
-        });
-        UIkit.notification({
-          message: `Impossible de changer le statut de la société`,
-          status: "danger",
-          pos: "top-center",
-        });
-      });
-  };
-
-  const toggleIsExhibitor = (): void => {
-    setCompany((company) => {
-      return {
-        ...company,
-        isExhibitor: !company.isExhibitor,
-      };
-    });
-    instance
-      .patch(`/api/company/${company.id!}`, {
-        isExhibitor: !company.isExhibitor,
-      })
-      .catch(() => {
-        setCompany((company) => {
-          return {
-            ...company,
-            isExhibitor: !company.isExhibitor,
+            [field]: !company[field],
           };
         });
         UIkit.notification({
@@ -223,7 +125,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
           <input
             className="uk-checkbox"
             type="checkbox"
-            onChange={toggleIsActive}
+            onChange={toggleProperty.bind(this, "isActive")}
             checked={company.isActive}
           />{" "}
           Actif
@@ -232,7 +134,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
           <input
             className="uk-checkbox"
             type="checkbox"
-            onChange={toggleIsPublisher}
+            onChange={toggleProperty.bind(this, "isPublisher")}
             checked={company.isPublisher}
           />{" "}
           Editeur
@@ -241,7 +143,7 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
           <input
             className="uk-checkbox"
             type="checkbox"
-            onChange={toggleIsExhibitor}
+            onChange={toggleProperty.bind(this, "isExhibitor")}
             checked={company.isExhibitor}
           />{" "}
           Exposant
