@@ -46,6 +46,10 @@ const GameModalForm = (props: {
     type,
   ]);
 
+  useEffect(() => {
+    console.log("type : " + type);
+  }, [type]);
+
   const validInput = (name: string): boolean => {
     if (name.length > 2 && name.length < 40) {
       return true;

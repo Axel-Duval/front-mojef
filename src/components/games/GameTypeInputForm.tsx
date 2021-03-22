@@ -1,6 +1,6 @@
-import { wait } from "@testing-library/dom";
 import { FC, useEffect, useState } from "react";
 import { useGet } from "../../hooks/useGet";
+import Autosuggest from "react-autosuggest";
 
 interface IRequestResult {
   type: string;
@@ -15,17 +15,22 @@ const GameTypeInputForm: FC<{
   const [userInput, setUserInput] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  useEffect(() => {
-    setType(userInput);
-    setSuggestions(findSuggestions());
-  }, [userInput]);
+  const inputProps = {
+    placeholder: "Insérer le type de jeu...",
+    value: userInput,
+    onChange: (event: any, params: { newValue: string }) => {
+      setUserInput(params.newValue);
+    },
+  };
 
-  const findSuggestions = (): string[] => {
+  const findSuggestions = (input: string): string[] => {
     if (gameTypes) {
       let res: string[] = [];
+      const cleanedInput = input.trim().toLowerCase();
       for (let i = 0; i < gameTypes.length; i++) {
         if (
-          gameTypes[i].type.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+          gameTypes[i].type.toLowerCase().slice(0, cleanedInput.length) ===
+          cleanedInput
         ) {
           res.push(gameTypes[i].type);
         }
@@ -36,6 +41,8 @@ const GameTypeInputForm: FC<{
     }
   };
 
+  const renderSuggestion = (suggestion: string) => <div>{suggestion}</div>;
+
   return (
     <div className="uk-margin">
       {isLoading ? (
@@ -45,17 +52,20 @@ const GameTypeInputForm: FC<{
           <label className="uk-form-label" htmlFor="form-stacked-text">
             Type de jeu
           </label>
-          <div className="uk-form-controls">
-            <input
-              className="uk-input"
-              id="form-stacked-text"
-              type="text"
-              placeholder="entrer le type de jeu..."
-              onChange={(e) => {
-                setUserInput(e.currentTarget.value);
-              }}
-            />
-          </div>
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={(params: { value: string }) => {
+              setType(params.value);
+              setSuggestions(findSuggestions(params.value));
+            }}
+            onSuggestionSelected={(event: any, data: any) => {
+              setType(data.suggestion);
+            }}
+            alwaysRenderSuggestions={true}
+            getSuggestionValue={(value) => value}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+          />
         </>
       )}
     </div>
