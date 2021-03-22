@@ -65,7 +65,7 @@ const CompanyPage = () => {
           <div className="uk-flex -fullheight -company-responsive">
             <div className="-flex-1">
               <div className="uk-flex uk-flex-column -fullheight">
-                <Infos company={company!} />
+                <Infos companyInfos={company!} />
                 <CompanyContacts
                   companyContacts={company!.contacts}
                   companyId={company!.id!}
