@@ -82,17 +82,17 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
 
   return (
     <>
+      <GameModalForm
+        setShowModal={switchAddModalState}
+        showModal={addModalState}
+        addGame={addGame}
+        companyId={companyId}
+      />
       <Heading title="Jeux" subtitle={games.length + " jeux trouvés"}>
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
           onClick={switchAddModalState}
-        />
-        <GameModalForm
-          setShowModal={switchAddModalState}
-          showModal={addModalState}
-          addGame={addGame}
-          companyId={companyId}
         />
         <span
           className="uk-icon-link -pointer uk-margin-small-right"

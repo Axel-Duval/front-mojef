@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import UIkit from "uikit";
+import NewBookingModal from "../components/bookings/NewBookingModal";
 import TableBookings from "../components/Tables/Bookings";
-import { IBookings } from "../utils/types";
+import { FestivalContext } from "../contexts/festival";
+import { useGet } from "../hooks/useGet";
+import { IBooking } from "../utils/types";
 
 const Bookings = () => {
-  const test: IBookings[] = [
-    {
-      id: "zef",
-      notes: "zefze",
-      needVolunteers: false,
-      isPresent: true,
-      isPlaced: true,
-      discount: 0,
-      fees: 0,
-      festival: "zef",
-      company: "efe",
-      createdOn: new Date(),
-    },
-  ];
+  const festivals = useContext(FestivalContext);
+  const [showNewBookingModal, setShowNewBookingModal] = useState(false);
+  const [filterInput, setFilterInput] = useState("");
+  const [bookings, isLoading, isErrored] = useGet<IBooking[]>(
+    "/api/booking/festival/" + festivals.currentFestival?.id
+  );
+
+  useEffect(() => {
+    isErrored &&
+      UIkit.notification({
+        message: "Impossible de récupérer les réservations",
+        status: "danger",
+        pos: "top-center",
+      });
+  }, [isErrored]);
+
+  const filteredBookings = (bookings: IBooking[]) => {
+    return bookings.filter((booking) => {
+      return booking.company.includes(filterInput);
+    });
+  };
 
   return (
     <div className="uk-flex uk-flex-column -fullheight">
+      <NewBookingModal
+        show={showNewBookingModal}
+        onClose={() => setShowNewBookingModal(false)}
+      />
       <div className="uk-flex uk-flex-between uk-flex-middle">
         <h1 className="uk-heading-bullet">Réservations</h1>
         <div>
@@ -27,6 +42,7 @@ const Bookings = () => {
             className="uk-icon-link uk-margin-small-right -pointer"
             uk-icon="plus"
             uk-tooltip="ajouter une nouvelle réservation"
+            onClick={() => setShowNewBookingModal(true)}
           />
           <span
             className="uk-icon-link uk-margin-small-right -pointer"
@@ -42,12 +58,13 @@ const Bookings = () => {
         </div>
       </div>
       <hr />
-      <div id="toggle-filter-bookings" hidden={true}>
+      <div id="toggle-filter-bookings">
         <div className="uk-flex uk-flex-center uk-flex-middle">
           <input
             type="text"
             placeholder="Aa"
             className="uk-input uk-width-medium "
+            onChange={(e) => setFilterInput(e.target.value)}
           />
           <label className="uk-margin-remove-bottom uk-margin-left">
             <input className="uk-checkbox" type="checkbox" /> Payé
@@ -61,7 +78,7 @@ const Bookings = () => {
         </div>
         <hr />
       </div>
-      <TableBookings bookings={test} />
+      <TableBookings bookings={filteredBookings(bookings || [])} />
     </div>
   );
 };

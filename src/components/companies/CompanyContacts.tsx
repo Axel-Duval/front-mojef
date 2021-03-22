@@ -87,6 +87,12 @@ const CompanyContacts: FC<{
 
   return (
     <>
+      <ContactModalForm
+        showModal={addModalState}
+        setShowModal={switchAddModalState}
+        addContact={addContact}
+        companyId={companyId}
+      />
       <Heading
         title="Contacts"
         subtitle={contacts.length + " contacts trouvés"}
@@ -95,12 +101,6 @@ const CompanyContacts: FC<{
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
           onClick={switchAddModalState}
-        />
-        <ContactModalForm
-          showModal={addModalState}
-          setShowModal={switchAddModalState}
-          addContact={addContact}
-          companyId={companyId}
         />
         <span
           className="uk-icon-link -pointer uk-margin-small-right"

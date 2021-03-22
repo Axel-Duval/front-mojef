@@ -37,10 +37,10 @@ export interface ITimelineElement {
  * BOOKINGS
  */
 export interface ITableBookings {
-  bookings: IBookings[];
+  bookings: IBooking[];
 }
 
-export interface IBookings {
+export interface IBooking {
   id?: string;
   notes: string;
   needVolunteers: boolean;

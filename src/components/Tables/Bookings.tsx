@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { IBookings, ITableBookings } from "../../utils/types";
+import { IBooking, ITableBookings } from "../../utils/types";
 
 const Bookings = ({ bookings }: ITableBookings) => {
   const history = useHistory();
@@ -15,7 +15,7 @@ const Bookings = ({ bookings }: ITableBookings) => {
         </tr>
       </thead>
       <tbody>
-        {bookings.map((booking: IBookings, index: number) => {
+        {bookings.map((booking: IBooking, index: number) => {
           return (
             <tr
               key={index}

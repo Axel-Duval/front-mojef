@@ -59,8 +59,9 @@ function Global() {
         });
         localStorage.setItem("access_token", data.access_token);
         setUserContext((currentState) => {
-          currentState.axios.defaults.headers["Authorization"] =
-            data.access_token;
+          currentState.axios.defaults.headers[
+            "Authorization"
+          ] = `Bearer ${data.access_token}`;
           return { ...currentState, _credentials: data, loggedIn: true };
         });
       },

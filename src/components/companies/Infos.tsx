@@ -41,8 +41,9 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
             pos: "top-center",
           });
         });
+    } else {
+      setEditMode(true);
     }
-    setEditMode(true);
   };
 
   const toggleProperty = (field: AllowedField): void => {
