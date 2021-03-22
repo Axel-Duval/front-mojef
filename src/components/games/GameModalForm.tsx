@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import UIkit from "uikit";
+import { useAxios } from "../../hooks/useAxios";
 import { IGame } from "../../utils/types";
 import GameTypeInputForm from "./GameTypeInputForm";
 
-const GameModalForm = (props: {
+const GameModalForm: FC<{
   showModal: boolean;
-  setShowModal: () => void;
-  addGame: (game: IGame) => void;
+  setShowModal: (state: boolean) => void;
+  onSuccess: (game: IGame) => void;
   companyId: string;
-}) => {
+}> = ({ showModal, setShowModal, onSuccess, companyId }) => {
+  const instance = useAxios();
   const [name, setName] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
   const [minPlayers, setMinPlayers] = useState<number>(-1);
@@ -46,10 +49,6 @@ const GameModalForm = (props: {
     type,
   ]);
 
-  useEffect(() => {
-    console.log("type : " + type);
-  }, [type]);
-
   const validInput = (name: string): boolean => {
     if (name.length > 2 && name.length < 40) {
       return true;
@@ -73,8 +72,15 @@ const GameModalForm = (props: {
     return true;
   };
 
-  const submitForm = (): void => {
-    props.addGame({
+  const onGuideFieldChange = (): void => {
+    if (guideField) {
+      setGuideLink(null);
+    }
+    setGuideField(!guideField);
+  };
+
+  const addGame = (): void => {
+    const newGame: IGame = {
       name,
       duration,
       minPlayers,
@@ -83,10 +89,19 @@ const GameModalForm = (props: {
       maxAge,
       isPrototype,
       guideLink,
-      publisherId: props.companyId,
+      publisherId: companyId,
       type: type,
-    });
-    props.setShowModal();
+    };
+    instance
+      .post("/api/game", newGame)
+      .then((res) => onSuccess(res.data))
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible d'ajouter ce jeu`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
   };
 
   const areValid = (min: number, max: number): boolean => {
@@ -95,8 +110,10 @@ const GameModalForm = (props: {
 
   return (
     <div>
-      <Modal isOpen={props.showModal} toggle={props.setShowModal}>
-        <ModalHeader toggle={props.setShowModal}>Ajouter un jeu</ModalHeader>
+      <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
+        <ModalHeader toggle={() => setShowModal(false)}>
+          Ajouter un jeu
+        </ModalHeader>
         <ModalBody>
           <form className="uk-form uk-form-stacked">
             <fieldset className="uk-fieldset">
@@ -219,7 +236,7 @@ const GameModalForm = (props: {
                   <input
                     className="uk-checkbox"
                     type="checkbox"
-                    onChange={() => setGuideField(!guideField)}
+                    onChange={onGuideFieldChange}
                     checked={guideField}
                   />
                   A t-il un lien de manuel?
@@ -244,7 +261,7 @@ const GameModalForm = (props: {
         <ModalFooter>
           <button
             className="uk-button uk-button-primary"
-            onClick={submitForm}
+            onClick={addGame}
             disabled={disabled}
           >
             Créer

@@ -10,28 +10,15 @@ const CompanyContacts: FC<{
   companyContacts: IContact[];
   companyId: string;
 }> = ({ companyContacts, companyId }) => {
-  const [addModalState, setAddModalState] = useState<boolean>(false);
+  const [addModal, setAddModal] = useState<boolean>(false);
   const [contacts, setContacts] = useState<IContact[]>(companyContacts);
   const instance = useAxios();
-  const switchAddModalState = (): void => {
-    setAddModalState(!addModalState);
-  };
 
-  const addContact = (contact: IContact) => {
-    instance
-      .post("/api/contact", contact)
-      .then((res) =>
-        setContacts((contacts) => {
-          return [...contacts, res.data];
-        })
-      )
-      .catch((err) => {
-        UIkit.notification({
-          message: `Impossible d'ajouter ce contact : ${err}`,
-          status: "danger",
-          pos: "top-center",
-        });
-      });
+  const onAddSuccess = (contact: IContact) => {
+    setContacts((contacts) => {
+      return [...contacts, contact];
+    });
+    setAddModal(false);
   };
 
   const deleteContact = (contact: IContact) => {
@@ -96,9 +83,9 @@ const CompanyContacts: FC<{
   return (
     <>
       <ContactModalForm
-        showModal={addModalState}
-        setShowModal={switchAddModalState}
-        addContact={addContact}
+        showModal={addModal}
+        setShowModal={setAddModal}
+        onSuccess={onAddSuccess}
         companyId={companyId}
       />
       <Heading
@@ -108,7 +95,7 @@ const CompanyContacts: FC<{
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
-          onClick={switchAddModalState}
+          onClick={() => setAddModal(true)}
         />
         <span
           className="uk-icon-link -pointer uk-margin-small-right"

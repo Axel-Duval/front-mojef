@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { IContact } from "../../utils/types";
 import * as EmailValidator from "email-validator";
+import { useAxios } from "../../hooks/useAxios";
+import UIkit from "uikit";
 
-const ContactModalForm = (props: {
+const ContactModalForm: FC<{
   showModal: boolean;
-  setShowModal: () => void;
-  addContact: (contact: IContact) => void;
+  setShowModal: (state: boolean) => void;
+  onSuccess: (contact: IContact) => void;
   companyId: string;
-}) => {
+}> = ({ showModal, setShowModal, onSuccess, companyId }) => {
+  const instance = useAxios();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,22 +49,31 @@ const ContactModalForm = (props: {
     return EmailValidator.validate(input);
   };
 
-  const submitForm = (): void => {
-    props.addContact({
+  const addContact = () => {
+    const newContact: IContact = {
       firstname: firstName,
       lastname: lastName,
       email: email,
       phone: phone,
       isPrimary: isPrimary,
-      companyId: props.companyId,
-    });
-    props.setShowModal();
+      companyId: companyId,
+    };
+    instance
+      .post("/api/contact", newContact)
+      .then((res) => onSuccess(res.data))
+      .catch((err) => {
+        UIkit.notification({
+          message: `Impossible d'ajouter ce contact : ${err}`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
   };
 
   return (
     <div>
-      <Modal isOpen={props.showModal} toggle={props.setShowModal}>
-        <ModalHeader toggle={props.setShowModal}>
+      <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
+        <ModalHeader toggle={() => setShowModal(false)}>
           Ajouter un contact
         </ModalHeader>
         <ModalBody>
@@ -135,7 +147,7 @@ const ContactModalForm = (props: {
         <ModalFooter>
           <button
             className="uk-button uk-button-primary"
-            onClick={submitForm}
+            onClick={addContact}
             disabled={disabled}
           >
             {" "}

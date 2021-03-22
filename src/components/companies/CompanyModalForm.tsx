@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Alert, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import UIkit from "uikit";
+import { useAxios } from "../../hooks/useAxios";
 import { IPartialCompany } from "../../utils/types";
 
-const CompanyModalForm = (props: {
+const CompanyModalForm: FC<{
   showModal: boolean;
-  setShowModal: () => void;
-  addCompany: (company: IPartialCompany) => void;
+  setShowModal: (state: boolean) => void;
+  onSuccess: (company: IPartialCompany) => void;
   companies: IPartialCompany[];
-}) => {
+}> = ({ showModal, setShowModal, onSuccess, companies }) => {
+  const instance = useAxios();
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [publisher, setPublisher] = useState<boolean>(false);
@@ -30,20 +33,31 @@ const CompanyModalForm = (props: {
     }
   };
 
-  const submitForm = () => {
-    props.addCompany({
+  const addCompany = () => {
+    const newCompany: IPartialCompany = {
       name,
       address,
       isPublisher: publisher,
       isExhibitor: exhibitor,
       isActive: true,
-    });
-    props.setShowModal();
+    };
+    instance
+      .post("/api/company", newCompany)
+      .then((res) => {
+        onSuccess(res.data);
+      })
+      .catch((err) =>
+        UIkit.notification({
+          message: `Impossible d'ajouter cette société : ${err}`,
+          status: "danger",
+          pos: "top-center",
+        })
+      );
   };
 
   const nameAlreadyExists = (name: string): boolean => {
-    for (let i = 0; i < props.companies.length; i++) {
-      if (props.companies[i].name === name) {
+    for (let i = 0; i < companies.length; i++) {
+      if (companies[i].name === name) {
         return true;
       }
     }
@@ -51,8 +65,10 @@ const CompanyModalForm = (props: {
   };
 
   return (
-    <Modal isOpen={props.showModal} toggle={props.setShowModal}>
-      <ModalHeader toggle={props.setShowModal}>Ajouter une société</ModalHeader>
+    <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
+      <ModalHeader toggle={() => setShowModal(false)}>
+        Ajouter une société
+      </ModalHeader>
       <ModalBody>
         {nameAlreadyExists(name) ? (
           <>
@@ -116,7 +132,7 @@ const CompanyModalForm = (props: {
       <ModalFooter>
         <button
           className="uk-button uk-button-primary"
-          onClick={submitForm}
+          onClick={addCompany}
           disabled={disabled}
         >
           Créer

@@ -11,27 +11,14 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
   companyId,
 }) => {
   const [games, setGames] = useState<IGame[]>(companyGames);
-  const [addModalState, setAddModalState] = useState<boolean>(false);
+  const [addModal, setAddModal] = useState<boolean>(false);
   const instance = useAxios();
-  const switchAddModalState = (): void => {
-    setAddModalState(!addModalState);
-  };
 
-  const addGame = (game: IGame): void => {
-    instance
-      .post("/api/game", game)
-      .then((res) =>
-        setGames((games) => {
-          return [...games, res.data];
-        })
-      )
-      .catch((err) => {
-        UIkit.notification({
-          message: `Impossible d'ajouter ce jeu`,
-          status: "danger",
-          pos: "top-center",
-        });
-      });
+  const onAddSuccess = (game: IGame): void => {
+    setGames((games) => {
+      return [...games, game];
+    });
+    setAddModal(false);
   };
 
   const editGame = (game: IGame) => {
@@ -89,16 +76,16 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
   return (
     <>
       <GameModalForm
-        setShowModal={switchAddModalState}
-        showModal={addModalState}
-        addGame={addGame}
+        setShowModal={setAddModal}
+        showModal={addModal}
+        onSuccess={onAddSuccess}
         companyId={companyId}
       />
       <Heading title="Jeux" subtitle={games.length + " jeux trouvés"}>
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
-          onClick={switchAddModalState}
+          onClick={() => setAddModal(true)}
         />
         <span
           className="uk-icon-link -pointer uk-margin-small-right"

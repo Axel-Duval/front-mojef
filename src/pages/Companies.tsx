@@ -19,17 +19,9 @@ const CompaniesPage = () => {
     }
   }, [data]);
 
-  const switchModalState = () => {
-    setAddModal(!addModal);
-  };
-
-  const addCompany = (company: IPartialCompany) => {
-    instance
-      .post("/api/company", company)
-      .then((res) => {
-        setCompanies([...companies, res.data]);
-      })
-      .catch((err) => console.error(err));
+  const onAddSuccess = (company: IPartialCompany) => {
+    setCompanies([...companies, company]);
+    setAddModal(false);
   };
 
   return (
@@ -40,7 +32,7 @@ const CompaniesPage = () => {
           <span
             className="uk-icon-link uk-margin-small-right -pointer"
             uk-icon="plus"
-            onClick={switchModalState}
+            onClick={() => setAddModal(true)}
             uk-tooltip="ajouter une nouvelle société"
           />
           <span
@@ -78,8 +70,8 @@ const CompaniesPage = () => {
       </div>
       <CompanyModalForm
         showModal={addModal}
-        setShowModal={switchModalState}
-        addCompany={addCompany}
+        setShowModal={setAddModal}
+        onSuccess={onAddSuccess}
         companies={companies}
       />
       <CompaniesTable companies={companies} />
