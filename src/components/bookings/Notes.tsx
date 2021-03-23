@@ -9,13 +9,13 @@ interface INotes {
 }
 
 const Notes = ({ notes, bookingId }: INotes) => {
-  const [_notes, setNotes] = useState(notes);
+  const [reactiveNotes, setNotes] = useState(notes);
 
   const instance = useAxios();
 
   const saveNotes = () => {
     instance
-      .patch(`/api/booking/${bookingId}`, { notes: _notes })
+      .patch(`/api/booking/${bookingId}`, { notes: reactiveNotes })
       .then((res) => console.log("ok work"))
       .catch((err) => {
         console.log(err);
@@ -29,9 +29,12 @@ const Notes = ({ notes, bookingId }: INotes) => {
 
   return (
     <div className="uk-margin-medium-top">
-      <Heading title="Notes" subtitle="Synchronisation automatique">
+      <Heading
+        title="Notes"
+        subtitle={reactiveNotes.split(" ").length + " mots"}
+      >
         <span
-          className="uk-icon-link"
+          className="uk-icon-link -pointer"
           uk-icon="cloud-upload"
           uk-tooltip="auto-sync"
         />
@@ -40,7 +43,7 @@ const Notes = ({ notes, bookingId }: INotes) => {
         className="uk-textarea -notes-texarea"
         placeholder="Aa"
         rows={4}
-        value={_notes}
+        value={reactiveNotes}
         onChange={(e) => setNotes(e.target.value)}
         onBlur={saveNotes}
       />

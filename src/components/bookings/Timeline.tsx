@@ -94,19 +94,24 @@ const Timeline = ({ exchanges, bookingId }: ITimeline) => {
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading
         title="Suivi des échanges"
-        subtitle="Dernière mise a jour il y a 2h"
+        subtitle={"Dernier échange: " + timeline[0].datetime}
       >
         <span
-          className="uk-icon-link uk-margin-small-right"
+          className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
           onClick={() => {
             addModal();
           }}
         />
         <span
-          className="uk-icon-link"
+          className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="info"
           uk-tooltip="Vous pouvez modifier/supprimer un échange en passant la souris dessus"
+        />
+        <span
+          className="uk-icon-link -pointer"
+          uk-icon="cloud-upload"
+          uk-tooltip="auto-sync"
         />
       </Heading>
       <div className="-timeline">
@@ -122,14 +127,14 @@ const Timeline = ({ exchanges, bookingId }: ITimeline) => {
                     </p>
                     <div className="uk-flex uk-flex-middle uk-width-auto -timeline-hover-expand">
                       <span
-                        className="uk-icon-link uk-margin-small-right uk-margin-small-left"
+                        className="uk-icon-link uk-margin-small-right uk-margin-small-left -pointer"
                         uk-icon="file-edit"
                         onClick={() => {
                           editModal(elt, index);
                         }}
                       />
                       <span
-                        className="uk-icon-link"
+                        className="uk-icon-link -pointer"
                         uk-icon="trash"
                         onClick={() => {
                           remove(elt);

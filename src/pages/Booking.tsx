@@ -136,7 +136,7 @@ const Booking = () => {
             </div>
             <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
             <div className="-flex-1">
-              <BookingGames />
+              {booking && <BookingGames bookingId={booking.id!} />}
             </div>
           </div>
         </li>

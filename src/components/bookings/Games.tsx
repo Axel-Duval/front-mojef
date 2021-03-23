@@ -1,17 +1,26 @@
 import Heading from "../Heading";
 
-const BookingGames = () => {
+interface IBookingGames {
+  bookingId: string;
+}
+
+const BookingGames = ({ bookingId }: IBookingGames) => {
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
-      <Heading
-        title="Jeux présentés"
-        subtitle="Dernière mise a jour il y a 10min"
-      >
-        <span className="uk-icon-link uk-margin-small-right" uk-icon="plus" />
+      <Heading title="Jeux présentés" subtitle="Jeux trouvés : 10">
         <span
-          className="uk-icon-link"
+          className="uk-icon-link uk-margin-small-right -pointer"
+          uk-icon="plus"
+        />
+        <span
+          className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="info"
           uk-tooltip="Vous pouvez ajouter/modifier ou supprimer des jeux"
+        />
+        <span
+          className="uk-icon-link -pointer"
+          uk-icon="cloud-upload"
+          uk-tooltip="auto-sync"
         />
       </Heading>
       <div className="-booking-games">

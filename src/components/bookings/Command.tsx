@@ -38,11 +38,19 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading title="Récapitulatif" subtitle="Dernière mise a jour il y a 2h">
-        <span className="uk-icon-link uk-margin-small-right" uk-icon="plus" />
         <span
-          className="uk-icon-link"
+          className="uk-icon-link uk-margin-small-right -pointer"
+          uk-icon="plus"
+        />
+        <span
+          className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="info"
           uk-tooltip="Vous pouvez modifier/supprimer la commande en passant la souris dessus"
+        />
+        <span
+          className="uk-icon-link -pointer"
+          uk-icon="cloud-upload"
+          uk-tooltip="auto-sync"
         />
       </Heading>
       <div className="-booking-command">

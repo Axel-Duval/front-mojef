@@ -12,7 +12,7 @@ interface IBookingContacts {
 }
 
 const Contacts = ({ contacts, companyId }: IBookingContacts) => {
-  const [_contacts, setContacts] = useState(contacts);
+  const [reactiveContact, setContacts] = useState(contacts);
   const [showContactModal, setShowContactModal] = useState(false);
   const [editContact, setEditContact] = useState<IContact | null>(null);
   const instance = useAxios();
@@ -24,7 +24,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
         instance
           .delete(`/api/contact/${contact.id}`)
           .then(() => {
-            setContacts(_contacts.filter((item) => item !== contact));
+            setContacts(reactiveContact.filter((item) => item !== contact));
           })
           .catch(() => {
             UIkit.notification({
@@ -39,7 +39,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
   const handleToggle = (contact: IContact) => {
     //Toggle isPrimary
     setContacts(
-      _contacts.map((c) => {
+      reactiveContact.map((c) => {
         if (c.id === contact.id) {
           return {
             ...c,
@@ -55,7 +55,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
       .catch(() => {
         //Error => re-toggle isPrimary
         setContacts(
-          _contacts.map((c) => {
+          reactiveContact.map((c) => {
             if (c.id === contact.id) {
               return contact;
             }
@@ -76,7 +76,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
       //Edit mode
       setEditContact(null);
       setContacts(
-        _contacts.map((c) => {
+        reactiveContact.map((c) => {
           if (c.id !== contact.id) {
             return c;
           } else {
@@ -86,7 +86,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
       );
     } else {
       //Add mode
-      setContacts([contact, ..._contacts]);
+      setContacts([contact, ...reactiveContact]);
     }
   };
 
@@ -109,7 +109,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
         <div className="uk-flex uk-flex-column -fullheight">
           <Heading
             title="Contacts"
-            subtitle="Dernière mis à jour il y a 10 jours"
+            subtitle={"Contacts trouvés: " + reactiveContact.length}
           >
             <span
               className="uk-icon-link uk-margin-small-right -pointer"
@@ -117,15 +117,20 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
               onClick={() => setShowContactModal(true)}
             />
             <span
-              className="uk-icon-link -pointer"
+              className="uk-icon-link uk-margin-small-right -pointer"
               uk-icon="info"
               uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des contacts"
+            />
+            <span
+              className="uk-icon-link -pointer"
+              uk-icon="cloud-upload"
+              uk-tooltip="auto-sync"
             />
           </Heading>
           <div className="-booking-contacts">
             <div className="-booking-contact-container">
               <ContactsTable
-                contacts={_contacts}
+                contacts={reactiveContact}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
                 onToggle={handleToggle}
