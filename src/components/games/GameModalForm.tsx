@@ -1,61 +1,99 @@
 import { FC, useEffect, useState } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import UIkit from "uikit";
-import { useAxios } from "../../hooks/useAxios";
+import { useForm } from "../../hooks/useForm";
 import { IGame } from "../../utils/types";
+import { minLength, required } from "../../validators";
 import GameTypeInputForm from "./GameTypeInputForm";
 
 const GameModalForm: FC<{
   showModal: boolean;
   setShowModal: (state: boolean) => void;
-  onSuccess: (game: IGame) => void;
+  onSubmit: (game: IGame, editMode: boolean) => void;
+  game: IGame | null;
   companyId: string;
-}> = ({ showModal, setShowModal, onSuccess, companyId }) => {
-  const instance = useAxios();
-  const [name, setName] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
-  const [minPlayers, setMinPlayers] = useState<number>(-1);
-  const [maxPlayers, setMaxPlayers] = useState<number>(-1);
-  const [minAge, setMinAge] = useState<number>(-1);
-  const [maxAge, setMaxAge] = useState<number>(-1);
-  const [guideLink, setGuideLink] = useState<string | null>(null);
-  const [guideField, setGuideField] = useState<boolean>(false);
-  const [isPrototype, setIsPrototype] = useState<boolean>(false);
-  const [type, setType] = useState<string>("");
-  const [disabled, setDisabled] = useState<boolean>(true);
-
+}> = ({ showModal, setShowModal, onSubmit, game, companyId }) => {
   useEffect(() => {
-    if (
-      areValid(minAge, maxAge) &&
-      areValid(minPlayers, maxPlayers) &&
-      validInput(name) &&
-      validInput(duration) &&
-      validInput(type) &&
-      ((guideField && guideLink) || (!guideField && !guideLink))
-    ) {
-      setDisabled(false);
+    if (game) {
+      form.name.set(game.name);
+      form.duration.set(game.duration);
+      form.minPlayers.set(game.minPlayers);
+      form.maxPlayers.set(game.maxPlayers);
+      form.minAge.set(game.minAge);
+      form.maxAge.set(game.maxAge);
+      form.isPrototype.set(game.isPrototype);
+      form.guideLink.set(game.guideLink);
+      form.type.set(game.type);
     } else {
-      setDisabled(true);
+      form.name.set("");
+      form.duration.set("");
+      form.minPlayers.set(0);
+      form.maxPlayers.set(0);
+      form.minAge.set(0);
+      form.maxAge.set(0);
+      form.isPrototype.set(false);
+      form.guideField.set(false);
+      form.guideLink.set(null);
+      form.type.set("");
     }
-  }, [
-    name,
-    duration,
-    minPlayers,
-    maxPlayers,
-    minAge,
-    maxAge,
-    guideField,
-    guideLink,
-    type,
-  ]);
+  }, [game]);
 
-  const validInput = (name: string): boolean => {
-    if (name.length > 2 && name.length < 40) {
-      return true;
+  const ageConstraint = (formData: any): null | any => {
+    if (formData.minAge <= formData.maxAge) {
+      return null;
     } else {
-      return false;
+      return {
+        minltmaxage: false,
+      };
     }
   };
+
+  const playersConstraint = (formData: any): null | any => {
+    if (formData.minPlayers <= formData.maxPlayers) {
+      return null;
+    } else {
+      return {
+        minltmaxplayers: false,
+      };
+    }
+  };
+
+  const positiveNumber = (v: number): null | any => {
+    let res = v > -1 ? null : { ltzero: true };
+    return res;
+  };
+
+  const guideConstraint = (formData: any): null | any => {
+    if (
+      (formData.guideField && formData.guideLink) ||
+      (!formData.guideField && !formData.guideLink)
+    ) {
+      return null;
+    } else {
+      return {
+        guideConstraint: "false",
+      };
+    }
+  };
+
+  const validUrl = (input: string | null): any | null => {
+    if (input) {
+    }
+    return null;
+  };
+
+  const [form, formErrors] = useForm({
+    name: { default: "", validators: [minLength(2)] },
+    duration: { default: "", validators: [minLength(2)] },
+    minPlayers: { default: 0, validators: [positiveNumber] },
+    maxPlayers: { default: 0, validators: [positiveNumber] },
+    minAge: { default: 0, validators: [positiveNumber] },
+    maxAge: { default: 0, validators: [positiveNumber] },
+    guideLink: { default: false, validators: [] },
+    guideField: { default: null, validators: [] },
+    isPrototype: { default: false, validators: [] },
+    type: { default: "", validators: [minLength(2)] },
+  });
+  const editMode = game ? true : false;
 
   const handleNumberChange = (
     i: string,
@@ -68,51 +106,38 @@ const GameModalForm: FC<{
     }
   };
 
-  const validUrl = (url: string): boolean => {
-    return true;
-  };
-
   const onGuideFieldChange = (): void => {
-    if (guideField) {
-      setGuideLink(null);
+    if (form.guideField.get()) {
+      form.guideLink.get(null);
     }
-    setGuideField(!guideField);
+    form.guideField.set(!form.guideField.get());
   };
 
-  const addGame = (): void => {
+  const submitForm = () => {
     const newGame: IGame = {
-      name,
-      duration,
-      minPlayers,
-      maxPlayers,
-      minAge,
-      maxAge,
-      isPrototype,
-      guideLink,
+      name: form.name.get(),
+      duration: form.duration.get(),
+      minPlayers: form.minPlayers.get(),
+      maxPlayers: form.maxPlayers.get(),
+      minAge: form.minAge.get(),
+      maxAge: form.maxAge.get(),
+      isPrototype: form.isPrototype.get(),
+      guideLink: form.guideLink.get(),
       publisherId: companyId,
-      type: type,
+      type: form.type.get(),
     };
-    instance
-      .post("/api/game", newGame)
-      .then((res) => onSuccess(res.data))
-      .catch(() => {
-        UIkit.notification({
-          message: `Impossible d'ajouter ce jeu`,
-          status: "danger",
-          pos: "top-center",
-        });
-      });
-  };
-
-  const areValid = (min: number, max: number): boolean => {
-    return min > -1 && max > -1 && min <= max;
+    if (editMode) {
+      onSubmit({ ...newGame, id: game!.id }, true);
+    } else {
+      onSubmit(newGame, false);
+    }
   };
 
   return (
     <div>
       <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
         <ModalHeader toggle={() => setShowModal(false)}>
-          Ajouter un jeu
+          {editMode ? `Modifier ${game!.name}` : "Ajouter un jeu"}
         </ModalHeader>
         <ModalBody>
           <form className="uk-form uk-form-stacked">
@@ -122,12 +147,11 @@ const GameModalForm: FC<{
                   Nom du jeu
                 </label>
                 <input
-                  className={`uk-input ${
-                    validInput(name) ? "" : "uk-form-danger"
-                  }`}
+                  className="uk-input"
                   type="text"
                   placeholder="entrer le nom..."
-                  onChange={(e) => setName(e.currentTarget.value)}
+                  defaultValue={form.name.get()}
+                  onChange={(e) => form.name.set(e.currentTarget.value)}
                 />
               </div>
               <div className="uk-margin">
@@ -135,12 +159,11 @@ const GameModalForm: FC<{
                   Durée du jeu
                 </label>
                 <input
-                  className={`uk-input ${
-                    validInput(duration) ? "" : "uk-form-danger"
-                  }`}
+                  className="uk-input"
                   type="text"
                   placeholder="entrer la durée..."
-                  onChange={(e) => setDuration(e.currentTarget.value)}
+                  defaultValue={form.duration.get()}
+                  onChange={(e) => form.duration.set(e.currentTarget.value)}
                 />
               </div>
               <div className="uk-margin">
@@ -153,12 +176,14 @@ const GameModalForm: FC<{
                       Age minimum
                     </label>
                     <input
-                      className={`uk-input ${
-                        areValid(minAge, maxAge) ? "" : "uk-form-danger"
-                      }`}
+                      className="uk-input"
                       type="number"
+                      defaultValue={form.minAge.get()}
                       onChange={(e) => {
-                        handleNumberChange(e.currentTarget.value, setMinAge);
+                        handleNumberChange(
+                          e.currentTarget.value,
+                          form.minAge.set
+                        );
                       }}
                     />
                   </div>
@@ -170,12 +195,14 @@ const GameModalForm: FC<{
                       Age maximum
                     </label>
                     <input
-                      className={`uk-input ${
-                        areValid(minAge, maxAge) ? "" : "uk-form-danger"
-                      }`}
+                      className="uk-input"
                       type="number"
+                      defaultValue={form.maxAge.get()}
                       onChange={(e) =>
-                        handleNumberChange(e.currentTarget.value, setMaxAge)
+                        handleNumberChange(
+                          e.currentTarget.value,
+                          form.maxAge.set
+                        )
                       }
                     />
                   </div>
@@ -191,12 +218,14 @@ const GameModalForm: FC<{
                       Nombre de joueurs minimum
                     </label>
                     <input
-                      className={`uk-input ${
-                        areValid(minPlayers, maxPlayers) ? "" : "uk-form-danger"
-                      }`}
+                      className="uk-input"
                       type="number"
+                      defaultValue={form.minPlayers.get()}
                       onChange={(e) =>
-                        handleNumberChange(e.currentTarget.value, setMinPlayers)
+                        handleNumberChange(
+                          e.currentTarget.value,
+                          form.minPlayers.set
+                        )
                       }
                     />
                   </div>
@@ -208,25 +237,32 @@ const GameModalForm: FC<{
                       Nombre de joueurs maximum
                     </label>
                     <input
-                      className={`uk-input ${
-                        areValid(minPlayers, maxPlayers) ? "" : "uk-form-danger"
-                      }`}
+                      className="uk-input"
                       type="number"
+                      defaultValue={form.maxPlayers.get()}
                       onChange={(e) =>
-                        handleNumberChange(e.currentTarget.value, setMaxPlayers)
+                        handleNumberChange(
+                          e.currentTarget.value,
+                          form.maxPlayers.set
+                        )
                       }
                     />
                   </div>
                 </div>
               </div>
-              <GameTypeInputForm setType={setType} />
+              <GameTypeInputForm
+                defaultValue={form.type.get}
+                setType={(value: string) => form.type.set(value)}
+              />
               <div className="uk-margin">
                 <label>
                   <input
                     className="uk-checkbox"
                     type="checkbox"
-                    onChange={() => setIsPrototype(!isPrototype)}
-                    checked={isPrototype}
+                    onChange={() =>
+                      form.isPrototype.set(!form.isPrototype.get())
+                    }
+                    checked={form.isPrototype.get()}
                   />
                   Est-ce un prototype?
                 </label>
@@ -237,22 +273,23 @@ const GameModalForm: FC<{
                     className="uk-checkbox"
                     type="checkbox"
                     onChange={onGuideFieldChange}
-                    checked={guideField}
+                    checked={form.guideField.get()}
                   />
                   A t-il un lien de manuel?
                 </label>
               </div>
-              <div className="uk-margin" hidden={!guideField}>
+              <div className="uk-margin" hidden={!form.guideField.get()}>
                 <label className="uk-form-label" htmlFor="form-stacked-text">
                   Lien du manuel
                 </label>
                 <input
-                  className={`uk-input ${
-                    validUrl(name) ? "" : "uk-form-danger"
-                  }`}
+                  className="uk-input"
                   type="text"
                   placeholder="entrer le lien..."
-                  onChange={(e) => setGuideLink(e.currentTarget.value)}
+                  defaultValue={
+                    form.guideLink.get() ? form.guideLink.get() : "https://"
+                  }
+                  onChange={(e) => form.guideLink.set(e.currentTarget.value)}
                 />
               </div>
             </fieldset>
@@ -261,10 +298,10 @@ const GameModalForm: FC<{
         <ModalFooter>
           <button
             className="uk-button uk-button-primary"
-            onClick={addGame}
-            disabled={disabled}
+            onClick={submitForm}
+            disabled={!formErrors.$form.valid}
           >
-            Créer
+            {editMode ? "Modifier" : "Créer"}
           </button>
         </ModalFooter>
       </Modal>

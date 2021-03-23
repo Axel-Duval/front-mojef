@@ -7,12 +7,13 @@ interface IRequestResult {
 }
 
 const GameTypeInputForm: FC<{
+  defaultValue: string;
   setType: (gameTypeId: string) => void;
-}> = ({ setType }) => {
+}> = ({ defaultValue, setType }) => {
   const [gameTypes, isLoading, isErrored] = useGet<IRequestResult[]>(
     "/api/game/types"
   );
-  const [userInput, setUserInput] = useState<string>("");
+  const [userInput, setUserInput] = useState<string>(defaultValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const inputProps = {

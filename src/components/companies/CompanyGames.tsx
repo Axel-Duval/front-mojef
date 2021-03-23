@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { IGame } from "../../utils/types";
@@ -11,18 +11,63 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
   companyId,
 }) => {
   const [games, setGames] = useState<IGame[]>(companyGames);
-  const [addModal, setAddModal] = useState<boolean>(false);
+  const [modalState, setModalState] = useState<boolean>(false);
+  const [gameToEdit, setGameToEdit] = useState<IGame | null>(null);
   const instance = useAxios();
 
-  const onAddSuccess = (game: IGame): void => {
-    setGames((games) => {
-      return [...games, game];
-    });
-    setAddModal(false);
+  useEffect(() => {
+    if (!modalState) {
+      setGameToEdit(null);
+    }
+  }, [modalState]);
+
+  const addGame = (game: IGame): void => {
+    instance
+      .post("/api/game", game)
+      .then((res) =>
+        setGames((games) => {
+          return [...games, res.data];
+        })
+      )
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible d'ajouter ce jeu`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+    setModalState(false);
   };
 
   const editGame = (game: IGame) => {
-    console.log(`${game.name} wants to be edited.`);
+    instance
+      .patch(`api/game/${game.id}`, game)
+      .then(() =>
+        setGames((games) =>
+          games.map((g: IGame) => {
+            if (g.id === game.id) {
+              return game;
+            }
+            return g;
+          })
+        )
+      )
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible d'éditeur le jeu ${game.name}`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+    setModalState(false);
+  };
+
+  const onModalSubmit = (game: IGame, editMode: boolean) => {
+    if (editMode) {
+      editGame(game);
+    } else {
+      addGame(game);
+    }
   };
 
   const deleteGame = (game: IGame) => {
@@ -39,6 +84,11 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
         pos: "top-center",
       });
     });
+  };
+
+  const handleEdit = (game: IGame) => {
+    setGameToEdit(game);
+    setModalState(true);
   };
 
   const handleDelete = (game: IGame) => {
@@ -76,16 +126,17 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
   return (
     <>
       <GameModalForm
-        setShowModal={setAddModal}
-        showModal={addModal}
-        onSuccess={onAddSuccess}
+        setShowModal={setModalState}
+        showModal={modalState}
+        onSubmit={onModalSubmit}
         companyId={companyId}
+        game={gameToEdit}
       />
       <Heading title="Jeux" subtitle={games.length + " jeux trouvés"}>
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
-          onClick={() => setAddModal(true)}
+          onClick={() => setModalState(true)}
         />
         <span
           className="uk-icon-link -pointer uk-margin-small-right"
@@ -100,7 +151,7 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
       </Heading>
       <GamesTable
         games={games}
-        onEdit={editGame}
+        onEdit={handleEdit}
         onDelete={handleDelete}
         onToggle={switchGameIsPrototype}
       />
