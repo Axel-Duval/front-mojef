@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "uikit/dist/css/uikit-core.min.css";
 import "uikit/dist/css/uikit.min.css";
@@ -31,7 +31,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function prepareLoginState(): UserCredentials {
   const access_token = localStorage.getItem("access_token");
-  return access_token ? { access_token } : null;
+  const refresh_token = localStorage.getItem("refresh_token");
+  return access_token && refresh_token ? { access_token, refresh_token } : null;
 }
 
 function prepareAxiosInstance(creds: UserCredentials): AxiosInstance {
@@ -48,8 +49,30 @@ function prepareAxiosInstance(creds: UserCredentials): AxiosInstance {
 
 function Global() {
   const [userContext, setUserContext] = useState<UserContextValue>(() => {
-    const userCredentials = prepareLoginState();
+    let userCredentials = prepareLoginState();
     const axiosInstance = prepareAxiosInstance(userCredentials);
+    if (userCredentials) {
+      const expirationDateRefresh = JSON.parse(
+        atob(userCredentials.refresh_token.split(".")[0])
+      ).exp;
+      const expRefresh = new Date(expirationDateRefresh);
+      if (expRefresh > new Date()) {
+        userCredentials = null;
+      } else {
+        axiosInstance
+          .post("/auth/refresh", {
+            refresh_token: userCredentials.refresh_token,
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              userContext.setCredentials(res.data);
+            }
+          })
+          .catch(() => {
+            userContext.logout();
+          });
+      }
+    }
     return {
       loggedIn: !!userCredentials,
       login: async (username, password) => {
@@ -57,29 +80,70 @@ function Global() {
           username,
           password,
         });
-        localStorage.setItem("access_token", data.access_token);
-        setUserContext((currentState) => {
-          currentState.axios.defaults.headers[
-            "Authorization"
-          ] = `Bearer ${data.access_token}`;
-          return { ...currentState, _credentials: data, loggedIn: true };
-        });
+        userContext.setCredentials(data);
       },
       logout: () => {
-        localStorage.removeItem("access_token");
-        setUserContext((currentState) => {
-          delete currentState.axios.defaults.headers["Authorization"];
-          return {
-            ...currentState,
-            _credentials: null,
-            loggedIn: false,
-          };
-        });
+        userContext.setCredentials(null);
+      },
+      setCredentials: (credentials: UserCredentials) => {
+        if (credentials) {
+          localStorage.setItem("access_token", credentials.access_token);
+          localStorage.setItem("refresh_token", credentials.refresh_token);
+          setUserContext((ctx) => {
+            ctx.axios.defaults.headers[
+              "Authorization"
+            ] = `Bearer ${credentials.access_token}`;
+            return {
+              ...ctx,
+              _credentials: credentials,
+              loggedIn: true,
+            };
+          });
+        } else {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          setUserContext((ctx) => {
+            delete ctx.axios.defaults.headers["Authorization"];
+            return {
+              ...ctx,
+              _credentials: credentials,
+              loggedIn: false,
+            };
+          });
+        }
       },
       _credentials: userCredentials,
       axios: axiosInstance,
     };
   });
+
+  useEffect(() => {
+    if (userContext._credentials) {
+      const accessTokenPayload = JSON.parse(
+        atob(userContext._credentials.access_token.split(".")[1])
+      );
+      const expTime = accessTokenPayload.exp;
+      const time = expTime * 1000 - new Date().getTime() - 5000;
+
+      const id = setTimeout(() => {
+        userContext.axios
+          .post("/auth/refresh", {
+            refresh_token: userContext._credentials?.refresh_token,
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              userContext.setCredentials(res.data);
+            }
+          })
+          .catch(() => {
+            userContext.logout();
+          });
+      }, time);
+      return () => {
+        clearTimeout(id);
+      };
+    }
+  }, [userContext]);
 
   return (
     <UserContext.Provider value={userContext}>
