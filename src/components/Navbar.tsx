@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { FestivalContext } from "../contexts/festival";
@@ -44,7 +44,7 @@ const Navbar = () => {
           >
             {ctx.currentFestival
               ? ctx.currentFestival.name
-              : "Choisir un festival ..."}
+              : "Sélectionner ...."}
           </button>
         </li>
         <li className="uk-nav-header uk-margin-top">Organisation</li>
