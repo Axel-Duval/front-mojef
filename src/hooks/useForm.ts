@@ -87,7 +87,7 @@ export function useForm(
     }
     allErrors.$form.valid = !formErrored;
     setErrors(allErrors);
-  }, [formData, validators]); // Do not depend on formSpecif, applyFieldValidators, applyFormValidators !!
+  }, [formData]); // Do not depend on formSpecif, applyFieldValidators, applyFormValidators !!
 
   const formAccess = Object.keys(formData).reduce((prev, fieldName) => {
     prev[fieldName] = {

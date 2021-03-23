@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import svg from "../assets/images/collaboration.svg";
 import UIkit from "uikit";
 import { UserContext } from "../contexts/user";

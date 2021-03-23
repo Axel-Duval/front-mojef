@@ -1,5 +1,3 @@
-import React from "react";
-
 const Account = () => {
   return (
     <div className="uk-flex uk-flex-column -fullheight">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Heading from "../Heading";
 import table from "../../assets/images/table.svg";
 import selection from "../../assets/images/selection.svg";

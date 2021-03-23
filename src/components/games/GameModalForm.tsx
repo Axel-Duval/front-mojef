@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { useForm } from "../../hooks/useForm";
 import { IGame } from "../../utils/types";
-import { minLength, required } from "../../validators";
+import { minLength } from "../../validators";
 import GameTypeInputForm from "./GameTypeInputForm";
 
 const GameModalForm: FC<{
@@ -32,7 +32,7 @@ const GameModalForm: FC<{
       form.maxAge.set(0);
       form.isPrototype.set(false);
       form.guideField.set(false);
-      form.guideLink.set(null);
+      form.guideLink.set("");
       form.type.set("");
     }
   }, [game]);
@@ -63,10 +63,7 @@ const GameModalForm: FC<{
   };
 
   const guideConstraint = (formData: any): null | any => {
-    if (
-      (formData.guideField && formData.guideLink) ||
-      (!formData.guideField && !formData.guideLink)
-    ) {
+    if (formData.guideField && formData.guideLink.length > 2) {
       return null;
     } else {
       return {
@@ -81,18 +78,21 @@ const GameModalForm: FC<{
     return null;
   };
 
-  const [form, formErrors] = useForm({
-    name: { default: "", validators: [minLength(2)] },
-    duration: { default: "", validators: [minLength(2)] },
-    minPlayers: { default: 0, validators: [positiveNumber] },
-    maxPlayers: { default: 0, validators: [positiveNumber] },
-    minAge: { default: 0, validators: [positiveNumber] },
-    maxAge: { default: 0, validators: [positiveNumber] },
-    guideLink: { default: false, validators: [] },
-    guideField: { default: null, validators: [] },
-    isPrototype: { default: false, validators: [] },
-    type: { default: "", validators: [minLength(2)] },
-  });
+  const [form, formErrors] = useForm(
+    {
+      name: { default: "", validators: [minLength(2)] },
+      duration: { default: "", validators: [minLength(2)] },
+      minPlayers: { default: 0, validators: [positiveNumber] },
+      maxPlayers: { default: 0, validators: [positiveNumber] },
+      minAge: { default: 0, validators: [positiveNumber] },
+      maxAge: { default: 0, validators: [positiveNumber] },
+      guideLink: { default: false, validators: [] },
+      guideField: { default: null, validators: [] },
+      isPrototype: { default: false, validators: [] },
+      type: { default: "https://", validators: [minLength(2)] },
+    },
+    [playersConstraint, ageConstraint, guideConstraint]
+  );
   const editMode = game ? true : false;
 
   const handleNumberChange = (
@@ -122,7 +122,7 @@ const GameModalForm: FC<{
       minAge: form.minAge.get(),
       maxAge: form.maxAge.get(),
       isPrototype: form.isPrototype.get(),
-      guideLink: form.guideLink.get(),
+      guideLink: form.guideField.get() ? form.guideLink.get() : null,
       publisherId: companyId,
       type: form.type.get(),
     };
@@ -286,9 +286,7 @@ const GameModalForm: FC<{
                   className="uk-input"
                   type="text"
                   placeholder="entrer le lien..."
-                  defaultValue={
-                    form.guideLink.get() ? form.guideLink.get() : "https://"
-                  }
+                  defaultValue={form.guideLink.get()}
                   onChange={(e) => form.guideLink.set(e.currentTarget.value)}
                 />
               </div>

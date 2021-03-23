@@ -1,4 +1,3 @@
-import React from "react";
 import { IContact } from "../../utils/types";
 import Modal from "../Modal";
 import ContactForm from "./ContactForm";

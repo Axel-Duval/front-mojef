@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useGet } from "../../hooks/useGet";
 import Autosuggest from "react-autosuggest";
 
@@ -27,7 +27,7 @@ const GameTypeInputForm: FC<{
   const findSuggestions = (input: string): string[] => {
     if (gameTypes) {
       let res: string[] = [];
-      const cleanedInput = input.trim().toLowerCase();
+      const cleanedInput = input.toLowerCase().trim();
       for (let i = 0; i < gameTypes.length; i++) {
         if (
           gameTypes[i].type.toLowerCase().slice(0, cleanedInput.length) ===

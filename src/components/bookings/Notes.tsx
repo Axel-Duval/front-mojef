@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import Heading from "../Heading";

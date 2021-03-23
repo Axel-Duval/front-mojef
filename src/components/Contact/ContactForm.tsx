@@ -1,4 +1,3 @@
-import React from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import svg from "../assets/images/collaboration.svg";
 import FestivalForm from "../components/festivals/FestivalForm";
 import { FestivalContext } from "../contexts/festival";

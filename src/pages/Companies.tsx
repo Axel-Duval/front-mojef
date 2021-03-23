@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyModalForm from "../components/companies/CompanyModalForm";
 import CompaniesTable from "../components/Tables/Companies";
 import { useAxios } from "../hooks/useAxios";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
@@ -11,7 +11,7 @@ import Zones from "./pages/Zones";
 import Categories from "./pages/Categories";
 import Account from "./pages/Account";
 import Accounts from "./pages/Accounts";
-import { Redirect, Route, Switch } from "react-router";
+import { Route, Switch } from "react-router";
 import {
   FestivalContext,
   FestivalContextValue,

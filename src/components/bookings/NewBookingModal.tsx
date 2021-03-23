@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import UIkit from "uikit";
 import { FestivalContext } from "../../contexts/festival";
 import { useAxios } from "../../hooks/useAxios";
