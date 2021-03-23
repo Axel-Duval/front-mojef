@@ -5,19 +5,17 @@ import { ITimelineElement } from "../../utils/types";
 import Heading from "../Heading";
 
 interface ITimeline {
-  notes: string;
+  exchanges: string;
   bookingId: string;
 }
 
-const Timeline = ({ notes, bookingId }: ITimeline) => {
+const Timeline = ({ exchanges, bookingId }: ITimeline) => {
   const instance = useAxios();
   const [timeline, setTimeline] = useState<ITimelineElement[]>(
-    timelineFromString(notes)
+    timelineFromString(exchanges)
   );
 
   useEffect(() => {
-    console.log(timeline);
-    console.log(bookingId);
     function format() {
       return timeline
         .map((item: ITimelineElement) => {
@@ -26,7 +24,7 @@ const Timeline = ({ notes, bookingId }: ITimeline) => {
         .join("<#>");
     }
     instance
-      .patch(`/api/booking/${bookingId}`, { notes: format() })
+      .patch(`/api/booking/${bookingId}`, { exchanges: format() })
       .catch(() => {
         UIkit.notification({
           message: `Impossible de sauvegarder les échanges`,

@@ -3,9 +3,9 @@
  */
 export interface ITableContacts {
   contacts: IContact[];
-  onEdit: Function;
-  onDelete: Function;
-  onToggle: Function;
+  onEdit?: Function;
+  onDelete?: Function;
+  onToggle?: Function;
 }
 export interface IContact {
   id?: string;
@@ -43,6 +43,7 @@ export interface ITableBookings {
 export interface IBooking {
   id?: string;
   notes: string;
+  exchanges: string;
   needVolunteers: boolean;
   isPresent: boolean;
   isPlaced: boolean;
@@ -52,12 +53,13 @@ export interface IBooking {
   billSentOn?: Date;
   billPaidOn?: Date;
   festival: string;
-  companyId: string;
+  company: string;
 }
 
 export interface IBookingJoinCompany {
   id?: string;
   notes: string;
+  exchanges: string;
   needVolunteers: boolean;
   isPresent: boolean;
   isPlaced: boolean;

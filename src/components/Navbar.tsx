@@ -58,9 +58,18 @@ const Navbar = () => {
         <li>
           <NavLink activeClassName="uk-active" to="/app/reservations">
             <span className="uk-margin-small-right" uk-icon="icon: bell" />
-            Réservations
+            Suivis
           </NavLink>
         </li>
+        {/* <li>
+          <NavLink exact activeClassName="uk-active" to="/app/prix">
+            <span
+              className="uk-margin-small-right"
+              uk-icon="icon:  credit-card"
+            />
+            Prix
+          </NavLink>
+        </li> */}
         <li>
           <NavLink exact activeClassName="uk-active" to="/app/comptabilite">
             <span className="uk-margin-small-right" uk-icon="icon: file-text" />

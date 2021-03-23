@@ -1,79 +1,140 @@
 import React, { useState } from "react";
 import UIkit from "uikit";
+import { useAxios } from "../../hooks/useAxios";
 import { IContact } from "../../utils/types";
 import Heading from "../Heading";
 import ContactsTable from "../Tables/Contacts";
+import ContactModal from "../Contact/ContactModal";
 
-const Contacts = () => {
-  //Fakes contacts !
-  const [contacts, setContacts] = useState<IContact[]>([
-    {
-      id: "fakeid",
-      firstname: "Axel",
-      lastname: "Duval",
-      email: "axel.duval@gmail.com",
-      phone: "05.65.45.67.89",
-      companyId: "companyId",
-      isPrimary: true,
-    },
-    {
-      id: "fakeid",
-      firstname: "Lilian",
-      lastname: "Misser",
-      email: "axel.duval@gmail.com",
-      phone: "07.67.11.40.53",
-      companyId: "companyId",
-      isPrimary: false,
-    },
-  ]);
+interface IBookingContacts {
+  contacts: IContact[];
+  companyId: string;
+}
 
-  const handleAdd = () => {
-    console.log("Let's add a contact");
-  };
+const Contacts = ({ contacts, companyId }: IBookingContacts) => {
+  const [_contacts, setContacts] = useState(contacts);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [editContact, setEditContact] = useState<IContact | null>(null);
+  const instance = useAxios();
+
   const handleDelete = (contact: IContact) => {
     UIkit.modal
       .confirm("Etes vous sûr de vouloir supprimer ce contact ?")
       .then(() => {
-        setContacts(contacts.filter((item) => item !== contact));
+        instance
+          .delete(`/api/contact/${contact.id}`)
+          .then(() => {
+            setContacts(_contacts.filter((item) => item !== contact));
+          })
+          .catch(() => {
+            UIkit.notification({
+              message: `Impossible de supprimer le contact`,
+              status: "danger",
+              pos: "top-center",
+            });
+          });
       });
   };
-  const handleEdit = (contact: IContact) => {
-    console.log("edit: " + contact);
-  };
+
   const handleToggle = (contact: IContact) => {
-    console.log("toggled: " + contact);
+    //Toggle isPrimary
+    setContacts(
+      _contacts.map((c) => {
+        if (c.id === contact.id) {
+          return {
+            ...c,
+            isPrimary: !contact.isPrimary,
+          };
+        }
+        return c;
+      })
+    );
+    //Perform action (API)
+    instance
+      .patch(`/api/contact/${contact.id!}`, { isPrimary: !contact.isPrimary })
+      .catch(() => {
+        //Error => re-toggle isPrimary
+        setContacts(
+          _contacts.map((c) => {
+            if (c.id === contact.id) {
+              return contact;
+            }
+            return c;
+          })
+        );
+        UIkit.notification({
+          message: `Impossible de changer le statut du contact`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+  };
+
+  const handleSuccess = (contact: IContact, isEdit: boolean) => {
+    setShowContactModal(false);
+    if (isEdit) {
+      //Edit mode
+      setEditContact(null);
+      setContacts(
+        _contacts.map((c) => {
+          if (c.id !== contact.id) {
+            return c;
+          } else {
+            return contact;
+          }
+        })
+      );
+    } else {
+      //Add mode
+      setContacts([contact, ..._contacts]);
+    }
+  };
+
+  const handleEdit = (contact: IContact) => {
+    setEditContact(contact);
+    setShowContactModal(true);
   };
 
   return (
-    <div className="-flex-1">
-      <div className="uk-flex uk-flex-column -fullheight">
-        <Heading
-          title="Contacts"
-          subtitle="Dernière mis à jour il y a 10 jours"
-        >
-          <span
-            className="uk-icon-link uk-margin-small-right"
-            uk-icon="plus"
-            onClick={handleAdd}
-          />
-          <span
-            className="uk-icon-link"
-            uk-icon="info"
-            uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des contacts"
-          />
-        </Heading>
-        <div className="-booking-contacts">
-          <div className="-booking-contact-container">
-            <ContactsTable
-              contacts={contacts}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
-              onToggle={handleToggle}
+    <>
+      {showContactModal && (
+        <ContactModal
+          onClose={() => setShowContactModal(false)}
+          handleSuccess={handleSuccess}
+          companyId={companyId}
+          contact={editContact || undefined}
+        />
+      )}
+      <div className="-flex-1">
+        <div className="uk-flex uk-flex-column -fullheight">
+          <Heading
+            title="Contacts"
+            subtitle="Dernière mis à jour il y a 10 jours"
+          >
+            <span
+              className="uk-icon-link uk-margin-small-right -pointer"
+              uk-icon="plus"
+              onClick={() => setShowContactModal(true)}
             />
+            <span
+              className="uk-icon-link -pointer"
+              uk-icon="info"
+              uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des contacts"
+            />
+          </Heading>
+          <div className="-booking-contacts">
+            <div className="-booking-contact-container">
+              <ContactsTable
+                contacts={_contacts}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                onToggle={handleToggle}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

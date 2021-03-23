@@ -11,12 +11,16 @@ interface INewFestivalModal {
 
 const NewFestivalModal = ({ show, onClose, onSuccess }: INewFestivalModal) => {
   return (
-    <Modal show={show} onClose={onClose}>
-      <h2 className="uk-modal-title uk-margin-bottom -noselect">
-        Nouveau festival
-      </h2>
-      <FestivalForm onSuccess={onSuccess} />
-    </Modal>
+    <>
+      {show && (
+        <Modal onClose={onClose}>
+          <h2 className="uk-modal-title uk-margin-bottom -noselect">
+            Nouveau festival
+          </h2>
+          <FestivalForm onSuccess={onSuccess} />
+        </Modal>
+      )}
+    </>
   );
 };
 

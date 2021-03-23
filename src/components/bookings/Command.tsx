@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import Heading from "../Heading";
 import table from "../../assets/images/table.svg";
 import selection from "../../assets/images/selection.svg";
+import { IBooking } from "../../utils/types";
+import { useAxios } from "../../hooks/useAxios";
+import UIkit from "uikit";
 
-const Bookingcommand = () => {
+interface IBookingCommand {
+  booking: IBooking;
+}
+
+const Bookingcommand = ({ booking }: IBookingCommand) => {
+  const instance = useAxios();
+  const [checkboxes, setCheckboxes] = useState({
+    isPlaced: booking.isPlaced,
+    isPresent: booking.isPresent,
+    needVolunteers: booking.needVolunteers,
+  });
+
+  //TODO: Problem here, can't see checkboxes updates but PATCH works
+  const toggleCheckbox = (item: any) => {
+    //Toggle checkboxes
+    const tmp = checkboxes;
+    setCheckboxes(Object.assign(tmp, item));
+
+    //Perform action (API)
+    instance.patch(`/api/booking/${booking.id}`, item).catch(() => {
+      //Error re-toggle checkboxes
+      setCheckboxes(tmp);
+      UIkit.notification({
+        message: `Impossible d'appliquer la modification`,
+        status: "danger",
+        pos: "top-center",
+      });
+    });
+  };
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading title="Récapitulatif" subtitle="Dernière mise a jour il y a 2h">
@@ -106,13 +137,35 @@ const Bookingcommand = () => {
       </div>
       <div className="uk-flex uk-flex-between">
         <label>
-          <input className="uk-checkbox" type="checkbox" /> Placé sur le plan
+          <input
+            className="uk-checkbox"
+            type="checkbox"
+            checked={checkboxes.isPlaced}
+            onChange={() => toggleCheckbox({ isPlaced: !checkboxes.isPlaced })}
+          />{" "}
+          Placé sur le plan
         </label>
         <label>
-          <input className="uk-checkbox" type="checkbox" /> Sera présent
+          <input
+            className="uk-checkbox"
+            type="checkbox"
+            checked={checkboxes.isPresent}
+            onChange={() =>
+              toggleCheckbox({ isPresent: !checkboxes.isPresent })
+            }
+          />{" "}
+          Sera présent
         </label>
         <label>
-          <input className="uk-checkbox" type="checkbox" /> Besoin bénévoles
+          <input
+            className="uk-checkbox"
+            type="checkbox"
+            checked={checkboxes.needVolunteers}
+            onChange={() =>
+              toggleCheckbox({ needVolunteers: !checkboxes.needVolunteers })
+            }
+          />{" "}
+          Besoin bénévoles
         </label>
       </div>
     </div>

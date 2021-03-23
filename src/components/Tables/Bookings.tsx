@@ -21,7 +21,7 @@ const Bookings = ({ bookings }: ITableBookings) => {
               key={index}
               onClick={() => history.push("/app/reservations/" + booking.id)}
             >
-              <td>{booking.company.name}</td>
+              <td className="uk-text-bold">{booking.company.name}</td>
               <td>
                 {new Date(booking.createdOn).toLocaleDateString("fr-FR", {
                   day: "numeric",
