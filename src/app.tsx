@@ -102,19 +102,6 @@ function App() {
                 <Route exact path="/app/zones" component={Zones} />
               </>
             ) : null}
-
-            {festivalCtxValue.festivals.length ? (
-              <Route path="*">
-                <Redirect to="/app" />
-              </Route>
-            ) : (
-              <>
-                <Route exact path="/app/demarrage" component={NoFestival} />
-                <Route path="*">
-                  <Redirect to="/app/demarrage" />
-                </Route>
-              </>
-            )}
           </Switch>
         </main>
       </div>
