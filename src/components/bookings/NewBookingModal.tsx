@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
 import { FestivalContext } from "../../contexts/festival";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { useGet } from "../../hooks/useGet";
-import { IBooking, IBookingCreate, ICompany } from "../../utils/types";
+import { IBookingCreate, ICompany } from "../../utils/types";
 import { required } from "../../validators";
 import Modal from "../Modal";
 
@@ -16,6 +16,7 @@ interface INewBookingModal {
 const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
   const instance = useAxios();
   const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
+  const [bookingsCompaniesId, setBookingsCompaniesId] = useState(new Array());
   const [form, formErrors] = useForm({
     needVolunteers: { default: false, validators: [] },
     isPresent: { default: false, validators: [] },
@@ -24,6 +25,25 @@ const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
   });
 
   const [companies, ,] = useGet<ICompany[]>("/api/company");
+
+  useEffect(() => {
+    instance
+      .get(`/api/booking/festival/${currentFestivalId}`)
+      .then((res) => {
+        setBookingsCompaniesId(
+          res.data.map((booking: any) => {
+            return booking.companyId;
+          })
+        );
+      })
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible de récupérer les sociétés`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+  }, [instance, currentFestivalId]);
 
   const onSubmit = (booking: IBookingCreate) => {
     instance
@@ -76,11 +96,13 @@ const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
               <option value="">-</option>
               {companies &&
                 companies.map((company, index) => {
-                  return (
-                    <option key={index} value={company.id}>
-                      {company.name}
-                    </option>
-                  );
+                  if (!bookingsCompaniesId.includes(company.id)) {
+                    return (
+                      <option key={index} value={company.id}>
+                        {company.name}
+                      </option>
+                    );
+                  }
                 })}
             </select>
           </div>
