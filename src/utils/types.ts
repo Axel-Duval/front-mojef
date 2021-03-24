@@ -145,3 +145,8 @@ export interface ITableGames {
   onDelete: Function;
   onToggle: Function;
 }
+
+export interface IArea {
+  label: string;
+  id?: string;
+}

@@ -7,7 +7,7 @@ import Companies from "./pages/Companies";
 import Company from "./pages/Company";
 import Accounting from "./pages/Accounting";
 import Games from "./pages/Games";
-import Zones from "./pages/Zones";
+import Areas from "./pages/Areas";
 import Categories from "./pages/Categories";
 import Account from "./pages/Account";
 import Accounts from "./pages/Accounts";
@@ -18,7 +18,6 @@ import {
   FestivalData,
 } from "./contexts/festival";
 import { useGet } from "./hooks/useGet";
-import NoFestival from "./pages/NoFestival";
 
 function App() {
   const [
@@ -99,7 +98,7 @@ function App() {
                 <Route exact path="/app/reservations" component={Bookings} />
                 <Route exact path="/app/reservations/:id" component={Booking} />
                 <Route exact path="/app/comptabilite" component={Accounting} />
-                <Route exact path="/app/zones" component={Zones} />
+                <Route exact path="/app/zones" component={Areas} />
               </>
             ) : null}
           </Switch>
