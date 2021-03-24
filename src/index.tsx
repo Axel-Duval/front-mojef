@@ -12,6 +12,8 @@ import "../src/assets/styles/company.css";
 import "../src/assets/styles/bookings.css";
 import "../src/assets/styles/tables.css";
 import "../src/assets/styles/modal.css";
+import "../src/assets/styles/tile.css";
+import "../src/assets/styles/prices.css";
 
 import App from "./app";
 import Login from "./pages/Login";

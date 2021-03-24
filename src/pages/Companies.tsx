@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
 import CompanyModalForm from "../components/companies/CompanyModalForm";
+import Loading from "../components/Loading";
 import CompaniesTable from "../components/Tables/Companies";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
@@ -10,10 +11,10 @@ import { ICompany, IPartialCompany } from "../utils/types";
 const CompaniesPage = () => {
   const instance = useAxios();
   const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
-  const [companies, setCompanies] = useState<IPartialCompany[]>([]);
+  const [companies, setCompanies] = useState<IPartialCompany[]>(new Array());
   const [addModal, setAddModal] = useState<boolean>(false);
 
-  const [data, ,] = useGet<IPartialCompany[]>("/api/company");
+  const [data, loading] = useGet<IPartialCompany[]>("/api/company");
 
   const [bookingsCompaniesId, setBookingsCompaniesId] = useState(new Array());
 
@@ -74,61 +75,73 @@ const CompaniesPage = () => {
   };
 
   return (
-    <div className="uk-flex uk-flex-column -fullheight">
-      <div className="uk-flex uk-flex-between uk-flex-middle">
-        <h1 className="uk-heading-bullet">Sociétés</h1>
-        <div>
-          <span
-            className="uk-icon-link uk-margin-small-right -pointer"
-            uk-icon="plus"
-            onClick={() => setAddModal(true)}
-            uk-tooltip="ajouter une nouvelle société"
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="uk-flex uk-flex-column -fullheight">
+          <div className="uk-flex uk-flex-between uk-flex-middle">
+            <h1 className="uk-heading-bullet">Sociétés</h1>
+            <div>
+              <span
+                className="uk-icon-link uk-margin-small-right -pointer"
+                uk-icon="plus"
+                onClick={() => setAddModal(true)}
+                uk-tooltip="ajouter une nouvelle société"
+              />
+              <span
+                className="uk-icon-link uk-margin-small-right -pointer"
+                uk-icon="database"
+                uk-tooltip="filter les sociétés"
+                uk-toggle="target: #toggle-filter-companies"
+              />
+              <span
+                className="uk-icon-link -pointer"
+                uk-icon="cloud-upload"
+                uk-tooltip="auto-sync"
+              />
+            </div>
+          </div>
+          <hr />
+          <div id="toggle-filter-companies">
+            <div className="uk-flex uk-flex-center uk-flex-middle">
+              <input
+                type="text"
+                placeholder="Aa"
+                className="uk-input uk-width-medium "
+              />
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Editeur
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Exposant
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Actif
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Suivi en cours
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Pas de suivi
+              </label>
+            </div>
+            <hr />
+          </div>
+          <CompanyModalForm
+            showModal={addModal}
+            setShowModal={setAddModal}
+            onSuccess={onAddSuccess}
+            companies={companies}
           />
-          <span
-            className="uk-icon-link uk-margin-small-right -pointer"
-            uk-icon="database"
-            uk-tooltip="filter les sociétés"
-            uk-toggle="target: #toggle-filter-companies"
-          />
-          <span
-            className="uk-icon-link -pointer"
-            uk-icon="cloud-upload"
-            uk-tooltip="auto-sync"
+          <CompaniesTable
+            companies={companies}
+            onCreateBooking={handleCreateBooking}
+            bookingsCompaniesId={bookingsCompaniesId}
           />
         </div>
-      </div>
-      <hr />
-      <div id="toggle-filter-companies">
-        <div className="uk-flex uk-flex-center uk-flex-middle">
-          <input
-            type="text"
-            placeholder="Aa"
-            className="uk-input uk-width-medium "
-          />
-          <label className="uk-margin-remove-bottom uk-margin-left">
-            <input className="uk-checkbox" type="checkbox" /> Editeur
-          </label>
-          <label className="uk-margin-remove-bottom uk-margin-left">
-            <input className="uk-checkbox" type="checkbox" /> Exposant
-          </label>
-          <label className="uk-margin-remove-bottom uk-margin-left">
-            <input className="uk-checkbox" type="checkbox" /> Actif
-          </label>
-        </div>
-        <hr />
-      </div>
-      <CompanyModalForm
-        showModal={addModal}
-        setShowModal={setAddModal}
-        onSuccess={onAddSuccess}
-        companies={companies}
-      />
-      <CompaniesTable
-        companies={companies}
-        onCreateBooking={handleCreateBooking}
-        bookingsCompaniesId={bookingsCompaniesId}
-      />
-    </div>
+      )}
+    </>
   );
 };
 
