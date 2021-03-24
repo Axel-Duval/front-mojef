@@ -261,7 +261,7 @@ const Areas = () => {
                   <>
                     <span
                       className="uk-icon-link"
-                      uk-icon="icon: pencil"
+                      uk-icon="icon: file-edit"
                       onClick={startEditing.bind(this, area)}
                       style={{ marginRight: "6px" }}
                     ></span>
@@ -277,7 +277,7 @@ const Areas = () => {
                 {area.label === editedArea.label ? null : (
                   <span
                     className="uk-icon-link"
-                    uk-icon="icon: close"
+                    uk-icon="icon: trash"
                     onClick={deleteArea.bind(this, area)}
                   ></span>
                 )}
