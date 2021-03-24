@@ -4,7 +4,7 @@ import { FestivalContext } from "../../contexts/festival";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { useGet } from "../../hooks/useGet";
-import { IBooking, ICompany } from "../../utils/types";
+import { IBooking, IBookingCreate, ICompany } from "../../utils/types";
 import { required } from "../../validators";
 import Modal from "../Modal";
 
@@ -25,11 +25,10 @@ const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
 
   const [companies, ,] = useGet<ICompany[]>("/api/company");
 
-  const onSubmit = (booking: IBooking) => {
+  const onSubmit = (booking: IBookingCreate) => {
     instance
       .post("/api/booking", booking)
       .then((res) => {
-        console.log(res);
         handleSuccess(res.data);
       })
       .catch(() => {

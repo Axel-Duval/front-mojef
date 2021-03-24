@@ -40,7 +40,7 @@ export interface ITableBookings {
   bookings: IBookingJoinCompany[];
 }
 
-export interface IBooking {
+export interface IBookingCreate {
   id?: string;
   notes: string;
   exchanges: string;
@@ -54,6 +54,22 @@ export interface IBooking {
   billPaidOn?: Date;
   festival: string;
   company: string;
+}
+
+export interface IBooking {
+  id?: string;
+  notes: string;
+  exchanges: string;
+  needVolunteers: boolean;
+  isPresent: boolean;
+  isPlaced: boolean;
+  discount: number;
+  fees: number;
+  createdOn: Date;
+  billSentOn?: Date;
+  billPaidOn?: Date;
+  festival: string;
+  companyId: string;
 }
 
 export interface IBookingJoinCompany {

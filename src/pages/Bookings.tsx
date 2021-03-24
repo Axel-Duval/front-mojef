@@ -56,7 +56,7 @@ const Bookings = () => {
   const handleSuccess = (booking: IBooking) => {
     //Fetch company
     instance
-      .get(`/api/company/${booking.company}`)
+      .get(`/api/company/${booking.companyId}`)
       .then((res) => {
         const newBooking: IBookingJoinCompany = {
           ...booking,
@@ -68,8 +68,15 @@ const Bookings = () => {
         } else {
           setBookings([newBooking]);
         }
+        setShowNewBookingModal(false);
       })
-      .catch(() => {});
+      .catch(() => {
+        UIkit.notification({
+          message: "Impossible de créer un suivi",
+          status: "danger",
+          pos: "top-center",
+        });
+      });
   };
 
   return (
