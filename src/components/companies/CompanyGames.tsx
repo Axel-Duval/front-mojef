@@ -32,13 +32,12 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
           return g;
         })
       );
-      setModalState(false);
     } else {
       setGames((games) => {
         return [...games, game];
       });
-      setModalState(false);
     }
+    setModalState(false);
   };
 
   const deleteGame = (game: IGame) => {
@@ -82,7 +81,7 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
     });
     instance
       .patch(`/api/game/${game.id}`, { isPrototype: !game.isPrototype })
-      .catch((err) => {
+      .catch(() => {
         setGames((games) => {
           return games.map((g) => {
             if (g.id === game.id) {
@@ -130,6 +129,7 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
         onEdit={handleEdit}
         onDelete={handleDelete}
         onToggle={switchGameIsPrototype}
+        showCompanies={false}
       />
     </>
   );

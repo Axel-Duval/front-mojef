@@ -135,7 +135,7 @@ export interface IGame {
   isPrototype: boolean;
   publisherId: string;
   publisher?: ICompany;
-  guideLink: string | null;
+  guideLink?: string | null;
   type: string;
 }
 
@@ -144,6 +144,7 @@ export interface ITableGames {
   onEdit: Function;
   onDelete: Function;
   onToggle: Function;
+  showCompanies: boolean;
 }
 
 export interface IArea {

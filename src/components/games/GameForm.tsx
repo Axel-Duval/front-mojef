@@ -4,12 +4,13 @@ import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { IGame } from "../../utils/types";
 import { minLength } from "../../validators";
+import CompanyInputForm from "../companies/CompanyInputForm";
 import GameTypeInputForm from "./GameTypeInputForm";
 
 const GameForm: FC<{
   onSuccess: (game: IGame, editMode: boolean) => void;
   game: IGame | null;
-  companyId: string;
+  companyId?: string;
 }> = ({ onSuccess, game, companyId }) => {
   const instance = useAxios();
   const [loading, setLoading] = useState<boolean>(false);
@@ -78,6 +79,10 @@ const GameForm: FC<{
       },
       isPrototype: { default: game ? game.isPrototype : false, validators: [] },
       type: { default: game ? game.type : "", validators: [minLength(2)] },
+      cpnId: {
+        default: companyId ? companyId : game ? game.id : "",
+        validators: [],
+      },
     },
     [playersConstraint, ageConstraint, guideConstraint]
   );
@@ -142,7 +147,7 @@ const GameForm: FC<{
       maxAge: form.maxAge.get(),
       isPrototype: form.isPrototype.get(),
       guideLink: form.guideField.get() ? form.guideLink.get() : null,
-      publisherId: companyId,
+      publisherId: companyId ? form.cpnId.get() : "",
       type: form.type.get(),
     };
     if (editMode) {
@@ -249,6 +254,9 @@ const GameForm: FC<{
           defaultValue={form.type.get}
           setType={(value: string) => form.type.set(value)}
         />
+        {!companyId && !game && (
+          <CompanyInputForm defaultValue={""} setCompanyId={form.cpnId.set} />
+        )}
         <div className="uk-margin">
           <label>
             <input

@@ -1,3 +1,4 @@
+import { worker } from "node:cluster";
 import { ITableGames, IGame } from "../../utils/types";
 
 const GamesTable: React.FC<ITableGames> = ({
@@ -5,6 +6,7 @@ const GamesTable: React.FC<ITableGames> = ({
   onEdit,
   onDelete,
   onToggle,
+  showCompanies,
 }) => {
   const formatNumberOfPlayers = (game: IGame) => {
     if (game.minPlayers === game.maxPlayers) {
@@ -24,6 +26,7 @@ const GamesTable: React.FC<ITableGames> = ({
           <th>Age</th>
           <th>Genre</th>
           <th>Prototype?</th>
+          {showCompanies && <th>Éditeur</th>}
           <th>Actions</th>
         </tr>
       </thead>
@@ -44,6 +47,7 @@ const GamesTable: React.FC<ITableGames> = ({
                   onChange={() => onToggle(game)}
                 />
               </td>
+              {game.publisher && <td>{game.publisher.name}</td>}
               <td>
                 {game.guideLink && (
                   <a onClick={() => window.open(game.guideLink!)}>

@@ -250,7 +250,7 @@ const Areas = () => {
                       onChange={(e) => editAreaForm.label.set(e.target.value)}
                       autoFocus={true}
                       onKeyDown={(e) => {
-                        if (e.code === 'Escape') {
+                        if (e.code === "Escape") {
                           stopEditing();
                         }
                       }}
