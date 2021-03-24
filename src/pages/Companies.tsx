@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
-import CompanyModalForm from "../components/companies/CompanyModalForm";
+import CompanyForm from "../components/companies/CompanyForm";
 import Loading from "../components/Loading";
+import Modal from "../components/Modal";
 import CompaniesTable from "../components/Tables/Companies";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
@@ -12,7 +13,7 @@ const CompaniesPage = () => {
   const instance = useAxios();
   const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
   const [companies, setCompanies] = useState<IPartialCompany[]>(new Array());
-  const [addModal, setAddModal] = useState<boolean>(false);
+  const [modalState, setModalState] = useState<boolean>(false);
 
   const [data, loading] = useGet<IPartialCompany[]>("/api/company");
 
@@ -30,7 +31,7 @@ const CompaniesPage = () => {
       })
       .catch(() => {
         UIkit.notification({
-          message: `Impossible de récupérer les sociétés`,
+          message: `Impossible de récupérer les sociétés du festival courant.`,
           status: "danger",
           pos: "top-center",
         });
@@ -45,7 +46,7 @@ const CompaniesPage = () => {
 
   const onAddSuccess = (company: IPartialCompany) => {
     setCompanies([...companies, company]);
-    setAddModal(false);
+    setModalState(false);
   };
 
   const handleCreateBooking = (company: ICompany) => {
@@ -86,7 +87,7 @@ const CompaniesPage = () => {
               <span
                 className="uk-icon-link uk-margin-small-right -pointer"
                 uk-icon="plus"
-                onClick={() => setAddModal(true)}
+                onClick={() => setModalState(true)}
                 uk-tooltip="ajouter une nouvelle société"
               />
               <span
@@ -116,9 +117,7 @@ const CompaniesPage = () => {
               <label className="uk-margin-remove-bottom uk-margin-left">
                 <input className="uk-checkbox" type="checkbox" /> Exposant
               </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Actif
-              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left"></label>
               <label className="uk-margin-remove-bottom uk-margin-left">
                 <input className="uk-checkbox" type="checkbox" /> Suivi en cours
               </label>
@@ -128,12 +127,14 @@ const CompaniesPage = () => {
             </div>
             <hr />
           </div>
-          <CompanyModalForm
-            showModal={addModal}
-            setShowModal={setAddModal}
-            onSuccess={onAddSuccess}
-            companies={companies}
-          />
+          {modalState && (
+            <Modal
+              onClose={() => setModalState(false)}
+              title="Ajouter une société."
+            >
+              <CompanyForm onSuccess={onAddSuccess} companies={companies} />
+            </Modal>
+          )}
           <CompaniesTable
             companies={companies}
             onCreateBooking={handleCreateBooking}
