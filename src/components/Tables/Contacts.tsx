@@ -37,14 +37,14 @@ const ContactsTable: React.FC<ITableContacts> = ({
               <td>
                 {onEdit && (
                   <span
-                    className="uk-icon-link uk-margin-small-left"
+                    className="uk-icon-link uk-margin-small-left -pointer"
                     uk-icon="file-edit"
                     onClick={() => onEdit(contact)}
                   />
                 )}
                 {onDelete && (
                   <span
-                    className="uk-icon-link uk-margin-small-left"
+                    className="uk-icon-link uk-margin-small-left -pointer"
                     uk-icon="trash"
                     onClick={() => onDelete(contact)}
                   />

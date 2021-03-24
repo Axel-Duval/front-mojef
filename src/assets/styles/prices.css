@@ -1,0 +1,18 @@
+.-prices-card:not(:first-child) {
+  left: -2rem;
+  z-index: 2;
+}
+.-prices-card:last-child {
+  z-index: 1;
+  left: -4rem;
+}
+.-prices-card:first-child {
+  z-index: 3;
+  left: 0;
+}
+
+.-price-label {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
