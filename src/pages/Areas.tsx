@@ -196,7 +196,16 @@ const Areas = () => {
       <div className="uk-flex uk-flex-between uk-flex-middle">
         <h1 className="uk-heading-bullet">Zones de jeux</h1>
         <div>
-          <span className="uk-icon-link" uk-icon="plus" />
+          <span
+            className="uk-icon-link -pointer uk-margin-small-right"
+            uk-icon="info"
+            uk-tooltip="Selectionnez une zone pour voir les jeux qu'elle contient"
+          />
+          <span
+            className="uk-icon-link -pointer"
+            uk-icon="cloud-upload"
+            uk-tooltip="auto-sync"
+          />
         </div>
       </div>
       <hr />
@@ -212,8 +221,8 @@ const Areas = () => {
           type="text"
           className={
             formErrors.label && formErrors.label.unique
-              ? "uk-input uk-form-danger"
-              : "uk-input"
+              ? "uk-input uk-width-medium uk-form-danger"
+              : "uk-input uk-width-medium"
           }
           placeholder="Entrez un nom pour créer une zone"
           disabled={loading}
@@ -221,11 +230,11 @@ const Areas = () => {
           onChange={(e) => newAreaForm.label.set(e.target.value)}
         />
       </form>
-      <table className="uk-table">
+      <table className="uk-table uk-table-divider uk-table-small -noselect">
         <thead>
           <tr>
             <th className="uk-table-expand">Label</th>
-            <th></th>
+            <th>actions</th>
           </tr>
         </thead>
         <tbody>
@@ -242,8 +251,8 @@ const Areas = () => {
                     <input
                       className={
                         editAreaErrors.label && editAreaErrors.label.unique
-                          ? "uk-input uk-form-danger"
-                          : "uk-input"
+                          ? "uk-input uk-form-width-medium uk-form-small uk-form-danger"
+                          : "uk-input uk-form-width-medium uk-form-small"
                       }
                       type="text"
                       value={editAreaForm.label.get()}
@@ -258,15 +267,7 @@ const Areas = () => {
                     ></input>
                   </form>
                 ) : (
-                  <>
-                    <span
-                      className="uk-icon-link"
-                      uk-icon="icon: file-edit"
-                      onClick={startEditing.bind(this, area)}
-                      style={{ marginRight: "6px" }}
-                    ></span>
-                    {area.label}
-                  </>
+                  <>{area.label}</>
                 )}
               </td>
               <td
@@ -275,11 +276,19 @@ const Areas = () => {
                 }}
               >
                 {area.label === editedArea.label ? null : (
-                  <span
-                    className="uk-icon-link"
-                    uk-icon="icon: trash"
-                    onClick={deleteArea.bind(this, area)}
-                  ></span>
+                  <>
+                    <span
+                      className="uk-icon-link -pointer uk-margin-small-right"
+                      uk-icon="icon: file-edit"
+                      onClick={startEditing.bind(this, area)}
+                      style={{ marginRight: "6px" }}
+                    />
+                    <span
+                      className="uk-icon-link -pointer"
+                      uk-icon="icon: trash"
+                      onClick={deleteArea.bind(this, area)}
+                    />
+                  </>
                 )}
               </td>
             </tr>

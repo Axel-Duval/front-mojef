@@ -104,7 +104,7 @@ const CompaniesPage = () => {
             </div>
           </div>
           <hr />
-          <div id="toggle-filter-companies">
+          <div id="toggle-filter-companies" hidden={true}>
             <div className="uk-flex uk-flex-center uk-flex-middle">
               <input
                 type="text"

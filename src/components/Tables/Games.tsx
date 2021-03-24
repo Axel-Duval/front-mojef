@@ -12,20 +12,20 @@ const GamesTable: React.FC<ITableGames> = ({
     if (game.minPlayers === game.maxPlayers) {
       return `${game.minPlayers} requis`;
     } else {
-      return `De ${game.minPlayers} à ${game.maxPlayers} joueurs.`;
+      return `${game.minPlayers}-${game.maxPlayers} joueurs`;
     }
   };
 
   return (
-    <table className="uk-table uk-table-justify uk-table-divider uk-table-small -noselect">
+    <table className="uk-table uk-table-divider uk-table-small -noselect">
       <thead>
         <tr>
-          <th>Jeu</th>
+          <th className="uk-table-expand">Jeu</th>
           <th>Durée</th>
-          <th>Nombre de joueurs</th>
+          <th>Joueurs</th>
           <th>Age</th>
           <th>Genre</th>
-          <th>Prototype?</th>
+          <th>Prototype</th>
           {showCompanies && <th>Éditeur</th>}
           <th>Actions</th>
         </tr>
@@ -34,12 +34,12 @@ const GamesTable: React.FC<ITableGames> = ({
         {games.map((game: IGame, index: number) => {
           return (
             <tr key={index}>
-              <td>{game.name}</td>
+              <td className="uk-text-bold">{game.name}</td>
               <td>{game.duration}</td>
               <td>{formatNumberOfPlayers(game)}</td>
-              <td>{`De ${game.minAge} à ${game.maxAge} ans`}</td>
+              <td>{`${game.minAge}-${game.maxAge} ans`}</td>
               <td>{game.type}</td>
-              <td className="uk-text-center">
+              <td>
                 <input
                   className="uk-checkbox"
                   type="checkbox"
@@ -52,18 +52,18 @@ const GamesTable: React.FC<ITableGames> = ({
                 {game.guideLink && (
                   <a href={game.guideLink!} target="_blank" rel="noreferrer">
                     <span
-                      className="uk-margin-small-right"
-                      uk-icon="icon: location"
+                      className="uk-icon-link -pointer uk-margin-small-right"
+                      uk-icon="icon: link"
                     />
                   </a>
                 )}
                 <span
-                  className="uk-icon-link uk-margin-small-right uk-margin-small-left"
+                  className="uk-icon-link uk-margin-small-right -pointer"
                   uk-icon="file-edit"
                   onClick={() => onEdit(game)}
                 />
                 <span
-                  className="uk-icon-link"
+                  className="uk-icon-link -pointer"
                   uk-icon="trash"
                   onClick={() => onDelete(game)}
                 />

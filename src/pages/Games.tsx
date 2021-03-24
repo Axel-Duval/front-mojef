@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import UIkit from "uikit";
 import GameForm from "../components/games/GameForm";
+import Loading from "../components/Loading";
 import Modal from "../components/Modal";
 import GamesTable from "../components/Tables/Games";
 import { useAxios } from "../hooks/useAxios";
@@ -9,7 +10,7 @@ import { IGame } from "../utils/types";
 
 const Games = () => {
   const instance = useAxios();
-  const [data, ,] = useGet<IGame[]>("/api/game");
+  const [data, loading] = useGet<IGame[]>("/api/game");
   const [games, setGames] = useState<IGame[]>([]);
   const [modalState, setModalState] = useState<boolean>(false);
   const [gameToEdit, setGameToEdit] = useState<IGame | null>(null);
@@ -98,34 +99,76 @@ const Games = () => {
   };
 
   return (
-    <div className="uk-flex uk-flex-column -fullheight">
-      <div className="uk-flex uk-flex-between uk-flex-middle">
-        <h1 className="uk-heading-bullet">Jeux</h1>
-        <div>
-          <span
-            className="uk-icon-link"
-            uk-icon="plus"
-            onClick={() => setModalState(true)}
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="uk-flex uk-flex-column -fullheight">
+          <div className="uk-flex uk-flex-between uk-flex-middle">
+            <h1 className="uk-heading-bullet">Jeux</h1>
+            <div>
+              <span
+                className="uk-icon-link uk-margin-small-right"
+                uk-icon="plus"
+                onClick={() => setModalState(true)}
+              />
+              <span
+                className="uk-icon-link uk-margin-small-right -pointer"
+                uk-icon="database"
+                uk-tooltip="filter les jeux"
+                uk-toggle="target: #toggle-filter-games"
+              />
+              <span
+                className="uk-icon-link -pointer"
+                uk-icon="cloud-upload"
+                uk-tooltip="auto-sync"
+              />
+            </div>
+          </div>
+          <hr />
+          <div id="toggle-filter-games" hidden={true}>
+            <div className="uk-flex uk-flex-center uk-flex-middle">
+              <input
+                type="text"
+                placeholder="Aa"
+                className="uk-input uk-width-medium "
+              />
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Editeur
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Exposant
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left"></label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Suivi en cours
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                <input className="uk-checkbox" type="checkbox" /> Pas de suivi
+              </label>
+            </div>
+            <hr />
+          </div>
+          {modalState && (
+            <Modal
+              onClose={() => setModalState(false)}
+              title={
+                gameToEdit ? `Modifier ${gameToEdit.name}` : "Ajouter un jeu"
+              }
+            >
+              <GameForm onSuccess={handleModalSuccess} game={gameToEdit} />
+            </Modal>
+          )}
+          <GamesTable
+            games={games}
+            onEdit={handleEdit}
+            onToggle={switchGameIsPrototype}
+            onDelete={handleDelete}
+            showCompanies={true}
           />
         </div>
-      </div>
-      <hr />
-      {modalState && (
-        <Modal
-          onClose={() => setModalState(false)}
-          title={gameToEdit ? `Modifier ${gameToEdit.name}` : "Ajouter un jeu"}
-        >
-          <GameForm onSuccess={handleModalSuccess} game={gameToEdit} />
-        </Modal>
       )}
-      <GamesTable
-        games={games}
-        onEdit={handleEdit}
-        onToggle={switchGameIsPrototype}
-        onDelete={handleDelete}
-        showCompanies={true}
-      />
-    </div>
+    </>
   );
 };
 

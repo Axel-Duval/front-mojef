@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import Infos from "../components/companies/Infos";
 import { useAxios } from "../hooks/useAxios";
@@ -7,6 +7,7 @@ import UIkit from "uikit";
 import { useGet } from "../hooks/useGet";
 import CompanyGames from "../components/companies/CompanyGames";
 import CompanyContacts from "../components/companies/CompanyContacts";
+import Loading from "../components/Loading";
 
 const CompanyPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,9 +42,9 @@ const CompanyPage = () => {
   };
 
   return (
-    <div>
+    <>
       {loading ? (
-        "loading ..."
+        <Loading />
       ) : (
         <div className="uk-flex uk-flex-column -fullheight">
           <div className="uk-flex uk-flex-between uk-flex-middle">
@@ -84,7 +85,7 @@ const CompanyPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

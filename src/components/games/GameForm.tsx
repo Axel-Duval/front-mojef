@@ -109,7 +109,7 @@ const GameForm: FC<{
   const editGame = (game: IGame) => {
     instance
       .patch(`api/game/${game.id}`, game)
-      .then(() => onSuccess(game, true))
+      .then((res) => onSuccess(res.data, true))
       .catch(() => {
         UIkit.notification({
           message: `Impossible d'éditer le jeu ${game.name}`,
