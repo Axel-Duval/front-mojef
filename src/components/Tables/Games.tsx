@@ -50,7 +50,7 @@ const GamesTable: React.FC<ITableGames> = ({
               {game.publisher && <td>{game.publisher.name}</td>}
               <td>
                 {game.guideLink && (
-                  <a onClick={() => window.open(game.guideLink!)}>
+                  <a href={game.guideLink!} target="_blank" rel="noreferrer">
                     <span
                       className="uk-margin-small-right"
                       uk-icon="icon: location"

@@ -10,7 +10,7 @@ import Games from "./pages/Games";
 import Areas from "./pages/Areas";
 import Account from "./pages/Account";
 import Accounts from "./pages/Accounts";
-import { Route, Switch } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import {
   FestivalContext,
   FestivalContextValue,
@@ -99,6 +99,7 @@ function App() {
                 <Route exact path="/app/zones" component={Areas} />
               </>
             ) : null}
+            <Redirect from="/app/*" to="/app" />
           </Switch>
         </main>
       </div>

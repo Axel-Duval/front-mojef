@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import PriceCard from "../components/PriceCard";
-import Tile from "../components/Tile";
+import PriceCard from "../components/dashboard/PriceCard";
+import Tile from "../components/dashboard/Tile";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
@@ -118,7 +118,7 @@ const Dashboard = () => {
             </div>
             <hr />
           </div>
-          <div>
+          <div className="uk-flex uk-flex-wrap uk-flex-wrap-top">
             <PriceCard />
           </div>
         </div>

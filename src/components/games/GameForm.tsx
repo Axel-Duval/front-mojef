@@ -177,7 +177,7 @@ const GameForm: FC<{
           <input
             className="uk-input"
             type="text"
-            placeholder="entrer le nom..."
+            placeholder="Aa"
             defaultValue={form.name.get()}
             onChange={(e) => form.name.set(e.currentTarget.value)}
           />
@@ -189,7 +189,7 @@ const GameForm: FC<{
           <input
             className="uk-input"
             type="text"
-            placeholder="entrer la durée..."
+            placeholder="Aa"
             defaultValue={form.duration.get()}
             onChange={(e) => form.duration.set(e.currentTarget.value)}
           />
@@ -271,7 +271,7 @@ const GameForm: FC<{
               type="checkbox"
               onChange={() => form.isPrototype.set(!form.isPrototype.get())}
               checked={form.isPrototype.get()}
-            />
+            />{" "}
             Est-ce un prototype?
           </label>
         </div>
@@ -282,7 +282,7 @@ const GameForm: FC<{
               type="checkbox"
               onChange={onGuideFieldChange}
               checked={form.guideField.get()}
-            />
+            />{" "}
             A t-il un lien de manuel?
           </label>
         </div>

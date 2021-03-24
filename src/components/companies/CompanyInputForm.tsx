@@ -1,6 +1,7 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { useGet } from "../../hooks/useGet";
 import { ICompany } from "../../utils/types";
+import Loading from "../Loading";
 
 const CompanyInputForm: FC<{
   defaultValue: string;
@@ -13,7 +14,7 @@ const CompanyInputForm: FC<{
   return (
     <div className="uk-margin">
       {isLoading ? (
-        "... loading"
+        <Loading />
       ) : (
         <>
           <label className="uk-form-label">Société d'édition</label>

@@ -144,7 +144,7 @@ export interface ITableGames {
   onEdit: Function;
   onDelete: Function;
   onToggle: Function;
-  showCompanies: boolean;
+  showCompanies?: boolean;
 }
 
 export interface IArea {

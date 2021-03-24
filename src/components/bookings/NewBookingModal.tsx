@@ -61,10 +61,7 @@ const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
   };
 
   return (
-    <Modal onClose={onClose}>
-      <h2 className="uk-modal-title uk-margin-bottom uk-margin-medium-bottom -noselect">
-        Nouvelle réservation
-      </h2>
+    <Modal onClose={onClose} title="Nouveau suivi">
       <form
         className="uk-form-stacked -noselect"
         onSubmit={(e) => {

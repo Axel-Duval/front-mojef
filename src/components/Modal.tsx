@@ -13,7 +13,11 @@ const Modal: React.FC<IModal> = ({ title, onClose, children }) => {
           <span uk-icon="icon: close" onClick={() => onClose()} />
         </div>
         <div className="-modal-children">
-          {title && <h2>{title}</h2>}
+          {title && (
+            <h2 className="uk-modal-title uk-margin-medium-bottom -noselect">
+              {title}
+            </h2>
+          )}
           {children}
         </div>
       </section>

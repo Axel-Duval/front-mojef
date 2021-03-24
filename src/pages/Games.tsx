@@ -109,6 +109,7 @@ const Games = () => {
           />
         </div>
       </div>
+      <hr />
       {modalState && (
         <Modal
           onClose={() => setModalState(false)}

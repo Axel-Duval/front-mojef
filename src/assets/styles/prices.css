@@ -1,5 +1,10 @@
+.-prices {
+  margin: 2rem 1rem 2rem 1rem;
+}
+
 .-prices-card:not(:first-child) {
   left: -2rem;
+  padding-left: 4rem;
   z-index: 2;
 }
 .-prices-card:last-child {
@@ -10,9 +15,36 @@
   z-index: 3;
   left: 0;
 }
+.-prices-card {
+  border-radius: 1rem;
+}
 
 .-price-label {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 500;
   margin-bottom: 0;
+  margin-top: 0;
+}
+
+.-price-number {
+  font-weight: 600;
+  color: black;
+  font-size: 1.4rem;
+}
+
+.-prices-card-item {
+  padding: 1.6rem;
+}
+
+.-prices-rounded {
+  border-radius: 0.8rem;
+}
+
+.-img-white {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(68deg)
+    brightness(107%) contrast(100%);
+}
+
+.-price-item {
+  font-size: 1.6rem;
 }
