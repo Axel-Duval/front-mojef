@@ -1,17 +1,40 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import UIkit from "uikit";
 import CompanyModalForm from "../components/companies/CompanyModalForm";
 import CompaniesTable from "../components/Tables/Companies";
+import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
-import { IPartialCompany } from "../utils/types";
+import { ICompany, IPartialCompany } from "../utils/types";
 
 const CompaniesPage = () => {
-  const [companies, setCompanies] = useState<IPartialCompany[]>([]);
-  const [data, isLoading, isErrored] = useGet<IPartialCompany[]>(
-    "/api/company"
-  );
-  const [addModal, setAddModal] = useState<boolean>(false);
   const instance = useAxios();
+  const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
+  const [companies, setCompanies] = useState<IPartialCompany[]>([]);
+  const [addModal, setAddModal] = useState<boolean>(false);
+
+  const [data, ,] = useGet<IPartialCompany[]>("/api/company");
+
+  const [bookingsCompaniesId, setBookingsCompaniesId] = useState(new Array());
+
+  useEffect(() => {
+    instance
+      .get(`/api/booking/festival/${currentFestivalId}`)
+      .then((res) => {
+        setBookingsCompaniesId(
+          res.data.map((booking: any) => {
+            return booking.companyId;
+          })
+        );
+      })
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible de récupérer les sociétés`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+  }, [instance, currentFestivalId]);
 
   useEffect(() => {
     if (data) {
@@ -22,6 +45,32 @@ const CompaniesPage = () => {
   const onAddSuccess = (company: IPartialCompany) => {
     setCompanies([...companies, company]);
     setAddModal(false);
+  };
+
+  const handleCreateBooking = (company: ICompany) => {
+    instance
+      .post("/api/booking", {
+        company: company.id,
+        needVolunteers: false,
+        isPresent: false,
+        isPlaced: false,
+        notes: "",
+        exchanges: "",
+        discount: 0,
+        fees: 0,
+        createdOn: new Date(),
+        festival: currentFestivalId!,
+      })
+      .then(() => {
+        setBookingsCompaniesId([...bookingsCompaniesId, company.id]);
+      })
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible de commencer le suivi`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
   };
 
   return (
@@ -74,7 +123,11 @@ const CompaniesPage = () => {
         onSuccess={onAddSuccess}
         companies={companies}
       />
-      <CompaniesTable companies={companies} />
+      <CompaniesTable
+        companies={companies}
+        onCreateBooking={handleCreateBooking}
+        bookingsCompaniesId={bookingsCompaniesId}
+      />
     </div>
   );
 };
