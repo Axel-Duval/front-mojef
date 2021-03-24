@@ -29,6 +29,12 @@ const Areas = () => {
     }
   }, [fetchErrored]);
 
+  useEffect(() => {
+    if (festival) {
+      setAreas(festival.areas);
+    }
+  }, [festival]);
+
   //////////////
   // CREATION //
   //////////////
@@ -163,12 +169,6 @@ const Areas = () => {
       .catch(() => revert());
   };
 
-  useEffect(() => {
-    if (festival) {
-      setAreas(festival.areas);
-    }
-  }, [festival]);
-
   //////////////
   // DELETION //
   //////////////
@@ -250,7 +250,7 @@ const Areas = () => {
                       onChange={(e) => editAreaForm.label.set(e.target.value)}
                       autoFocus={true}
                       onKeyDown={(e) => {
-                        if (e.code === 'Escape') {
+                        if (e.code === "Escape") {
                           stopEditing();
                         }
                       }}
