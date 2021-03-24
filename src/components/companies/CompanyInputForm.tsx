@@ -21,13 +21,17 @@ const CompanyInputForm: FC<{
             <select
               className="uk-select"
               id="form-horizontal-select"
-              onChange={(e) => setCompanyId(e.currentTarget.value)}
-              defaultValue={defaultValue != "" ? defaultValue : undefined}
+              onChange={(e) => {
+                setCompanyId(e.currentTarget.value);
+                console.log("changed + " + e.currentTarget.value);
+              }}
+              defaultValue={defaultValue}
             >
+              <option value={""}>-</option>
               {companies!.map((company: ICompany, index: number) => {
                 return (
                   <option value={company.id} key={index}>
-                    {company.name} {";id" + company.id}
+                    {company.name}
                   </option>
                 );
               })}

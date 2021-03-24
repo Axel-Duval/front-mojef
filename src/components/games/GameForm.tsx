@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
@@ -147,8 +147,12 @@ const GameForm: FC<{
       maxAge: form.maxAge.get(),
       isPrototype: form.isPrototype.get(),
       guideLink: form.guideField.get() ? form.guideLink.get() : null,
-      publisherId: companyId ? form.cpnId.get() : "",
       type: form.type.get(),
+      publisherId: companyId
+        ? companyId
+        : game
+        ? game.publisherId
+        : form.cpnId.get(),
     };
     if (editMode) {
       editGame(newGame);
@@ -255,7 +259,10 @@ const GameForm: FC<{
           setType={(value: string) => form.type.set(value)}
         />
         {!companyId && !game && (
-          <CompanyInputForm defaultValue={""} setCompanyId={form.cpnId.set} />
+          <CompanyInputForm
+            defaultValue={""}
+            setCompanyId={(value: any) => form.cpnId.set(value)}
+          />
         )}
         <div className="uk-margin">
           <label>
