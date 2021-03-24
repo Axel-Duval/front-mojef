@@ -3,7 +3,7 @@ import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { IContact } from "../../utils/types";
-import { minLength, required, validMail, validPhone } from "../../validators";
+import { minLength, validMail, validPhone } from "../../validators";
 
 interface IContactForm {
   onSuccess: (contact: IContact, editMode: boolean) => void;
@@ -31,8 +31,8 @@ const ContactForm = ({ onSuccess, contact, companyId }: IContactForm) => {
             status: "danger",
             pos: "top-center",
           });
-          setLoading(false);
-        });
+        })
+        .finally(() => setLoading(false));
     } else {
       //Add mode
       instance
@@ -46,8 +46,8 @@ const ContactForm = ({ onSuccess, contact, companyId }: IContactForm) => {
             status: "danger",
             pos: "top-center",
           });
-          setLoading(false);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   };
 

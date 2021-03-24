@@ -147,7 +147,24 @@ export interface ITableGames {
   showCompanies?: boolean;
 }
 
+/**
+ * AREAS
+ */
+
 export interface IArea {
   label: string;
   id?: string;
+}
+
+/**
+ * PRICES
+ */
+export interface IPrice {
+  id: string;
+  label: string;
+  tableCount: number;
+  floorCount: number;
+  tablePrice: number;
+  floorPrice: number;
+  festivalId: string;
 }

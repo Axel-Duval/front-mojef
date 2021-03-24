@@ -16,10 +16,7 @@ const ContactModal = ({
   companyId,
 }: IContactModal) => {
   return (
-    <Modal onClose={onClose}>
-      <h2 className="uk-modal-title uk-margin-bottom uk-margin-left -noselect">
-        Contact
-      </h2>
+    <Modal onClose={onClose} title="Contact">
       <ContactForm
         onSuccess={handleSuccess}
         contact={contact}

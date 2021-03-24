@@ -5,11 +5,17 @@ import Tile from "../components/dashboard/Tile";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
-import { IBooking, IPartialCompany } from "../utils/types";
+import { IBooking, IPartialCompany, IPrice } from "../utils/types";
+import AddPriceModal from "../components/dashboard/PriceForm";
+import Modal from "../components/Modal";
+import PriceForm from "../components/dashboard/PriceForm";
 
 const Dashboard = () => {
   const instance = useAxios();
   const currentFestival = useContext(FestivalContext).currentFestival;
+  const [showAddPriceModal, setShowAddPriceModal] = useState(false);
+  const [editPrice, setEditPrice] = useState<IPrice | null>(null);
+  const [prices, setPrices] = useState<IPrice[]>(new Array());
   const [companies, loadingCompanies] = useGet<IPartialCompany[]>(
     "/api/company"
   );
@@ -43,6 +49,26 @@ const Dashboard = () => {
     }
   };
 
+  const onAddPriceSuccess = (price: IPrice, isEdit: boolean) => {
+    setShowAddPriceModal(false);
+    if (isEdit) {
+      //Edit mode
+      setEditPrice(null);
+      setPrices(
+        prices.map((p) => {
+          if (p.id !== price.id) {
+            return p;
+          } else {
+            return price;
+          }
+        })
+      );
+    } else {
+      //Add mode
+      setPrices([price, ...prices]);
+    }
+  };
+
   // const sumDiscounts = () => {
   //   return bookings?.reduce((prev, curr) => {
   //     return prev + curr.discount;
@@ -51,6 +77,14 @@ const Dashboard = () => {
 
   return (
     <>
+      {showAddPriceModal && (
+        <Modal
+          onClose={() => setShowAddPriceModal(false)}
+          title="Nouveau tarif"
+        >
+          <PriceForm onSuccess={onAddPriceSuccess} price={editPrice} />
+        </Modal>
+      )}
       {loadingCompanies || loadingBookings ? (
         <Loading />
       ) : (
@@ -65,7 +99,7 @@ const Dashboard = () => {
             <div className="uk-flex uk-flex-middle">
               <button
                 className="uk-button uk-button-primary uk-button-small"
-                onClick={() => console.log("ajouter tarification")}
+                onClick={() => setShowAddPriceModal(true)}
               >
                 Ajouter tarification
               </button>
@@ -119,7 +153,9 @@ const Dashboard = () => {
             <hr />
           </div>
           <div className="uk-flex uk-flex-wrap uk-flex-wrap-top">
-            <PriceCard />
+            {prices.map((price, index) => {
+              return <PriceCard key={index} price={price} />;
+            })}
           </div>
         </div>
       )}
