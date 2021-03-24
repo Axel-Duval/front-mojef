@@ -45,7 +45,7 @@ const GameTypeInputForm: FC<{
   const renderSuggestion = (suggestion: string) => <div>{suggestion}</div>;
 
   return (
-    <div className="uk-margin">
+    <div className="uk-margin -autosuggest">
       {isLoading ? (
         "loading ..."
       ) : (

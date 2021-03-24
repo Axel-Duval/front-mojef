@@ -96,13 +96,6 @@ const Navbar = () => {
             Jeux
           </NavLink>
         </li>
-
-        <li>
-          <NavLink exact activeClassName="uk-active" to="/app/categories">
-            <span className="uk-margin-small-right" uk-icon="icon: tag" />
-            Catégories
-          </NavLink>
-        </li>
         <li className="uk-nav-header uk-margin-top">Comptes</li>
         <li className="uk-nav-divider"></li>
         <li>

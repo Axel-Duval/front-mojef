@@ -8,7 +8,6 @@ import Company from "./pages/Company";
 import Accounting from "./pages/Accounting";
 import Games from "./pages/Games";
 import Areas from "./pages/Areas";
-import Categories from "./pages/Categories";
 import Account from "./pages/Account";
 import Accounts from "./pages/Accounts";
 import { Route, Switch } from "react-router";
@@ -89,7 +88,6 @@ function App() {
             <Route exact path="/app/societes/:id" component={Company} />
             <Route exact path="/app/societes" component={Companies} />
             <Route exact path="/app/jeux" component={Games} />
-            <Route exact path="/app/categories" component={Categories} />
             <Route exact path="/app/compte" component={Account} />
             <Route exact path="/app/comptes" component={Accounts} />
 
