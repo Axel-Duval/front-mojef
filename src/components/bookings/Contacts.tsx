@@ -99,7 +99,10 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
     <>
       {showContactModal && (
         <ContactModal
-          onClose={() => setShowContactModal(false)}
+          onClose={() => {
+            setShowContactModal(false);
+            !!editContact && setEditContact(null);
+          }}
           handleSuccess={handleSuccess}
           companyId={companyId}
           contact={editContact || undefined}

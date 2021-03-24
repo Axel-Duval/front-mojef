@@ -94,7 +94,11 @@ const Timeline = ({ exchanges, bookingId }: ITimeline) => {
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading
         title="Suivi des échanges"
-        subtitle={"Dernier échange: " + timeline[0].datetime}
+        subtitle={
+          timeline && timeline.length > 1
+            ? "Dernier échange: " + timeline[0].datetime
+            : "Pas encore d'échanges"
+        }
       >
         <span
           className="uk-icon-link uk-margin-small-right -pointer"

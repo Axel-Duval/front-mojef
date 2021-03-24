@@ -22,7 +22,8 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
   const toggleCheckbox = (item: any) => {
     //Toggle checkboxes
     const tmp = checkboxes;
-    setCheckboxes(Object.assign(tmp, item));
+
+    setCheckboxes({ ...tmp, ...item });
 
     //Perform action (API)
     instance.patch(`/api/booking/${booking.id}`, item).catch(() => {
