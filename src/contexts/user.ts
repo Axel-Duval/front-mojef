@@ -15,6 +15,7 @@ export interface UserContextValue {
   setCredentials: (credentials: UserCredentials) => void;
   logout: () => void;
   loggedIn: boolean;
+  jwtPayload: { sub: string; username: string; isAdmin: boolean } | null;
 }
 
 export const UserContext = React.createContext<UserContextValue>({
@@ -24,4 +25,5 @@ export const UserContext = React.createContext<UserContextValue>({
   login: () => Promise.reject(),
   logout: () => {},
   setCredentials: () => {},
+  jwtPayload: null,
 });

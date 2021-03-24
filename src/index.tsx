@@ -99,6 +99,9 @@ function Global() {
               ...ctx,
               _credentials: credentials,
               loggedIn: true,
+              jwtPayload: JSON.parse(
+                atob(credentials.access_token.split(".")[1])
+              ),
             };
           });
         } else {
@@ -110,12 +113,16 @@ function Global() {
               ...ctx,
               _credentials: credentials,
               loggedIn: false,
+              jwtPayload: null,
             };
           });
         }
       },
       _credentials: userCredentials,
       axios: axiosInstance,
+      jwtPayload: userCredentials
+        ? JSON.parse(atob(userCredentials.access_token.split(".")[1]))
+        : null,
     };
   });
 
