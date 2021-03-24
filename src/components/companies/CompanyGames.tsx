@@ -2,7 +2,8 @@ import { FC, useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { IGame } from "../../utils/types";
-import GameModalForm from "../games/GameModalForm";
+import GameModal from "../games/GameModal";
+import GameForm from "../games/GameForm";
 import Heading from "../Heading";
 import GamesTable from "../Tables/Games";
 
@@ -125,13 +126,14 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
 
   return (
     <>
-      <GameModalForm
-        setShowModal={setModalState}
-        showModal={modalState}
-        onSubmit={onModalSubmit}
-        companyId={companyId}
-        game={gameToEdit}
-      />
+      {modalState && (
+        <GameModal
+          setShowModal={setModalState}
+          onSubmit={onModalSubmit}
+          companyId={companyId}
+          game={gameToEdit}
+        />
+      )}
       <Heading title="Jeux" subtitle={games.length + " jeux trouvés"}>
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
