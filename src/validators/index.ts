@@ -1,3 +1,5 @@
+import * as EmailValidator from "email-validator";
+
 export function minLength(n: number) {
   return (s: string) => {
     if (s.length >= n) return null;
@@ -16,4 +18,25 @@ export function required() {
       required: true,
     };
   };
+}
+
+export function validPhone(input: string): null | any {
+  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  if (phoneRegex.test(input)) {
+    return null;
+  } else {
+    return {
+      validPhone: false,
+    };
+  }
+}
+
+export function validMail(input: string): any | null {
+  if (EmailValidator.validate(input)) {
+    return null;
+  } else {
+    return {
+      validMail: false,
+    };
+  }
 }

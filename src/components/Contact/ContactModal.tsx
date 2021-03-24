@@ -4,8 +4,8 @@ import ContactForm from "./ContactForm";
 
 interface IContactModal {
   onClose: Function;
-  handleSuccess: Function;
-  contact?: IContact;
+  handleSuccess: (contact: IContact, editMode: boolean) => void;
+  contact: IContact | null;
   companyId: string;
 }
 
@@ -21,7 +21,7 @@ const ContactModal = ({
         Contact
       </h2>
       <ContactForm
-        handleSuccess={handleSuccess}
+        onSuccess={handleSuccess}
         contact={contact}
         companyId={companyId}
       />

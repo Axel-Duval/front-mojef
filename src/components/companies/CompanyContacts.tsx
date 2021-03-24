@@ -1,24 +1,32 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { IContact } from "../../utils/types";
+import ContactForm from "../Contact/ContactForm";
 import Heading from "../Heading";
+import Modal from "../Modal";
 import ContactsTable from "../Tables/Contacts";
-import ContactModalForm from "./ContactModalForm";
 
 const CompanyContacts: FC<{
   companyContacts: IContact[];
   companyId: string;
 }> = ({ companyContacts, companyId }) => {
-  const [addModal, setAddModal] = useState<boolean>(false);
+  const [modalState, setModalState] = useState<boolean>(false);
   const [contacts, setContacts] = useState<IContact[]>(companyContacts);
+  const [contactToEdit, setContactToEdit] = useState<IContact | null>(null);
   const instance = useAxios();
+
+  useEffect(() => {
+    if (!modalState) {
+      setContactToEdit(null);
+    }
+  }, [modalState]);
 
   const onAddSuccess = (contact: IContact) => {
     setContacts((contacts) => {
       return [...contacts, contact];
     });
-    setAddModal(false);
+    setModalState(false);
   };
 
   const deleteContact = (contact: IContact) => {
@@ -45,8 +53,16 @@ const CompanyContacts: FC<{
       .then(() => deleteContact(contact));
   };
 
-  const editContact = (contact: IContact) => {
-    console.log("edit: " + contact);
+  const onEditSuccess = (contact: IContact) => {
+    setContacts((contacts) =>
+      contacts.map((c) => {
+        if (c.id === contact.id) {
+          return contact;
+        }
+        return c;
+      })
+    );
+    setModalState(false);
   };
 
   const switchContactIsPrimary = (contact: IContact) => {
@@ -80,14 +96,37 @@ const CompanyContacts: FC<{
       });
   };
 
+  const onModalSuccess = (contact: IContact, editMode: boolean): void => {
+    if (editMode) {
+      onEditSuccess(contact);
+    } else {
+      onAddSuccess(contact);
+    }
+  };
+
+  const handleEdit = (contact: IContact) => {
+    setContactToEdit(contact);
+    setModalState(true);
+  };
+
   return (
     <>
-      <ContactModalForm
-        showModal={addModal}
-        setShowModal={setAddModal}
-        onSuccess={onAddSuccess}
-        companyId={companyId}
-      />
+      {modalState && (
+        <Modal
+          onClose={() => setModalState(false)}
+          title={
+            contactToEdit
+              ? `Modifier ${contactToEdit.firstname} ${contactToEdit.lastname}`
+              : "Ajouter un contact"
+          }
+        >
+          <ContactForm
+            onSuccess={onModalSuccess}
+            companyId={companyId}
+            contact={contactToEdit}
+          />
+        </Modal>
+      )}
       <Heading
         title="Contacts"
         subtitle={contacts.length + " contacts trouvés"}
@@ -95,7 +134,7 @@ const CompanyContacts: FC<{
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
-          onClick={() => setAddModal(true)}
+          onClick={() => setModalState(true)}
         />
         <span
           className="uk-icon-link -pointer uk-margin-small-right"
@@ -112,7 +151,7 @@ const CompanyContacts: FC<{
         <div>
           <ContactsTable
             contacts={contacts}
-            onEdit={editContact}
+            onEdit={handleEdit}
             onDelete={handleDelete}
             onToggle={switchContactIsPrimary}
           />

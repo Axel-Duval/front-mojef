@@ -1,14 +1,18 @@
-import { FC, useEffect } from "react";
+import { FC, useState } from "react";
+import UIkit from "uikit";
+import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { IGame } from "../../utils/types";
 import { minLength } from "../../validators";
 import GameTypeInputForm from "./GameTypeInputForm";
 
 const GameForm: FC<{
-  onSubmit: (game: IGame, editMode: boolean) => void;
+  onSuccess: (game: IGame, editMode: boolean) => void;
   game: IGame | null;
   companyId: string;
-}> = ({ onSubmit, game, companyId }) => {
+}> = ({ onSuccess, game, companyId }) => {
+  const instance = useAxios();
+  const [loading, setLoading] = useState<boolean>(false);
   const ageConstraint = (formData: any): null | any => {
     if (formData.minAge <= formData.maxAge) {
       return null;
@@ -45,12 +49,6 @@ const GameForm: FC<{
         guideConstraint: "false",
       };
     }
-  };
-
-  const validUrl = (input: string | null): any | null => {
-    if (input) {
-    }
-    return null;
   };
 
   const [form, formErrors] = useForm(
@@ -103,8 +101,39 @@ const GameForm: FC<{
     form.guideField.set(!form.guideField.get());
   };
 
+  const editGame = (game: IGame) => {
+    instance
+      .patch(`api/game/${game.id}`, game)
+      .then(() => onSuccess(game, true))
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible d'éditer le jeu ${game.name}`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+  };
+
+  const addGame = (game: IGame): void => {
+    setLoading(true);
+    instance
+      .post("/api/game", game)
+      .then((res) => {
+        onSuccess(res.data, false);
+      })
+      .catch(() => {
+        UIkit.notification({
+          message: `Impossible d'ajouter ce jeu`,
+          status: "danger",
+          pos: "top-center",
+        });
+      });
+    setLoading(false);
+  };
+
   const submitForm = () => {
     const newGame: IGame = {
+      id: game ? game.id : undefined,
       name: form.name.get(),
       duration: form.duration.get(),
       minPlayers: form.minPlayers.get(),
@@ -117,14 +146,20 @@ const GameForm: FC<{
       type: form.type.get(),
     };
     if (editMode) {
-      onSubmit({ ...newGame, id: game!.id }, true);
+      editGame(newGame);
     } else {
-      onSubmit(newGame, false);
+      addGame(newGame);
     }
   };
 
   return (
-    <form className="uk-form-stacked -noselect" onSubmit={submitForm}>
+    <form
+      className="uk-form-stacked -noselect"
+      onSubmit={(e) => {
+        e.preventDefault();
+        submitForm();
+      }}
+    >
       <fieldset className="uk-fieldset">
         <div className="uk-margin">
           <label className="uk-form-label" htmlFor="form-stacked-text">
@@ -252,7 +287,7 @@ const GameForm: FC<{
       <button
         type="submit"
         className="uk-button uk-button-primary uk-align-center"
-        disabled={!formErrors.$form.valid}
+        disabled={loading || !formErrors.$form.valid}
       >
         {editMode ? "Modifier" : "Créer"}
       </button>

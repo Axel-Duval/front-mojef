@@ -1,25 +1,29 @@
+import { useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { IContact } from "../../utils/types";
-import { minLength, required } from "../../validators";
+import { minLength, required, validMail, validPhone } from "../../validators";
 
 interface IContactForm {
-  handleSuccess: Function;
+  onSuccess: (contact: IContact, editMode: boolean) => void;
   companyId: string;
-  contact?: IContact;
+  contact: IContact | null;
 }
 
-const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
+const ContactForm = ({ onSuccess, contact, companyId }: IContactForm) => {
   const instance = useAxios();
-  const onSubmit = (c: IContact) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const submitForm = (c: IContact) => {
+    setLoading(true);
     if (contact) {
       //Edit mode
       const { id, ...rest } = c;
       instance
         .patch(`/api/contact/${contact.id!}`, rest)
         .then((res) => {
-          handleSuccess(res.data, true);
+          onSuccess(res.data, true);
         })
         .catch(() => {
           UIkit.notification({
@@ -27,13 +31,14 @@ const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
             status: "danger",
             pos: "top-center",
           });
+          setLoading(false);
         });
     } else {
       //Add mode
       instance
         .post("/api/contact/", c)
         .then((res) => {
-          handleSuccess(res.data, false);
+          onSuccess(res.data, false);
         })
         .catch(() => {
           UIkit.notification({
@@ -41,6 +46,7 @@ const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
             status: "danger",
             pos: "top-center",
           });
+          setLoading(false);
         });
     }
   };
@@ -48,11 +54,11 @@ const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
   const [form, formErrors] = useForm({
     firstname: {
       default: contact?.firstname || "",
-      validators: [required(), minLength(2)],
+      validators: [minLength(2)],
     },
     lastname: {
       default: contact?.lastname || "",
-      validators: [required(), minLength(2)],
+      validators: [minLength(2)],
     },
     isPrimary: {
       default: contact?.isPrimary || false,
@@ -60,11 +66,11 @@ const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
     },
     email: {
       default: contact?.email || "",
-      validators: [required(), minLength(2)],
+      validators: [validMail, minLength(2)],
     },
     phone: {
       default: contact?.phone || "",
-      validators: [required(), minLength(2)],
+      validators: [validPhone, minLength(2)],
     },
   });
   return (
@@ -72,7 +78,7 @@ const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
       className="uk-form-stacked -noselect"
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit({
+        submitForm({
           firstname: form.firstname.get(),
           lastname: form.lastname.get(),
           isPrimary: form.isPrimary.get(),
@@ -154,7 +160,7 @@ const ContactForm = ({ handleSuccess, contact, companyId }: IContactForm) => {
       <button
         type="submit"
         className="uk-button uk-button-primary uk-align-center"
-        disabled={!formErrors.$form.valid}
+        disabled={loading || !formErrors.$form.valid}
       >
         Enregistrer
       </button>

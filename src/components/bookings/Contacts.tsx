@@ -105,7 +105,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
           }}
           handleSuccess={handleSuccess}
           companyId={companyId}
-          contact={editContact || undefined}
+          contact={editContact}
         />
       )}
       <div className="-flex-1">
