@@ -18,6 +18,7 @@ import {
 } from "./contexts/festival";
 import { useGet } from "./hooks/useGet";
 import Loading from "./components/Loading";
+import NoFestival from "./pages/NoFestival";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -84,7 +85,7 @@ function App() {
     <FestivalContext.Provider value={festivalCtxValue}>
       {!loaded ? (
         <Loading />
-      ) : (
+      ) : festivalCtxValue.currentFestival ? (
         <div className="uk-flex" id="app-layout">
           <aside>
             <Navbar />
@@ -118,6 +119,8 @@ function App() {
             </Switch>
           </main>
         </div>
+      ) : (
+        <NoFestival />
       )}
     </FestivalContext.Provider>
   );
