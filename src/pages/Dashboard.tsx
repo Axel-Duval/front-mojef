@@ -211,7 +211,7 @@ const Dashboard = () => {
             <hr />
           </div>
           <div className="-dashboard-prices-wrapper">
-            <div className="uk-flex uk-flex-wrap uk-flex-wrap-top uk-flex-center test">
+            <div className="uk-flex uk-flex-wrap uk-flex-wrap-center uk-flex-center test">
               {prices
                 .sort((a, b) => a.label.localeCompare(b.label))
                 .map((price, index) => {
