@@ -118,6 +118,8 @@ export interface IFestival {
   name: string;
   date: Date;
   isActive: boolean;
+  prices: IPrice[];
+  areas: IArea[];
 }
 
 /**
@@ -141,9 +143,9 @@ export interface IGame {
 
 export interface ITableGames {
   games: IGame[];
-  onEdit: Function;
-  onDelete: Function;
-  onToggle: Function;
+  onEdit?: Function;
+  onDelete?: Function;
+  onToggle?: Function;
   showCompanies?: boolean;
 }
 

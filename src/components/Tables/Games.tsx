@@ -1,4 +1,3 @@
-import { worker } from "node:cluster";
 import { ITableGames, IGame } from "../../utils/types";
 
 const GamesTable: React.FC<ITableGames> = ({
@@ -27,7 +26,7 @@ const GamesTable: React.FC<ITableGames> = ({
           <th>Genre</th>
           <th>Prototype</th>
           {showCompanies && <th>Éditeur</th>}
-          <th>Actions</th>
+          {(onEdit || onDelete) && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>
@@ -44,12 +43,14 @@ const GamesTable: React.FC<ITableGames> = ({
                   className="uk-checkbox"
                   type="checkbox"
                   checked={game.isPrototype}
-                  onChange={() => onToggle(game)}
+                  onChange={() => onToggle && onToggle(game)}
                 />
               </td>
-              {game.publisher && <td>{game.publisher.name}</td>}
+              {showCompanies && game.publisher && (
+                <td>{game.publisher.name}</td>
+              )}
               <td>
-                {game.guideLink && (
+                {(onEdit || onDelete) && game.guideLink && (
                   <a href={game.guideLink!} target="_blank" rel="noreferrer">
                     <span
                       className="uk-icon-link -pointer uk-margin-small-right"
@@ -57,16 +58,20 @@ const GamesTable: React.FC<ITableGames> = ({
                     />
                   </a>
                 )}
-                <span
-                  className="uk-icon-link uk-margin-small-right -pointer"
-                  uk-icon="file-edit"
-                  onClick={() => onEdit(game)}
-                />
-                <span
-                  className="uk-icon-link -pointer"
-                  uk-icon="trash"
-                  onClick={() => onDelete(game)}
-                />
+                {onEdit && (
+                  <span
+                    className="uk-icon-link uk-margin-small-right -pointer"
+                    uk-icon="file-edit"
+                    onClick={() => onEdit(game)}
+                  />
+                )}
+                {onDelete && (
+                  <span
+                    className="uk-icon-link -pointer"
+                    uk-icon="trash"
+                    onClick={() => onDelete(game)}
+                  />
+                )}
               </td>
             </tr>
           );

@@ -4,7 +4,7 @@ import { FestivalContext } from "../../contexts/festival";
 import { useAxios } from "../../hooks/useAxios";
 import { useForm } from "../../hooks/useForm";
 import { IPrice } from "../../utils/types";
-import { minLength } from "../../validators";
+import { minLength, validInt, validNumber } from "../../validators";
 
 interface IPriceForm {
   onSuccess: Function;
@@ -22,19 +22,19 @@ const PriceForm = ({ onSuccess, price }: IPriceForm) => {
     },
     tableCount: {
       default: price?.tableCount || 0,
-      validators: [],
+      validators: [validInt()],
     },
     floorCount: {
       default: price?.floorCount || 0,
-      validators: [],
+      validators: [validInt()],
     },
     tablePrice: {
       default: price?.tablePrice || 0,
-      validators: [],
+      validators: [validNumber()],
     },
     floorPrice: {
       default: price?.floorPrice || 0,
-      validators: [],
+      validators: [validNumber()],
     },
   });
 
@@ -42,6 +42,7 @@ const PriceForm = ({ onSuccess, price }: IPriceForm) => {
     setLoading(true);
     if (price) {
       //Edit mode
+      p.festivalId = festivalId;
       instance
         .patch(`/api/price/${price.id}`, p)
         .then((res) => {
@@ -57,6 +58,7 @@ const PriceForm = ({ onSuccess, price }: IPriceForm) => {
         .finally(() => setLoading(false));
     } else {
       //Add mode
+      p.festival = festivalId;
       instance
         .post("/api/price", p)
         .then((res) => {
@@ -80,11 +82,10 @@ const PriceForm = ({ onSuccess, price }: IPriceForm) => {
         e.preventDefault();
         submitForm({
           label: form.label.get(),
-          tableCount: form.tableCount.get(),
-          floorCount: form.floorCount.get(),
-          tablePrice: form.tablePrice.get(),
-          floorPrice: form.floorPrice.get(),
-          festival: festivalId,
+          tableCount: parseInt(form.tableCount.get()),
+          floorCount: parseInt(form.floorCount.get()),
+          tablePrice: parseFloat(form.tablePrice.get()),
+          floorPrice: parseFloat(form.floorPrice.get()),
         });
       }}
     >
@@ -170,7 +171,7 @@ const PriceForm = ({ onSuccess, price }: IPriceForm) => {
             max="200"
             step="0.5"
             type="number"
-            value={form.tablePrice.get()}
+            value={form.floorPrice.get()}
             onChange={(e) => form.floorPrice.set(e.target.value)}
           />
         </div>

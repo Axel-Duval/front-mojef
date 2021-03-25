@@ -3,19 +3,26 @@ import Loading from "../components/Loading";
 import PriceCard from "../components/dashboard/PriceCard";
 import Tile from "../components/dashboard/Tile";
 import { FestivalContext } from "../contexts/festival";
-import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
-import { IBooking, IPartialCompany, IPrice } from "../utils/types";
-import AddPriceModal from "../components/dashboard/PriceForm";
+import { IBooking, IFestival, IPartialCompany, IPrice } from "../utils/types";
 import Modal from "../components/Modal";
 import PriceForm from "../components/dashboard/PriceForm";
+import { useAxios } from "../hooks/useAxios";
+import UIkit from "uikit";
 
 const Dashboard = () => {
-  const instance = useAxios();
   const currentFestival = useContext(FestivalContext).currentFestival;
   const [showAddPriceModal, setShowAddPriceModal] = useState(false);
   const [editPrice, setEditPrice] = useState<IPrice | null>(null);
-  const [prices, setPrices] = useState<IPrice[]>(new Array());
+  const [prices, setPrices] = useState<IPrice[]>([]);
+  const instance = useAxios();
+
+  /**
+   *  API FETCHING
+   */
+  const [festival, loadingFestival] = useGet<IFestival>(
+    `/api/festival/${currentFestival?.id}`
+  );
   const [companies, loadingCompanies] = useGet<IPartialCompany[]>(
     "/api/company"
   );
@@ -23,6 +30,13 @@ const Dashboard = () => {
     `/api/booking/festival/${currentFestival?.id}`
   );
 
+  useEffect(() => {
+    setPrices(festival?.prices || []);
+  }, [festival]);
+
+  /**
+   *  COMPUTE STATS
+   */
   const countPaidBookings = () => {
     return bookings?.filter((booking) => booking.billPaidOn).length;
   };
@@ -49,8 +63,10 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   *  ADD/EDIT PRICE
+   */
   const onAddPriceSuccess = (price: IPrice, isEdit: boolean) => {
-    setShowAddPriceModal(false);
     if (isEdit) {
       //Edit mode
       setEditPrice(null);
@@ -67,6 +83,45 @@ const Dashboard = () => {
       //Add mode
       setPrices([price, ...prices]);
     }
+    setShowAddPriceModal(false);
+  };
+
+  const deletePrice = (price: IPrice) => {
+    instance
+      .delete(`/api/price/${price.id}`)
+      .then((res) => {
+        if (res.data && res.data.deleted) {
+          setPrices(
+            prices.filter((p) => {
+              return p.id !== price.id;
+            })
+          );
+        } else {
+          UIkit.notification({
+            message: "Le tarif n'a pas été supprimé",
+            status: "danger",
+            pos: "top-center",
+          });
+        }
+      })
+      .catch(() =>
+        UIkit.notification({
+          message: "Impossible de supprimer ce tarif",
+          status: "danger",
+          pos: "top-center",
+        })
+      );
+  };
+
+  const handleDelete = (price: IPrice) => {
+    UIkit.modal
+      .confirm(`Êtes vous sûr de vouloir supprimer ${price.label}?`)
+      .then(() => deletePrice(price));
+  };
+
+  const handleEdit = (price: IPrice) => {
+    setEditPrice(price);
+    setShowAddPriceModal(true);
   };
 
   // const sumDiscounts = () => {
@@ -79,13 +134,16 @@ const Dashboard = () => {
     <>
       {showAddPriceModal && (
         <Modal
-          onClose={() => setShowAddPriceModal(false)}
+          onClose={() => {
+            setEditPrice(null);
+            setShowAddPriceModal(false);
+          }}
           title="Nouveau tarif"
         >
           <PriceForm onSuccess={onAddPriceSuccess} price={editPrice} />
         </Modal>
       )}
-      {loadingCompanies || loadingBookings ? (
+      {loadingFestival || loadingCompanies || loadingBookings ? (
         <Loading />
       ) : (
         <div className="uk-flex uk-flex-column -fullheight">
@@ -153,9 +211,18 @@ const Dashboard = () => {
             <hr />
           </div>
           <div className="uk-flex uk-flex-wrap uk-flex-wrap-top">
-            {prices.map((price, index) => {
-              return <PriceCard key={index} price={price} />;
-            })}
+            {prices
+              .sort((a, b) => a.label.localeCompare(b.label))
+              .map((price, index) => {
+                return (
+                  <PriceCard
+                    key={index}
+                    price={price}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                );
+              })}
           </div>
         </div>
       )}

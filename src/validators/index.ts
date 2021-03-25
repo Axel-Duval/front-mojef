@@ -26,7 +26,7 @@ export function validPhone(input: string): null | any {
     return null;
   } else {
     return {
-      validPhone: false,
+      invalidPhone: true,
     };
   }
 }
@@ -36,7 +36,31 @@ export function validMail(input: string): any | null {
     return null;
   } else {
     return {
-      validMail: false,
+      invalidMail: true,
     };
   }
+}
+
+export function validNumber() {
+  return (input: string) => {
+    if (parseFloat(input)) {
+      return null;
+    } else {
+      return {
+        invalidNumber: true,
+      };
+    }
+  };
+}
+
+export function validInt() {
+  return (input: string) => {
+    if (parseInt(input)) {
+      return null;
+    } else {
+      return {
+        invalidNumber: true,
+      };
+    }
+  };
 }

@@ -78,23 +78,23 @@ const CompanyForm: FC<{
       <fieldset className="uk-fieldset">
         <div className="uk-margin">
           <label className="uk-form-label" htmlFor="form-stacked-text">
-            Nom du jeu
+            Nom société
           </label>
           <input
             className="uk-input"
             type="text"
-            placeholder="entrer le nom..."
+            placeholder="Aa"
             onChange={(e) => form.name.set(e.currentTarget.value)}
           />
         </div>
         <div className="uk-margin">
           <label className="uk-form-label" htmlFor="form-stacked-text">
-            Nom du jeu
+            Adresse
           </label>
           <input
             className="uk-input"
             type="text"
-            placeholder="entrer le nom..."
+            placeholder="Aa"
             onChange={(e) => form.address.set(e.currentTarget.value)}
           />
         </div>

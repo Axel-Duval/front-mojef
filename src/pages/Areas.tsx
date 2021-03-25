@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
+import Loading from "../components/Loading";
+import GamesTable from "../components/Tables/Games";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useForm } from "../hooks/useForm";
@@ -16,6 +18,7 @@ const Areas = () => {
   ///////////////////
 
   const [areas, setAreas] = useState<IArea[]>([]);
+  const [activeArea, setActiveArea] = useState<IArea | null>(null);
   const [festival, loading, fetchErrored] = useGet<{ areas: IArea[] }>(
     `/api/festival/${ctx.currentFestival?.id}`
   );
@@ -191,6 +194,14 @@ const Areas = () => {
       });
   };
 
+  ////////////////////////////////
+  // GAMES REMOVE FROM AREA //
+  ////////////////////////////////
+
+  const handleDelete = () => {
+    console.log("delete");
+  };
+
   return (
     <div className="uk-flex uk-flex-column -fullheight">
       <div className="uk-flex uk-flex-between uk-flex-middle">
@@ -209,92 +220,125 @@ const Areas = () => {
         </div>
       </div>
       <hr />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (formErrors.$form.valid) {
-            createArea(newAreaForm.label.get());
-          }
-        }}
-      >
-        <input
-          type="text"
-          className={
-            formErrors.label && formErrors.label.unique
-              ? "uk-input uk-width-medium uk-form-danger"
-              : "uk-input uk-width-medium"
-          }
-          placeholder="Entrez un nom pour créer une zone"
-          disabled={loading}
-          value={newAreaForm.label.get()}
-          onChange={(e) => newAreaForm.label.set(e.target.value)}
-        />
-      </form>
-      <table className="uk-table uk-table-divider uk-table-small -noselect">
-        <thead>
-          <tr>
-            <th className="uk-table-expand">Label</th>
-            <th>actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {areas.map((area) => (
-            <tr key={area.id || area.label}>
-              <td>
-                {area.label === editedArea.label ? (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      applyEdition();
-                    }}
-                  >
-                    <input
-                      className={
-                        editAreaErrors.label && editAreaErrors.label.unique
-                          ? "uk-input uk-form-width-medium uk-form-small uk-form-danger"
-                          : "uk-input uk-form-width-medium uk-form-small"
-                      }
-                      type="text"
-                      value={editAreaForm.label.get()}
-                      onChange={(e) => editAreaForm.label.set(e.target.value)}
-                      autoFocus={true}
-                      onKeyDown={(e) => {
-                        if (e.code === "Escape") {
-                          stopEditing();
-                        }
-                      }}
-                      onBlur={() => applyEdition(true)}
-                    ></input>
-                  </form>
-                ) : (
-                  <>{area.label}</>
+
+      <div className="-fullheight">
+        <div className="uk-flex -fullheight -booking-responsive">
+          <div className="-flex-1">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (formErrors.$form.valid) {
+                  createArea(newAreaForm.label.get());
+                }
+              }}
+            >
+              <label htmlFor="newArea" className="uk-form-label">
+                Nouvelle zone
+              </label>
+              <div className="uk-form-controls">
+                <input
+                  id="newArea"
+                  type="text"
+                  className={
+                    formErrors.label && formErrors.label.unique
+                      ? "uk-input uk-width-medium uk-form-danger"
+                      : "uk-input uk-width-medium"
+                  }
+                  placeholder="Aa"
+                  disabled={loading}
+                  value={newAreaForm.label.get()}
+                  onChange={(e) => newAreaForm.label.set(e.target.value)}
+                />
+                {!formErrors.label && (
+                  <span
+                    className="uk-icon-link -pointer uk-margin-small-left"
+                    uk-icon="check"
+                    uk-tooltip="Appuyez sur entrer pour valider"
+                  />
                 )}
-              </td>
-              <td
-                style={{
-                  textAlign: "right",
-                }}
-              >
-                {area.label === editedArea.label ? null : (
-                  <>
-                    <span
-                      className="uk-icon-link -pointer uk-margin-small-right"
-                      uk-icon="icon: file-edit"
-                      onClick={startEditing.bind(this, area)}
-                      style={{ marginRight: "6px" }}
-                    />
-                    <span
-                      className="uk-icon-link -pointer"
-                      uk-icon="icon: trash"
-                      onClick={deleteArea.bind(this, area)}
-                    />
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+            </form>
+            <table className="uk-table uk-table-divider uk-table-small -noselect">
+              <thead>
+                <tr>
+                  <th className="uk-table-expand">Label</th>
+                  <th className="uk-table-shrink">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {areas.map((area) => (
+                  <tr key={area.id || area.label}>
+                    <td>
+                      {area.label === editedArea.label ? (
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            applyEdition();
+                          }}
+                        >
+                          <input
+                            className={
+                              editAreaErrors.label &&
+                              editAreaErrors.label.unique
+                                ? "uk-input uk-form-width-medium uk-form-small uk-form-danger"
+                                : "uk-input uk-form-width-medium uk-form-small"
+                            }
+                            type="text"
+                            value={editAreaForm.label.get()}
+                            onChange={(e) =>
+                              editAreaForm.label.set(e.target.value)
+                            }
+                            autoFocus={true}
+                            onKeyDown={(e) => {
+                              if (e.code === "Escape") {
+                                stopEditing();
+                              }
+                            }}
+                            onBlur={() => applyEdition(true)}
+                          ></input>
+                        </form>
+                      ) : (
+                        <>{area.label}</>
+                      )}
+                    </td>
+                    <td>
+                      {area.label === editedArea.label ? null : (
+                        <>
+                          <span
+                            className="uk-icon-link -pointer uk-margin-small-right"
+                            uk-icon="icon: file-edit"
+                            onClick={startEditing.bind(this, area)}
+                          />
+                          <span
+                            className="uk-icon-link -pointer"
+                            uk-icon="icon: trash"
+                            onClick={deleteArea.bind(this, area)}
+                          />
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
+          <div className="-flex-1">
+            {!activeArea ? (
+              <div className="uk-padding-large -fullheight">
+                <div className="uk-placeholder -fullwidth -fullheight uk-flex uk-flex-center uk-flex-middle">
+                  Liste des jeux d'une zone
+                </div>
+              </div>
+            ) : (
+              <>
+                <h2>{activeArea.label}</h2>
+                <GamesTable games={new Array()} onDelete={handleDelete} />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
