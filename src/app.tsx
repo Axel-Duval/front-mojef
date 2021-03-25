@@ -17,8 +17,11 @@ import {
   FestivalData,
 } from "./contexts/festival";
 import { useGet } from "./hooks/useGet";
+import Loading from "./components/Loading";
 
 function App() {
+  const [loaded, setLoaded] = useState(false);
+
   const [
     festivalCtxValue,
     setFestivalCtxValue,
@@ -73,36 +76,49 @@ function App() {
         currentFestival: current,
         festivals,
       }));
+      setLoaded(true);
     }
   }, [festivals]);
 
   return (
     <FestivalContext.Provider value={festivalCtxValue}>
-      <div className="uk-flex" id="app-layout">
-        <aside>
-          <Navbar />
-        </aside>
-        <main className="uk-flex-1 uk-background-muted uk-padding-large">
-          <Switch>
-            <Route exact path="/app" component={Dashboard} />
-            <Route exact path="/app/societes/:id" component={Company} />
-            <Route exact path="/app/societes" component={Companies} />
-            <Route exact path="/app/jeux" component={Games} />
-            <Route exact path="/app/compte" component={Account} />
-            <Route exact path="/app/comptes" component={Accounts} />
+      {!loaded ? (
+        <Loading />
+      ) : (
+        <div className="uk-flex" id="app-layout">
+          <aside>
+            <Navbar />
+          </aside>
+          <main className="uk-flex-1 uk-background-muted uk-padding-large">
+            <Switch>
+              <Route exact path="/app" component={Dashboard} />
+              <Route exact path="/app/societes/:id" component={Company} />
+              <Route exact path="/app/societes" component={Companies} />
+              <Route exact path="/app/jeux" component={Games} />
+              <Route exact path="/app/compte" component={Account} />
+              <Route exact path="/app/comptes" component={Accounts} />
 
-            {festivalCtxValue.currentFestival ? (
-              <>
-                <Route exact path="/app/reservations" component={Bookings} />
-                <Route exact path="/app/reservations/:id" component={Booking} />
-                <Route exact path="/app/comptabilite" component={Accounting} />
-                <Route exact path="/app/zones" component={Areas} />
-              </>
-            ) : null}
-            <Redirect from="/app/*" to="/app" />
-          </Switch>
-        </main>
-      </div>
+              {festivalCtxValue.currentFestival ? (
+                <>
+                  <Route exact path="/app/reservations" component={Bookings} />
+                  <Route
+                    exact
+                    path="/app/reservations/:id"
+                    component={Booking}
+                  />
+                  <Route
+                    exact
+                    path="/app/comptabilite"
+                    component={Accounting}
+                  />
+                  <Route exact path="/app/zones" component={Areas} />
+                </>
+              ) : null}
+              <Redirect from="/app/*" to="/app" />
+            </Switch>
+          </main>
+        </div>
+      )}
     </FestivalContext.Provider>
   );
 }
