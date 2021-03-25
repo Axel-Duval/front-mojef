@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ITableGames, IGame } from "../../utils/types";
 
 const GamesTable: React.FC<ITableGames> = ({
@@ -47,7 +48,11 @@ const GamesTable: React.FC<ITableGames> = ({
                 />
               </td>
               {showCompanies && game.publisher && (
-                <td>{game.publisher.name}</td>
+                <td>
+                  <Link to={"/app/societes/" + game.publisherId}>
+                    {game.publisher.name}
+                  </Link>
+                </td>
               )}
               <td>
                 {(onEdit || onDelete) && game.guideLink && (
