@@ -1,0 +1,11 @@
+.-dashboard-prices-wrapper {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.-dashboard-prices-wrapper > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

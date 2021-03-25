@@ -146,7 +146,7 @@ const Dashboard = () => {
       {loadingFestival || loadingCompanies || loadingBookings ? (
         <Loading />
       ) : (
-        <div className="uk-flex uk-flex-column -fullheight">
+        <div className="uk-flex uk-flex-column -fullheight -noselect">
           <div className="uk-flex uk-flex-between uk-flex-middle">
             <h1 className="uk-heading-bullet uk-primary">
               {currentFestival?.name}
@@ -210,19 +210,21 @@ const Dashboard = () => {
             </div>
             <hr />
           </div>
-          <div className="uk-flex uk-flex-wrap uk-flex-wrap-top">
-            {prices
-              .sort((a, b) => a.label.localeCompare(b.label))
-              .map((price, index) => {
-                return (
-                  <PriceCard
-                    key={index}
-                    price={price}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                );
-              })}
+          <div className="-dashboard-prices-wrapper">
+            <div className="uk-flex uk-flex-wrap uk-flex-wrap-top uk-flex-center test">
+              {prices
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((price, index) => {
+                  return (
+                    <PriceCard
+                      key={index}
+                      price={price}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
+                  );
+                })}
+            </div>
           </div>
         </div>
       )}

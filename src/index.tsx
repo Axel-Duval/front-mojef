@@ -7,6 +7,7 @@ import "uikit/dist/css/uikit.min.css";
  * IMPORT ALL CSS FILES IN ASSETS
  */
 import "../src/assets/styles/main.css";
+import "../src/assets/styles/dashboard.css";
 import "../src/assets/styles/navbar.css";
 import "../src/assets/styles/company.css";
 import "../src/assets/styles/bookings.css";

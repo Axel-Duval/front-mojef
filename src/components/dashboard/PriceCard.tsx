@@ -18,7 +18,7 @@ const PriceCard = ({ price, onEdit, onDelete }: IPriceCard) => {
   };
   return (
     <div className="uk-flex -noselect -prices">
-      <div className="uk-card uk-card-hover uk-card-default uk-padding -prices-card">
+      <div className="uk-card uk-card-default uk-padding -prices-card">
         <div className="uk-flex uk-flex-between uk-flex-middle">
           <p className="uk-heading-small -price-label uk-text-center">
             {price.label}
@@ -59,12 +59,12 @@ const PriceCard = ({ price, onEdit, onDelete }: IPriceCard) => {
           <p className="-price-number uk-margin-left">{price.floorPrice}€</p>
         </div>
       </div>
-      <div className="uk-card uk-card-hover uk-card-default uk-padding -prices-card uk-text-center">
+      <div className="uk-card uk-card-default uk-padding -prices-card uk-text-center">
         <div className="uk-card uk-card-body uk-card-default -prices-card-item -prices-rounded">
           <img width="40" height="40" alt="tables" uk-img={table} />
         </div>
         <hr className="-img-white" />
-        <p className="-price-number">35/{price.tableCount}</p>
+        <p className="-price-number -price-item">35/{price.tableCount}</p>
         <label
           className={
             "uk-label " +
@@ -76,12 +76,12 @@ const PriceCard = ({ price, onEdit, onDelete }: IPriceCard) => {
           {percent(19, price.tableCount)}%
         </label>
       </div>
-      <div className="uk-card uk-card-hover uk-card-default uk-padding -prices-card uk-text-center">
+      <div className="uk-card uk-card-default uk-padding -prices-card uk-text-center">
         <div className="uk-card uk-card-body uk-card-default -prices-card-item -prices-rounded">
           <img width="40" height="40" alt="espace au sol" uk-img={floor} />
         </div>
         <hr className="-img-white" />
-        <p className="-price-number">12/{price.floorCount}</p>
+        <p className="-price-number -price-item">12/{price.floorCount}</p>
         <label
           className={
             "uk-label " +
