@@ -99,22 +99,11 @@ function App() {
               <Route exact path="/app/compte" component={Account} />
               <Route exact path="/app/comptes" component={Accounts} />
 
-              {festivalCtxValue.currentFestival ? (
-                <>
-                  <Route exact path="/app/reservations" component={Bookings} />
-                  <Route
-                    exact
-                    path="/app/reservations/:id"
-                    component={Booking}
-                  />
-                  <Route
-                    exact
-                    path="/app/comptabilite"
-                    component={Accounting}
-                  />
-                  <Route exact path="/app/zones" component={Areas} />
-                </>
-              ) : null}
+              <Route exact path="/app/reservations" component={Bookings} />
+              <Route exact path="/app/reservations/:id" component={Booking} />
+              <Route exact path="/app/comptabilite" component={Accounting} />
+              <Route exact path="/app/zones" component={Areas} />
+
               <Redirect from="/app/*" to="/app" />
             </Switch>
           </main>
