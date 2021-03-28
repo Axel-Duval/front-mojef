@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BookingCommand from "../components/bookings/Command";
 import BookingGames from "../components/bookings/Games";
 import BookingContacts from "../components/bookings/Contacts";
@@ -9,11 +9,13 @@ import { IBooking, ICompany } from "../utils/types";
 import { useAxios } from "../hooks/useAxios";
 import UIkit from "uikit";
 import Loading from "../components/Loading";
+import { UserContext } from "../contexts/user";
 
 const Booking = () => {
   const { id: bookingId } = useParams<{ id: string }>();
   const [booking, setBooking] = useState<IBooking | null>(null);
   const [company, setCompany] = useState<ICompany | null>(null);
+  const user = useContext(UserContext);
   const history = useHistory();
   const instance = useAxios();
 
@@ -102,9 +104,11 @@ const Booking = () => {
             <li>
               <a href="#informations">Informations</a>
             </li>
-            <li>
-              <a href="#comptabilite">Comptabilité</a>
-            </li>
+            {user && user.jwtPayload?.isAdmin && (
+              <li>
+                <a href="#comptabilite">Comptabilité</a>
+              </li>
+            )}
           </ul>
 
           <ul className="uk-switcher uk-margin-medium-top -flex-1">
@@ -139,7 +143,9 @@ const Booking = () => {
                 </div>
               </div>
             </li>
-            <li className="-fullheight">comptabilitéComponent</li>
+            {user && user.jwtPayload?.isAdmin && (
+              <li className="-fullheight">Comptabilité component</li>
+            )}
           </ul>
         </div>
       )}

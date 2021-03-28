@@ -11,6 +11,7 @@ const Navbar = () => {
   const [newFestivalShow, setNewFestivalShow] = useState<boolean>(false);
 
   const ctx = useContext(FestivalContext);
+  const user = useContext(UserContext);
 
   return (
     <div className="uk-container -nav-scroll-container">
@@ -61,21 +62,18 @@ const Navbar = () => {
             Suivis
           </NavLink>
         </li>
-        {/* <li>
-          <NavLink exact activeClassName="uk-active" to="/app/prix">
-            <span
-              className="uk-margin-small-right"
-              uk-icon="icon:  credit-card"
-            />
-            Prix
-          </NavLink>
-        </li> */}
-        <li>
-          <NavLink exact activeClassName="uk-active" to="/app/comptabilite">
-            <span className="uk-margin-small-right" uk-icon="icon: file-text" />
-            Comptabilité
-          </NavLink>
-        </li>
+        {user && user.jwtPayload?.isAdmin && (
+          <li>
+            <NavLink exact activeClassName="uk-active" to="/app/comptabilite">
+              <span
+                className="uk-margin-small-right"
+                uk-icon="icon: file-text"
+              />
+              Comptabilité
+            </NavLink>
+          </li>
+        )}
+
         <li>
           <NavLink exact activeClassName="uk-active" to="/app/zones">
             <span className="uk-margin-small-right" uk-icon="icon: location" />
@@ -104,25 +102,23 @@ const Navbar = () => {
             Mon compte
           </NavLink>
         </li>
-        <li>
-          <NavLink exact activeClassName="uk-active" to="/app/comptes">
-            <span className="uk-margin-small-right" uk-icon="icon: settings" />
-            Autres comptes
-          </NavLink>
-        </li>
+        {user && user.jwtPayload?.isAdmin && (
+          <li>
+            <NavLink exact activeClassName="uk-active" to="/app/comptes">
+              <span
+                className="uk-margin-small-right"
+                uk-icon="icon: settings"
+              />
+              Autres comptes
+            </NavLink>
+          </li>
+        )}
 
         <li>
-          <UserContext.Consumer>
-            {(ctx) => (
-              <a onClick={() => ctx.logout()} href=" ">
-                <span
-                  className="uk-margin-small-right"
-                  uk-icon="icon: sign-out"
-                />
-                Déconnexion
-              </a>
-            )}
-          </UserContext.Consumer>
+          <a onClick={() => user.logout()} href=" ">
+            <span className="uk-margin-small-right" uk-icon="icon: sign-out" />
+            Déconnexion
+          </a>
         </li>
       </ul>
     </div>

@@ -12,7 +12,7 @@ const ContactsTable: React.FC<ITableContacts> = ({
         <tr>
           {onToggle && <th className="uk-table-shrink">Primaire</th>}
           <th className="uk-text-nowrap">Nom</th>
-          <th className="uk-table-expand">Contact</th>
+          <th className="uk-table-expand">Tel</th>
           <th>Email</th>
           <th>Actions</th>
         </tr>

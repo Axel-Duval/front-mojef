@@ -170,3 +170,18 @@ export interface IPrice {
   floorPrice: number;
   festivalId: string;
 }
+
+/**
+ * USERS
+ */
+export interface IUser {
+  id: string;
+  username: string;
+  isAdmin: boolean;
+}
+
+export interface IUserCreate {
+  password: string;
+  username: string;
+  isAdmin: boolean;
+}
