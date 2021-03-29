@@ -8,17 +8,28 @@ import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
 import { IBooking, IBookingJoinCompany } from "../utils/types";
 
+enum FilterState {
+  ON = "on",
+  OFF = "off",
+  NONE = "none",
+}
+
 const Bookings = () => {
   const instance = useAxios();
   const festivals = useContext(FestivalContext);
   const [bookings, setBookings] = useState<IBookingJoinCompany[] | null>(null);
   const [showNewBookingModal, setShowNewBookingModal] = useState(false);
   const [useFilter, setUseFilter] = useState(false);
-  const [checkboxes, setCheckboxes] = useState({
-    paid: false,
-    placed: false,
-    present: false,
+  const [filters, setFilters] = useState<{
+    paid: boolean | null;
+    placed: boolean | null;
+    present: boolean | null;
+  }>({
+    paid: null,
+    placed: null,
+    present: null,
   });
+
   const [filterInput, setFilterInput] = useState("");
   const [_bookings, isLoading, isErrored] = useGet<IBookingJoinCompany[]>(
     "/api/booking/festival/" + festivals.currentFestival?.id
@@ -37,6 +48,17 @@ const Bookings = () => {
       });
   }, [isErrored]);
 
+  const getState = (i: string): boolean | null => {
+    switch (i) {
+      case FilterState.ON:
+        return true;
+      case FilterState.OFF:
+        return false;
+      default:
+        return null;
+    }
+  };
+
   const filteredBookings = (bookings: IBookingJoinCompany[]) => {
     return bookings.filter((booking) => {
       if (useFilter) {
@@ -44,9 +66,9 @@ const Bookings = () => {
           booking.company.name
             .toLowerCase()
             .includes(filterInput.toLowerCase()) &&
-          booking.isPlaced === checkboxes.placed &&
-          booking.isPresent === checkboxes.present &&
-          !!booking.billPaidOn === checkboxes.paid
+          (filters.placed === null || booking.isPlaced === filters.placed) &&
+          (filters.present === null || booking.isPresent === filters.present) &&
+          (filters.paid === null || !!booking.billPaidOn === filters.paid)
         );
       } else {
         return booking;
@@ -124,40 +146,58 @@ const Bookings = () => {
                 onChange={(e) => setFilterInput(e.target.value)}
               />
               <label className="uk-margin-remove-bottom uk-margin-left">
-                <input
-                  className="uk-checkbox"
-                  type="checkbox"
-                  checked={checkboxes.paid}
-                  onChange={() =>
-                    setCheckboxes({ ...checkboxes, paid: !checkboxes.paid })
-                  }
-                />{" "}
-                Payé
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input
-                  className="uk-checkbox"
-                  type="checkbox"
-                  checked={checkboxes.placed}
-                  onChange={() =>
-                    setCheckboxes({ ...checkboxes, placed: !checkboxes.placed })
-                  }
-                />{" "}
-                Placé
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input
-                  className="uk-checkbox"
-                  type="checkbox"
-                  checked={checkboxes.present}
-                  onChange={() =>
-                    setCheckboxes({
-                      ...checkboxes,
-                      present: !checkboxes.present,
+                Etat paiement
+                <select
+                  className="uk-select"
+                  onChange={(e) =>
+                    setFilters((filters) => {
+                      return {
+                        ...filters,
+                        paid: getState(e.target.value),
+                      };
                     })
                   }
-                />{" "}
-                Présent
+                >
+                  <option value={FilterState.NONE}>-</option>
+                  <option value={FilterState.ON}>Payé</option>
+                  <option value={FilterState.OFF}>Non payé</option>
+                </select>
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                Placement
+                <select
+                  className="uk-select"
+                  onChange={(e) =>
+                    setFilters((filters) => {
+                      return {
+                        ...filters,
+                        placed: getState(e.target.value),
+                      };
+                    })
+                  }
+                >
+                  <option value={FilterState.NONE}>-</option>
+                  <option value={FilterState.ON}>Placé</option>
+                  <option value={FilterState.OFF}>Non placé</option>
+                </select>
+              </label>
+              <label className="uk-margin-remove-bottom uk-margin-left">
+                Présence
+                <select
+                  className="uk-select"
+                  onChange={(e) =>
+                    setFilters((filters) => {
+                      return {
+                        ...filters,
+                        present: getState(e.target.value),
+                      };
+                    })
+                  }
+                >
+                  <option value={FilterState.NONE}>-</option>
+                  <option value={FilterState.ON}>Présent</option>
+                  <option value={FilterState.OFF}>Non présent</option>
+                </select>
               </label>
             </div>
             <hr />
