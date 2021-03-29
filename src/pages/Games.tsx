@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UIkit from "uikit";
 import GameForm from "../components/games/GameForm";
+import GamesFilter from "../components/games/GamesFilter";
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
 import GamesTable from "../components/Tables/Games";
@@ -14,6 +15,16 @@ const Games = () => {
   const [games, setGames] = useState<IGame[]>([]);
   const [modalState, setModalState] = useState<boolean>(false);
   const [gameToEdit, setGameToEdit] = useState<IGame | null>(null);
+  const [useFilter, setUseFilter] = useState<boolean>(false);
+  const [filters, setFilters] = useState<{
+    input: string;
+    prototype: boolean | null;
+    type: string | null;
+  }>({
+    input: "",
+    prototype: null,
+    type: null,
+  });
 
   useEffect(() => {
     if (data) {
@@ -26,6 +37,21 @@ const Games = () => {
       setGameToEdit(null);
     }
   }, [modalState]);
+
+  const filteredGames = (games: IGame[]) => {
+    return games.filter((game) => {
+      if (useFilter) {
+        return (
+          game.name.toLowerCase().includes(filters.input.toLowerCase()) &&
+          (filters.prototype === null ||
+            game.isPrototype === filters.prototype) &&
+          (filters.type === null || game.type === filters.type)
+        );
+      } else {
+        return game;
+      }
+    });
+  };
 
   const handleEdit = (game: IGame) => {
     setGameToEdit(game);
@@ -116,7 +142,7 @@ const Games = () => {
                 className="uk-icon-link uk-margin-small-right -pointer"
                 uk-icon="database"
                 uk-tooltip="filter les jeux"
-                uk-toggle="target: #toggle-filter-games"
+                onClick={() => setUseFilter(!useFilter)}
               />
               <span
                 className="uk-icon-link -pointer"
@@ -126,28 +152,8 @@ const Games = () => {
             </div>
           </div>
           <hr />
-          <div id="toggle-filter-games" hidden={true}>
-            <div className="uk-flex uk-flex-center uk-flex-middle">
-              <input
-                type="text"
-                placeholder="Aa"
-                className="uk-input uk-width-medium "
-              />
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Editeur
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Exposant
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left"></label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Suivi en cours
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Pas de suivi
-              </label>
-            </div>
-            <hr />
+          <div id="toggle-filter-games" hidden={!useFilter}>
+            <GamesFilter setFilters={setFilters} />
           </div>
           {modalState && (
             <Modal
@@ -160,7 +166,7 @@ const Games = () => {
             </Modal>
           )}
           <GamesTable
-            games={games}
+            games={filteredGames(games)}
             onEdit={handleEdit}
             onToggle={switchGameIsPrototype}
             onDelete={handleDelete}

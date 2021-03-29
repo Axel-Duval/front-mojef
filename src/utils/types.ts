@@ -185,3 +185,9 @@ export interface IUserCreate {
   username: string;
   isAdmin: boolean;
 }
+
+export enum FilterState {
+  ON = "on",
+  OFF = "off",
+  NONE = "none",
+}

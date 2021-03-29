@@ -1,18 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
+import BookingsFilter from "../components/bookings/BookingsFilter";
 import NewBookingModal from "../components/bookings/NewBookingModal";
 import Loading from "../components/Loading";
 import TableBookings from "../components/Tables/Bookings";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
-import { IBooking, IBookingJoinCompany } from "../utils/types";
-
-enum FilterState {
-  ON = "on",
-  OFF = "off",
-  NONE = "none",
-}
+import { getState } from "../utils/functions";
+import { IBooking, IBookingJoinCompany, FilterState } from "../utils/types";
 
 const Bookings = () => {
   const instance = useAxios();
@@ -21,16 +17,16 @@ const Bookings = () => {
   const [showNewBookingModal, setShowNewBookingModal] = useState(false);
   const [useFilter, setUseFilter] = useState(false);
   const [filters, setFilters] = useState<{
+    input: string;
     paid: boolean | null;
     placed: boolean | null;
     present: boolean | null;
   }>({
+    input: "",
     paid: null,
     placed: null,
     present: null,
   });
-
-  const [filterInput, setFilterInput] = useState("");
   const [_bookings, isLoading, isErrored] = useGet<IBookingJoinCompany[]>(
     "/api/booking/festival/" + festivals.currentFestival?.id
   );
@@ -48,24 +44,13 @@ const Bookings = () => {
       });
   }, [isErrored]);
 
-  const getState = (i: string): boolean | null => {
-    switch (i) {
-      case FilterState.ON:
-        return true;
-      case FilterState.OFF:
-        return false;
-      default:
-        return null;
-    }
-  };
-
   const filteredBookings = (bookings: IBookingJoinCompany[]) => {
     return bookings.filter((booking) => {
       if (useFilter) {
         return (
           booking.company.name
             .toLowerCase()
-            .includes(filterInput.toLowerCase()) &&
+            .includes(filters.input.toLowerCase()) &&
           (filters.placed === null || booking.isPlaced === filters.placed) &&
           (filters.present === null || booking.isPresent === filters.present) &&
           (filters.paid === null || !!booking.billPaidOn === filters.paid)
@@ -138,69 +123,7 @@ const Bookings = () => {
           </div>
           <hr />
           <div id="filter-bookings" hidden={!useFilter} className="-noselect">
-            <div className="uk-flex uk-flex-center uk-flex-middle">
-              <input
-                type="text"
-                placeholder="Aa"
-                className="uk-input uk-width-medium "
-                onChange={(e) => setFilterInput(e.target.value)}
-              />
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                Etat paiement
-                <select
-                  className="uk-select"
-                  onChange={(e) =>
-                    setFilters((filters) => {
-                      return {
-                        ...filters,
-                        paid: getState(e.target.value),
-                      };
-                    })
-                  }
-                >
-                  <option value={FilterState.NONE}>-</option>
-                  <option value={FilterState.ON}>Payé</option>
-                  <option value={FilterState.OFF}>Non payé</option>
-                </select>
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                Placement
-                <select
-                  className="uk-select"
-                  onChange={(e) =>
-                    setFilters((filters) => {
-                      return {
-                        ...filters,
-                        placed: getState(e.target.value),
-                      };
-                    })
-                  }
-                >
-                  <option value={FilterState.NONE}>-</option>
-                  <option value={FilterState.ON}>Placé</option>
-                  <option value={FilterState.OFF}>Non placé</option>
-                </select>
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                Présence
-                <select
-                  className="uk-select"
-                  onChange={(e) =>
-                    setFilters((filters) => {
-                      return {
-                        ...filters,
-                        present: getState(e.target.value),
-                      };
-                    })
-                  }
-                >
-                  <option value={FilterState.NONE}>-</option>
-                  <option value={FilterState.ON}>Présent</option>
-                  <option value={FilterState.OFF}>Non présent</option>
-                </select>
-              </label>
-            </div>
-            <hr />
+            <BookingsFilter setFilters={setFilters} />
           </div>
           <TableBookings bookings={filteredBookings(bookings)} />
         </div>
