@@ -10,6 +10,9 @@ import { useAxios } from "../hooks/useAxios";
 import UIkit from "uikit";
 import Loading from "../components/Loading";
 import { UserContext } from "../contexts/user";
+import BookingCompta from "../components/bookings/BookingCompta";
+import Heading from "../components/Heading";
+import SuiviCompta from "../components/bookings/SuiviCompta";
 
 const Booking = () => {
   const { id: bookingId } = useParams<{ id: string }>();
@@ -144,7 +147,27 @@ const Booking = () => {
               </div>
             </li>
             {user && user.jwtPayload?.isAdmin && (
-              <li className="-fullheight">Comptabilité component</li>
+              <li className="-fullheight">
+                <div className="uk-flex -fullheight -booking-responsive">
+                  <div className="-flex-1">
+                    <BookingCompta bookingId={booking.id!} />
+                  </div>
+                  <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
+                  <div className="-flex-1">
+                    <Heading
+                      title="Suivi facture"
+                      subtitle="Les bons comptes font les bons amis"
+                    >
+                      <span
+                        className="uk-icon-link -pointer"
+                        uk-icon="cloud-upload"
+                        uk-tooltip="auto-sync"
+                      />
+                    </Heading>
+                    <SuiviCompta bookingId={booking.id!} />
+                  </div>
+                </div>
+              </li>
             )}
           </ul>
         </div>

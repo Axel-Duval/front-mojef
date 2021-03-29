@@ -16,9 +16,7 @@ const Notes = ({ notes, bookingId }: INotes) => {
   const saveNotes = () => {
     instance
       .patch(`/api/booking/${bookingId}`, { notes: reactiveNotes })
-      .then((res) => console.log("ok work"))
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         UIkit.notification({
           message: `Impossible de sauvegarder la note`,
           status: "danger",
