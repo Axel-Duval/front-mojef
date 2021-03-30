@@ -19,9 +19,13 @@ import {
 import { useGet } from "./hooks/useGet";
 import Loading from "./components/Loading";
 import NoFestival from "./pages/NoFestival";
+import { usePost } from "./hooks/usePost";
+import { useAxios } from "./hooks/useAxios";
+import UIkit from "uikit";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
+  const axios = useAxios();
 
   const [
     festivalCtxValue,
@@ -42,6 +46,37 @@ function App() {
         festivals: [...ctx.festivals, festival],
         currentFestival: ctx.currentFestival || festival,
       })),
+    setActiveFestival: (festival) => {
+      setFestivalCtxValue((ctx) => {
+        const previousActive = ctx.festivals.findIndex((f) => f.isActive);
+        axios
+          .patch(`/api/festival/${festival.id}`, {
+            isActive: true,
+          })
+          .catch(() => {
+            setFestivalCtxValue((ctx) => ({
+              ...ctx,
+              festivals: ctx.festivals.map((f, i) => ({
+                ...f,
+                isActive: i === previousActive,
+              })),
+            }));
+            UIkit.notification({
+              message: "Impossible de changer le festival courant.",
+              pos: "top-center",
+              status: "danger",
+            });
+          });
+        const newFestivals = ctx.festivals.map((f) => ({
+          ...f,
+          isActive: f.id === festival.id,
+        }));
+        return {
+          ...ctx,
+          festivals: newFestivals,
+        };
+      });
+    },
   });
 
   const [festivals, loading, errored] = useGet<

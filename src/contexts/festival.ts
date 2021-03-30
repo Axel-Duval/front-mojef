@@ -11,6 +11,7 @@ export interface FestivalContextValue {
   currentFestival: FestivalData | null;
   setCurrentFestival: (festival: FestivalData) => void;
   addFestival: (festival: FestivalData) => void;
+  setActiveFestival: (festival: FestivalData) => void;
 }
 
 export const FestivalContext = React.createContext<FestivalContextValue>({
@@ -18,4 +19,5 @@ export const FestivalContext = React.createContext<FestivalContextValue>({
   currentFestival: null,
   setCurrentFestival: () => {},
   addFestival: () => {},
+  setActiveFestival: () => {},
 });

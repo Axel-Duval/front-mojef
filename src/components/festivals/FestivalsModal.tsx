@@ -1,4 +1,7 @@
-import { FestivalContext } from "../../contexts/festival";
+import { useContext } from "react";
+import { FestivalContext, FestivalContextValue } from "../../contexts/festival";
+import { UserContext } from "../../contexts/user";
+import { IFestival } from "../../utils/types";
 import Modal from "../Modal";
 
 interface IFestivalModal {
@@ -8,6 +11,7 @@ interface IFestivalModal {
 }
 
 const Festivals = ({ show, onClose, onAdd }: IFestivalModal) => {
+  const userCtx = useContext(UserContext);
   return (
     <>
       {show && (
@@ -69,6 +73,11 @@ const Festivals = ({ show, onClose, onAdd }: IFestivalModal) => {
                               festival.isActive
                                 ? "uk-card uk-card-hover uk-card-body uk-padding-small -timeline-card uk-margin-small-right uk-card-primary uk-margin-bottom -pointer"
                                 : "uk-card uk-card-hover uk-card-body uk-padding-small -timeline-card uk-margin-small-right uk-card-default uk-margin-bottom -pointer"
+                            }
+                            onClick={() =>
+                              userCtx.jwtPayload &&
+                              userCtx.jwtPayload.isAdmin &&
+                              value.setActiveFestival(festival)
                             }
                           >
                             <p>{festival.name}</p>
