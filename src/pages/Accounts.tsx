@@ -24,15 +24,19 @@ const Accounts = () => {
     setShowUserModal(true);
   };
   const handleDelete = (user: IUser) => {
-    setUsers(users.filter((u) => u.id !== user.id));
-    instance.delete(`/api/user/${user.id}`).catch(() => {
-      setUsers([...users, user]);
-      UIkit.notification({
-        message: `Impossible de supprimer l'utilisateur`,
-        status: "danger",
-        pos: "top-center",
+    UIkit.modal
+      .confirm(`Êtes vous sûr de vouloir supprimer cet utilisateur ?`)
+      .then(() => {
+        setUsers(users.filter((u) => u.id !== user.id));
+        instance.delete(`/api/user/${user.id}`).catch(() => {
+          setUsers([...users, user]);
+          UIkit.notification({
+            message: `Impossible de supprimer l'utilisateur`,
+            status: "danger",
+            pos: "top-center",
+          });
+        });
       });
-    });
   };
   const handleSuccess = (user: IUser, editMode: boolean) => {
     setEditUser(null);
