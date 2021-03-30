@@ -61,7 +61,8 @@ const Games = () => {
   const handleDelete = (game: IGame) => {
     UIkit.modal
       .confirm(`Êtes vous sûr de vouloir supprimer le jeu ${game.name}?`)
-      .then(() => deleteGame(game));
+      .then(() => deleteGame(game))
+      .catch(() => {});
   };
 
   const switchGameIsPrototype = (game: IGame) => {

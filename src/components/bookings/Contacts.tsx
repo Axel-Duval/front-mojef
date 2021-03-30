@@ -33,7 +33,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
               pos: "top-center",
             });
           });
-      });
+      }).catch(() => {});
   };
 
   const handleToggle = (contact: IContact) => {

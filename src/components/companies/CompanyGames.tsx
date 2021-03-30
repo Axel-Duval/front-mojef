@@ -63,8 +63,9 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
 
   const handleDelete = (game: IGame) => {
     UIkit.modal
-      .confirm(`Êtes vous sûr de vouloir supprimer le jeu ${game.name}?`)
-      .then(() => deleteGame(game));
+      .confirm("Êtes vous sûr de vouloir supprimer ce jeu ?")
+      .then(() => deleteGame(game))
+      .catch(() => {});
   };
 
   const switchGameIsPrototype = (game: IGame) => {

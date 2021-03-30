@@ -63,7 +63,8 @@ const Booking = () => {
               pos: "top-center",
             });
           });
-      });
+      })
+      .catch(() => {});
   };
 
   return (

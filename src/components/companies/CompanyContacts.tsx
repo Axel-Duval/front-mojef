@@ -47,10 +47,9 @@ const CompanyContacts: FC<{
 
   const handleDelete = (contact: IContact) => {
     UIkit.modal
-      .confirm(
-        `Êtes vous sûr de vouloir supprimer le contact ${contact.firstname} ${contact.lastname}?`
-      )
-      .then(() => deleteContact(contact));
+      .confirm("Êtes vous sûr de vouloir supprimer ce contact")
+      .then(() => deleteContact(contact))
+      .catch(() => {});
   };
 
   const onEditSuccess = (contact: IContact) => {

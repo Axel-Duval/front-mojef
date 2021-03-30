@@ -45,7 +45,7 @@ const GamesTable: React.FC<ITableGames> = ({
                   type="checkbox"
                   checked={game.isPrototype}
                   onChange={() => onToggle && onToggle(game)}
-                  disabled={onEdit === undefined}
+                  disabled={true}
                 />
               </td>
               {showCompanies && game.publisher && (

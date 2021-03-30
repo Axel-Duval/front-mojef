@@ -43,7 +43,8 @@ const Timeline = ({ exchanges, bookingId }: ITimeline) => {
       .confirm("Etes vous sûr de vouloir supprimer cet échange ?")
       .then(() => {
         setTimeline(timeline.filter((item) => item !== element));
-      });
+      })
+      .catch(() => {});
   };
 
   function timelineFromString(timeline: string) {

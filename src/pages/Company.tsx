@@ -38,7 +38,8 @@ const CompanyPage = () => {
               pos: "top-center",
             })
           );
-      });
+      })
+      .catch(() => {});
   };
 
   return (
