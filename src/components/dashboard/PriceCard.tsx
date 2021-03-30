@@ -1,14 +1,15 @@
 import React from "react";
 import table from "../../assets/images/table.svg";
 import floor from "../../assets/images/selection.svg";
-import { IPrice } from "../../utils/types";
+import { IPrice, ITableQuantitie } from "../../utils/types";
 interface IPriceCard {
   price: IPrice;
+  quantitie: ITableQuantitie | null;
   onEdit: Function;
   onDelete: Function;
 }
 
-const PriceCard = ({ price, onEdit, onDelete }: IPriceCard) => {
+const PriceCard = ({ price, quantitie, onEdit, onDelete }: IPriceCard) => {
   const percent = (val: number, max: number) => {
     if (val === 0 || max === 0) {
       return 0;
@@ -64,16 +65,18 @@ const PriceCard = ({ price, onEdit, onDelete }: IPriceCard) => {
           <img width="40" height="40" alt="tables" uk-img={table} />
         </div>
         <hr className="-img-white" />
-        <p className="-price-number -price-item">35/{price.tableCount}</p>
+        <p className="-price-number -price-item">
+          {quantitie?.tables || 0}/{price.tableCount}
+        </p>
         <label
           className={
             "uk-label " +
-            (percent(19, price.tableCount) > 100
+            (percent(quantitie?.tables || 0, price.tableCount) > 100
               ? " uk-label-danger"
               : " uk-label-success")
           }
         >
-          {percent(19, price.tableCount)}%
+          {percent(quantitie?.tables || 0, price.tableCount)}%
         </label>
       </div>
       <div className="uk-card uk-card-default uk-padding -prices-card uk-text-center">
@@ -81,16 +84,18 @@ const PriceCard = ({ price, onEdit, onDelete }: IPriceCard) => {
           <img width="40" height="40" alt="espace au sol" uk-img={floor} />
         </div>
         <hr className="-img-white" />
-        <p className="-price-number -price-item">12/{price.floorCount}</p>
+        <p className="-price-number -price-item">
+          {quantitie?.floors || 0}/{price.floorCount}
+        </p>
         <label
           className={
             "uk-label " +
-            (percent(19, price.floorCount) > 100
+            (percent(quantitie?.floors || 0, price.floorCount) > 100
               ? " uk-label-danger"
               : " uk-label-success")
           }
         >
-          {percent(10, price.floorCount)}%
+          {percent(quantitie?.floors || 0, price.floorCount)}%
         </label>
       </div>
     </div>

@@ -4,7 +4,13 @@ import PriceCard from "../components/dashboard/PriceCard";
 import Tile from "../components/dashboard/Tile";
 import { FestivalContext } from "../contexts/festival";
 import { useGet } from "../hooks/useGet";
-import { IBooking, IFestival, IPartialCompany, IPrice } from "../utils/types";
+import {
+  IBooking,
+  IFestival,
+  IPartialCompany,
+  IPrice,
+  ITableQuantitie,
+} from "../utils/types";
 import Modal from "../components/Modal";
 import PriceForm from "../components/dashboard/PriceForm";
 import { useAxios } from "../hooks/useAxios";
@@ -28,6 +34,9 @@ const Dashboard = () => {
   );
   const [bookings, loadingBookings] = useGet<IBooking[]>(
     `/api/booking/festival/${currentFestival?.id}`
+  );
+  const [table_quantities, loadingQuantities] = useGet<ITableQuantitie[]>(
+    `/api/festival/${currentFestival?.id}/summarize`
   );
 
   useEffect(() => {
@@ -67,6 +76,7 @@ const Dashboard = () => {
    *  ADD/EDIT PRICE
    */
   const onAddPriceSuccess = (price: IPrice, isEdit: boolean) => {
+    setShowAddPriceModal(false);
     if (isEdit) {
       //Edit mode
       setEditPrice(null);
@@ -83,7 +93,6 @@ const Dashboard = () => {
       //Add mode
       setPrices([price, ...prices]);
     }
-    setShowAddPriceModal(false);
   };
 
   const deletePrice = (price: IPrice) => {
@@ -130,6 +139,10 @@ const Dashboard = () => {
   //   }, 0);
   // };
 
+  const getQuantitie = (id: string): ITableQuantitie => {
+    return table_quantities!.filter((q) => q.prices_id === id)[0] || null;
+  };
+
   return (
     <>
       {showAddPriceModal && (
@@ -143,7 +156,10 @@ const Dashboard = () => {
           <PriceForm onSuccess={onAddPriceSuccess} price={editPrice} />
         </Modal>
       )}
-      {loadingFestival || loadingCompanies || loadingBookings ? (
+      {loadingFestival ||
+      loadingCompanies ||
+      loadingBookings ||
+      loadingQuantities ? (
         <Loading />
       ) : (
         <div className="uk-flex uk-flex-column -fullheight -noselect">
@@ -211,19 +227,21 @@ const Dashboard = () => {
             <hr />
           </div>
           <div className="-dashboard-prices-wrapper">
-            <div className="uk-flex uk-flex-wrap uk-flex-wrap-center uk-flex-center test">
-              {prices
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((price, index) => {
-                  return (
-                    <PriceCard
-                      key={index}
-                      price={price}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                    />
-                  );
-                })}
+            <div className="uk-flex uk-flex-wrap">
+              {table_quantities &&
+                prices
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((price, index) => {
+                    return (
+                      <PriceCard
+                        key={index}
+                        quantitie={getQuantitie(price.id)}
+                        price={price}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    );
+                  })}
             </div>
           </div>
         </div>

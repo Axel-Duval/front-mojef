@@ -138,6 +138,7 @@ const CompaniesPage = () => {
           <hr />
           <div id="toggle-filter-companies" hidden={!useFilter}>
             <CompaniesFilter setFilters={setFilters} />
+            <hr />
           </div>
           {modalState && (
             <Modal

@@ -191,3 +191,14 @@ export enum FilterState {
   OFF = "off",
   NONE = "none",
 }
+
+/**
+ * TABLE QUANTITIES
+ */
+
+export interface ITableQuantitie {
+  prices_id: string;
+  prices_label: string;
+  tables: number;
+  floors: number;
+}
