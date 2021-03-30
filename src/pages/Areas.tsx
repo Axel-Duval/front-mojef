@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
 import Loading from "../components/Loading";
 import GamesTable from "../components/Tables/Games";
@@ -6,7 +6,7 @@ import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useForm } from "../hooks/useForm";
 import { useGet } from "../hooks/useGet";
-import { IArea } from "../utils/types";
+import { IArea, IGame } from "../utils/types";
 import { required } from "../validators";
 
 const Areas = () => {
@@ -18,7 +18,6 @@ const Areas = () => {
   ///////////////////
 
   const [areas, setAreas] = useState<IArea[]>([]);
-  const [activeArea, setActiveArea] = useState<IArea | null>(null);
   const [festival, loading, fetchErrored] = useGet<{ areas: IArea[] }>(
     `/api/festival/${ctx.currentFestival?.id}`
   );
@@ -182,6 +181,9 @@ const Areas = () => {
       .confirm(`Voulez-vous vraiment supprimer cette zone ?`)
       .then(() => {
         const revert = () => setAreas((areas) => [...areas, area]);
+        if (activeArea?.id === area.id) {
+          setActiveArea(null);
+        }
         setAreas((areas) => areas.filter((a) => a.id !== area.id));
         axios
           .delete(`api/area/${area.id}`)
@@ -191,16 +193,54 @@ const Areas = () => {
             }
           })
           .catch(() => revert());
+      })
+      .catch(() => {});
+  };
+
+  ///////////////
+  // SELECTION //
+  ///////////////
+
+  const [activeArea, setActiveArea] = useState<IArea | null>(null);
+  const [areaGames, setAreaGames] = useState<IGame[]>([]);
+  const [gamesData, gamesLoading, gamesRetrieveErrored] = useGet<IGame[]>(
+    `/api/game/byArea/${activeArea?.id}`,
+    activeArea != null
+  );
+
+  const selectArea = (area: IArea) => {
+    if (activeArea && activeArea.id === area.id) {
+      setActiveArea(null);
+    } else {
+      setActiveArea(area);
+    }
+  };
+
+  useEffect(() => {
+    if (gamesData) {
+      setAreaGames(
+        gamesData.filter((value, index, games) => {
+          for (let i = 0; i < index; i++) {
+            if (games[i].id === value.id) {
+              return false;
+            }
+          }
+          return true;
+        })
+      );
+    }
+  }, [gamesData]);
+
+  useEffect(() => {
+    if (gamesRetrieveErrored) {
+      UIkit.notification({
+        message: "Impossible de récupérer les jeux de la zone sélectionnée",
+        pos: "top-center",
+        status: "danger",
       });
-  };
-
-  ////////////////////////////////
-  // GAMES REMOVE FROM AREA //
-  ////////////////////////////////
-
-  const handleDelete = () => {
-    console.log("delete");
-  };
+      setActiveArea(null);
+    }
+  }, [gamesRetrieveErrored]);
 
   return (
     <div className="uk-flex uk-flex-column -fullheight">
@@ -267,7 +307,19 @@ const Areas = () => {
               </thead>
               <tbody>
                 {areas.map((area) => (
-                  <tr key={area.id || area.label}>
+                  <tr
+                    key={area.id || area.label}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      selectArea(area);
+                    }}
+                    style={{
+                      border:
+                        activeArea && activeArea.id === area.id
+                          ? "solid 5px black"
+                          : undefined,
+                    }}
+                  >
                     <td>
                       {area.label === editedArea.label ? (
                         <form
@@ -288,6 +340,7 @@ const Areas = () => {
                             onChange={(e) =>
                               editAreaForm.label.set(e.target.value)
                             }
+                            onClick={(e) => e.stopPropagation()}
                             autoFocus={true}
                             onKeyDown={(e) => {
                               if (e.code === "Escape") {
@@ -307,12 +360,18 @@ const Areas = () => {
                           <span
                             className="uk-icon-link -pointer uk-margin-small-right"
                             uk-icon="icon: file-edit"
-                            onClick={startEditing.bind(this, area)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startEditing(area);
+                            }}
                           />
                           <span
                             className="uk-icon-link -pointer"
                             uk-icon="icon: trash"
-                            onClick={deleteArea.bind(this, area)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteArea(area);
+                            }}
                           />
                         </>
                       )}
@@ -327,13 +386,15 @@ const Areas = () => {
             {!activeArea ? (
               <div className="uk-padding-large -fullheight">
                 <div className="uk-placeholder -fullwidth -fullheight uk-flex uk-flex-center uk-flex-middle">
-                  Liste des jeux d'une zone
+                  Sélectionnez une zone pour voir les jeux s'y trouvant
                 </div>
               </div>
+            ) : gamesLoading ? (
+              <Loading />
             ) : (
               <>
                 <h2>{activeArea.label}</h2>
-                <GamesTable games={new Array()} onDelete={handleDelete} />
+                <GamesTable games={areaGames} />
               </>
             )}
           </div>
