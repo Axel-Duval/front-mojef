@@ -125,7 +125,8 @@ const Dashboard = () => {
   const handleDelete = (price: IPrice) => {
     UIkit.modal
       .confirm(`Êtes vous sûr de vouloir supprimer ${price.label}?`)
-      .then(() => deletePrice(price));
+      .then(() => deletePrice(price))
+      .catch(() => {});
   };
 
   const handleEdit = (price: IPrice) => {
