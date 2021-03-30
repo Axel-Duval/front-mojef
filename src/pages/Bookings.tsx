@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
 import BookingsFilter from "../components/bookings/BookingsFilter";
 import NewBookingModal from "../components/bookings/NewBookingModal";
@@ -7,7 +7,6 @@ import TableBookings from "../components/Tables/Bookings";
 import { FestivalContext } from "../contexts/festival";
 import { useAxios } from "../hooks/useAxios";
 import { useGet } from "../hooks/useGet";
-import { getState } from "../utils/functions";
 import { IBooking, IBookingJoinCompany, FilterState } from "../utils/types";
 
 const Bookings = () => {
@@ -18,12 +17,14 @@ const Bookings = () => {
   const [useFilter, setUseFilter] = useState(false);
   const [filters, setFilters] = useState<{
     input: string;
-    paid: boolean | null;
+    needVolunteers: boolean | null;
+    paid: string;
     placed: boolean | null;
     present: boolean | null;
   }>({
     input: "",
-    paid: null,
+    needVolunteers: null,
+    paid: FilterState.NONE,
     placed: null,
     present: null,
   });
@@ -53,7 +54,18 @@ const Bookings = () => {
             .includes(filters.input.toLowerCase()) &&
           (filters.placed === null || booking.isPlaced === filters.placed) &&
           (filters.present === null || booking.isPresent === filters.present) &&
-          (filters.paid === null || !!booking.billPaidOn === filters.paid)
+          (filters.needVolunteers === null ||
+            booking.needVolunteers === filters.needVolunteers) &&
+          ((filters.paid === "not sent" &&
+            booking.billSentOn === null &&
+            booking.billPaidOn === null) ||
+            (filters.paid === "sent" &&
+              booking.billSentOn !== null &&
+              booking.billPaidOn === null) ||
+            (filters.paid === "paid" &&
+              booking.billSentOn !== null &&
+              booking.billPaidOn !== null) ||
+            filters.paid === FilterState.NONE)
         );
       } else {
         return booking;

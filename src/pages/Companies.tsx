@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import UIkit from "uikit";
+import CompaniesFilter from "../components/companies/CompaniesFilter";
 import CompanyForm from "../components/companies/CompanyForm";
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
@@ -14,10 +15,41 @@ const CompaniesPage = () => {
   const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
   const [companies, setCompanies] = useState<IPartialCompany[]>(new Array());
   const [modalState, setModalState] = useState<boolean>(false);
-
   const [data, loading] = useGet<IPartialCompany[]>("/api/company");
-
   const [bookingsCompaniesId, setBookingsCompaniesId] = useState(new Array());
+  const [useFilter, setUseFilter] = useState(false);
+  const [filters, setFilters] = useState<{
+    input: string;
+    exhibitor: boolean | null;
+    publisher: boolean | null;
+    followed: boolean | null;
+    active: boolean | null;
+  }>({
+    input: "",
+    exhibitor: null,
+    publisher: null,
+    followed: null,
+    active: null,
+  });
+
+  const filteredCompanies = (companies: IPartialCompany[]) => {
+    return companies.filter((company) => {
+      if (useFilter) {
+        return (
+          company.name.toLowerCase().includes(filters.input.toLowerCase()) &&
+          (filters.exhibitor === null ||
+            company.isExhibitor === filters.exhibitor) &&
+          (filters.publisher === null ||
+            company.isPublisher === filters.publisher) &&
+          (filters.followed === null ||
+            bookingsCompaniesId.includes(company.id!) === filters.followed) &&
+          (filters.active === null || company.isActive === filters.active)
+        );
+      } else {
+        return company;
+      }
+    });
+  };
 
   useEffect(() => {
     instance
@@ -94,7 +126,7 @@ const CompaniesPage = () => {
                 className="uk-icon-link uk-margin-small-right -pointer"
                 uk-icon="database"
                 uk-tooltip="filter les sociétés"
-                uk-toggle="target: #toggle-filter-companies"
+                onClick={() => setUseFilter(!useFilter)}
               />
               <span
                 className="uk-icon-link -pointer"
@@ -104,28 +136,8 @@ const CompaniesPage = () => {
             </div>
           </div>
           <hr />
-          <div id="toggle-filter-companies" hidden={true}>
-            <div className="uk-flex uk-flex-center uk-flex-middle">
-              <input
-                type="text"
-                placeholder="Aa"
-                className="uk-input uk-width-medium "
-              />
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Editeur
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Exposant
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left"></label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Suivi en cours
-              </label>
-              <label className="uk-margin-remove-bottom uk-margin-left">
-                <input className="uk-checkbox" type="checkbox" /> Pas de suivi
-              </label>
-            </div>
-            <hr />
+          <div id="toggle-filter-companies" hidden={!useFilter}>
+            <CompaniesFilter setFilters={setFilters} />
           </div>
           {modalState && (
             <Modal
@@ -136,7 +148,7 @@ const CompaniesPage = () => {
             </Modal>
           )}
           <CompaniesTable
-            companies={companies}
+            companies={filteredCompanies(companies)}
             onCreateBooking={handleCreateBooking}
             bookingsCompaniesId={bookingsCompaniesId}
           />

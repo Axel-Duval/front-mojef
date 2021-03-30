@@ -2,7 +2,7 @@ import { FC } from "react";
 import { getState } from "../../utils/functions";
 import { FilterState } from "../../utils/types";
 
-const BookingsFilter: FC<{ setFilters: (filters: any) => void }> = ({
+const CompaniesFilter: FC<{ setFilters: (filters: any) => void }> = ({
   setFilters,
 }) => {
   return (
@@ -24,80 +24,76 @@ const BookingsFilter: FC<{ setFilters: (filters: any) => void }> = ({
         />
       </label>
       <label className="uk-margin-remove-bottom uk-margin-left">
-        Etat facturation
+        Statut
         <select
           className="uk-select"
           onChange={(e) =>
             setFilters((filters: any) => {
               return {
                 ...filters,
-                paid: e.target.value,
+                publisher: getState(e.target.value),
               };
             })
           }
         >
           <option value={FilterState.NONE}>-</option>
-          <option value="not sent">Pas de facture</option>
-          <option value="sent">Facture envoyé</option>
-          <option value="paid">Facture payé</option>
+          <option value={FilterState.ON}>Editeur</option>
+          <option value={FilterState.OFF}>Non éditeur</option>
+        </select>
+        <select
+          className="uk-select"
+          onChange={(e) =>
+            setFilters((filters: any) => {
+              return {
+                ...filters,
+                exhibitor: getState(e.target.value),
+              };
+            })
+          }
+        >
+          <option value={FilterState.NONE}>-</option>
+          <option value={FilterState.ON}>Exposant</option>
+          <option value={FilterState.OFF}>Non exposant</option>
         </select>
       </label>
       <label className="uk-margin-remove-bottom uk-margin-left">
-        Besoin de bénévoles
+        Etat du suivi
         <select
           className="uk-select"
           onChange={(e) =>
             setFilters((filters: any) => {
               return {
                 ...filters,
-                needVolunteers: getState(e.target.value),
+                followed: getState(e.target.value),
               };
             })
           }
         >
           <option value={FilterState.NONE}>-</option>
-          <option value={FilterState.ON}>Besoin de bénévoles</option>
-          <option value={FilterState.OFF}>Pas besoin</option>
+          <option value={FilterState.OFF}>A débuter</option>
+          <option value={FilterState.ON}>En cours</option>
         </select>
       </label>
       <label className="uk-margin-remove-bottom uk-margin-left">
-        Placement
+        Société active
         <select
           className="uk-select"
           onChange={(e) =>
             setFilters((filters: any) => {
               return {
                 ...filters,
-                placed: getState(e.target.value),
+                active: getState(e.target.value),
               };
             })
           }
         >
           <option value={FilterState.NONE}>-</option>
-          <option value={FilterState.ON}>Placé</option>
-          <option value={FilterState.OFF}>Non placé</option>
-        </select>
-      </label>
-      <label className="uk-margin-remove-bottom uk-margin-left">
-        Présence
-        <select
-          className="uk-select"
-          onChange={(e) =>
-            setFilters((filters: any) => {
-              return {
-                ...filters,
-                present: getState(e.target.value),
-              };
-            })
-          }
-        >
-          <option value={FilterState.NONE}>-</option>
-          <option value={FilterState.ON}>Présent</option>
-          <option value={FilterState.OFF}>Non présent</option>
+          <option value={FilterState.ON}>Active</option>
+          <option value={FilterState.OFF}>Inactive</option>
         </select>
       </label>
     </div>
   );
 };
 
-export default BookingsFilter;
+export default CompaniesFilter;

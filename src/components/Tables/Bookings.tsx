@@ -10,6 +10,7 @@ const Bookings = ({ bookings }: ITableBookings) => {
           <th>Société</th>
           <th>Date</th>
           <th>Statut</th>
+          <th>Bénévoles</th>
           <th>Facture</th>
         </tr>
       </thead>
@@ -38,6 +39,11 @@ const Bookings = ({ bookings }: ITableBookings) => {
                   <label className="uk-label uk-margin-remove-bottom">
                     Présent
                   </label>
+                )}
+              </td>
+              <td>
+                {booking.needVolunteers && (
+                  <label className="uk-label uk-label-warning">Besoin</label>
                 )}
               </td>
               <td>
