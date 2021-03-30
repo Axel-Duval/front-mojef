@@ -24,7 +24,25 @@ const CompaniesFilter: FC<{ setFilters: (filters: any) => void }> = ({
         />
       </label>
       <label className="uk-margin-remove-bottom uk-margin-left">
-        Statut
+        Société active
+        <select
+          className="uk-select"
+          onChange={(e) =>
+            setFilters((filters: any) => {
+              return {
+                ...filters,
+                active: getState(e.target.value),
+              };
+            })
+          }
+        >
+          <option value={FilterState.NONE}>-</option>
+          <option value={FilterState.ON}>Actives</option>
+          <option value={FilterState.OFF}>Inactives</option>
+        </select>
+      </label>
+      <label className="uk-margin-remove-bottom uk-margin-left">
+        Editeur
         <select
           className="uk-select"
           onChange={(e) =>
@@ -40,6 +58,9 @@ const CompaniesFilter: FC<{ setFilters: (filters: any) => void }> = ({
           <option value={FilterState.ON}>Editeur</option>
           <option value={FilterState.OFF}>Non éditeur</option>
         </select>
+      </label>
+      <label className="uk-margin-remove-bottom uk-margin-left">
+        Exposant
         <select
           className="uk-select"
           onChange={(e) =>
@@ -72,24 +93,6 @@ const CompaniesFilter: FC<{ setFilters: (filters: any) => void }> = ({
           <option value={FilterState.NONE}>-</option>
           <option value={FilterState.OFF}>A débuter</option>
           <option value={FilterState.ON}>En cours</option>
-        </select>
-      </label>
-      <label className="uk-margin-remove-bottom uk-margin-left">
-        Société active
-        <select
-          className="uk-select"
-          onChange={(e) =>
-            setFilters((filters: any) => {
-              return {
-                ...filters,
-                active: getState(e.target.value),
-              };
-            })
-          }
-        >
-          <option value={FilterState.NONE}>-</option>
-          <option value={FilterState.ON}>Active</option>
-          <option value={FilterState.OFF}>Inactive</option>
         </select>
       </label>
     </div>
