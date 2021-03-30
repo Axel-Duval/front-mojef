@@ -17,6 +17,7 @@
 }
 .-prices-card {
   border-radius: 1rem;
+  min-width: fit-content;
 }
 
 .-price-label {

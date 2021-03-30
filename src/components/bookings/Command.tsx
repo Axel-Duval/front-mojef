@@ -1,24 +1,83 @@
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import Heading from "../Heading";
 import table from "../../assets/images/table.svg";
 import selection from "../../assets/images/selection.svg";
-import { IBooking } from "../../utils/types";
+import {
+  IBookingSummarize,
+  IFestival,
+  ITableQuantities,
+} from "../../utils/types";
 import { useAxios } from "../../hooks/useAxios";
 import UIkit from "uikit";
+import CommandModal from "./CommandModal";
+import { FestivalContext } from "../../contexts/festival";
+import { useGet } from "../../hooks/useGet";
 
 interface IBookingCommand {
-  booking: IBooking;
+  booking: IBookingSummarize;
 }
 
 const Bookingcommand = ({ booking }: IBookingCommand) => {
   const instance = useAxios();
+  const [tablesQuantities, setTablesQuantities] = useState(
+    booking.tablesQuantities
+  );
+  const festivalId = useContext(FestivalContext).currentFestival?.id;
+  const [festival, loading] = useGet<IFestival>(`api/festival/${festivalId}`);
+  const [showCommandModal, setShowCommandModal] = useState(false);
+  const [
+    editTableQuantitie,
+    setEditTableQuantitie,
+  ] = useState<ITableQuantities | null>(null);
   const [checkboxes, setCheckboxes] = useState({
     isPlaced: booking.isPlaced,
     isPresent: booking.isPresent,
     needVolunteers: booking.needVolunteers,
   });
 
-  //TODO: Problem here, can't see checkboxes updates but PATCH works
+  const getAvailablePrices = () => {
+    const taken = tablesQuantities.map((t) => t.priceId);
+    return (
+      festival?.prices.filter((price) => {
+        return !taken.includes(price.id);
+      }) || []
+    );
+  };
+
+  const handleSuccess = async (
+    tableQuantity: ITableQuantities,
+    isEdit: boolean
+  ) => {
+    if (festival) {
+      if (isEdit) {
+        //edit mode
+        setTablesQuantities(
+          tablesQuantities.map((t) => {
+            if (t.priceId === tableQuantity.priceId) {
+              return {
+                ...t,
+                tables: tableQuantity.tables,
+                floors: tableQuantity.floors,
+              };
+            } else {
+              return t;
+            }
+          })
+        );
+      } else {
+        //add mode
+        const tmp = festival.prices.find(
+          (p) => p.id === tableQuantity.priceId
+        )!;
+        setTablesQuantities([
+          ...tablesQuantities,
+          { ...tableQuantity, price: tmp },
+        ]);
+      }
+      setShowCommandModal(false);
+    }
+  };
+
   const toggleCheckbox = (item: any) => {
     //Toggle checkboxes
     const tmp = checkboxes;
@@ -38,10 +97,23 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
   };
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
+      {showCommandModal && (
+        <CommandModal
+          onClose={() => {
+            setShowCommandModal(false);
+            setEditTableQuantitie(null);
+          }}
+          tableQuantitie={editTableQuantitie}
+          prices={getAvailablePrices() || []}
+          bookingId={booking.id}
+          onSuccess={handleSuccess}
+        />
+      )}
       <Heading title="Récapitulatif" subtitle="Dernière mise a jour il y a 2h">
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
           uk-icon="plus"
+          onClick={() => setShowCommandModal(true)}
         />
         <span
           className="uk-icon-link uk-margin-small-right -pointer"
@@ -56,92 +128,56 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
       </Heading>
       <div className="-booking-command">
         <ul className="-booking-command-container">
-          <li className="uk-flex uk-flex-middle -booking-command-item">
-            <p className="uk-label uk-margin-remove-bottom">Tarif 1</p>
-            <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small uk-flex uk-flex-middle">
-              <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
-                <img width="30" height="30" alt="" uk-img={table} />
-              </div>
-              <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
-                <p className="uk-text-bold uk-heading-small uk-margin-remove">
-                  10
-                </p>
-              </div>
-            </div>
-            <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-margin-left uk-padding-small uk-flex uk-flex-middle">
-              <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
-                <img width="30" height="30" alt="" uk-img={selection} />
-              </div>
-              <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
-                <p className="uk-text-bold uk-heading-small uk-margin-remove">
-                  10
-                </p>
-              </div>
-            </div>
-            <div className="uk-flex uk-flex-middle uk-width-auto uk-card uk-card-default uk-card-body uk-padding-small -booking-command-card uk-margin-left -booking-command-hover-expand">
-              <span
-                className="uk-icon-link uk-margin-small-right"
-                uk-icon="file-edit"
-              />
-              <span className="uk-icon-link" uk-icon="trash" />
-            </div>
-          </li>
-          <li className="uk-flex uk-flex-middle -booking-command-item">
-            <p className="uk-label uk-margin-remove-bottom">Tarif 1</p>
-            <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small uk-flex uk-flex-middle">
-              <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
-                <img
-                  width="30"
-                  height="30"
-                  alt=""
-                  uk-img={table}
-                  uk-svg="true"
-                />
-              </div>
-              <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
-                <p className="uk-text-bold uk-heading-small uk-margin-remove">
-                  12
-                </p>
-              </div>
-            </div>
-            <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-margin-left uk-padding-small uk-flex uk-flex-middle">
-              <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
-                <img width="30" height="30" alt="" uk-img={selection} />
-              </div>
-              <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
-                <p className="uk-text-bold uk-heading-small uk-margin-remove">
-                  04
-                </p>
-              </div>
-            </div>
-            <div className="uk-flex uk-flex-middle uk-width-auto uk-card uk-card-default uk-card-body uk-padding-small -booking-command-card uk-margin-left -booking-command-hover-expand">
-              <span
-                className="uk-icon-link uk-margin-small-right"
-                uk-icon="file-edit"
-              />
-              <span className="uk-icon-link" uk-icon="trash" />
-            </div>
-          </li>
-          <li className="uk-flex uk-flex-middle -booking-command-item">
-            <p className="uk-label uk-margin-remove-bottom">Tarif 1</p>
-            <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small uk-flex uk-flex-middle">
-              <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
-                <img width="30" height="30" alt="" uk-img={table} />
-              </div>
-              <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
-                <p className="uk-text-bold uk-heading-small uk-margin-remove">
-                  21
-                </p>
-              </div>
-            </div>
-            <div className="uk-flex uk-flex-middle uk-width-auto uk-card uk-card-default uk-card-body uk-padding-small -booking-command-card uk-margin-left -booking-command-hover-expand">
-              <span
-                className="uk-icon-link uk-margin-small-right"
-                uk-icon="file-edit"
-              />
-              <span className="uk-icon-link" uk-icon="trash" />
-            </div>
-          </li>
+          {tablesQuantities &&
+            tablesQuantities
+              .sort((a, b) =>
+                a.price.label
+                  .toLowerCase()
+                  .localeCompare(b.price.label.toLowerCase())
+              )
+              .map((quantity, index) => {
+                return (
+                  <li
+                    className="uk-flex uk-flex-middle -booking-command-item"
+                    key={index}
+                  >
+                    <p className="uk-label uk-margin-remove-bottom">
+                      {quantity.price.label}
+                    </p>
+                    <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small uk-flex uk-flex-middle">
+                      <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
+                        <img width="30" height="30" alt="" uk-img={table} />
+                      </div>
+                      <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
+                        <p className="uk-text-bold uk-heading-small uk-margin-remove">
+                          {quantity.tables}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-margin-left uk-padding-small uk-flex uk-flex-middle">
+                      <div className="uk-card uk-card-default uk-card-body -booking-command-card uk-padding-small">
+                        <img width="30" height="30" alt="" uk-img={selection} />
+                      </div>
+                      <div className="uk-flex uk-flex-center uk-flex-column uk-flex-middle uk-margin-left">
+                        <p className="uk-text-bold uk-heading-small uk-margin-remove">
+                          {quantity.floors}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="uk-flex uk-flex-middle uk-width-auto uk-card uk-card-default uk-card-body uk-padding-small -booking-command-card uk-margin-left -booking-command-hover-expand">
+                      <span
+                        className="uk-icon-link uk-margin-small-right"
+                        uk-icon="file-edit"
+                        onClick={() => {
+                          setEditTableQuantitie(quantity);
+                          setShowCommandModal(true);
+                        }}
+                      />
+                      <span className="uk-icon-link" uk-icon="trash" />
+                    </div>
+                  </li>
+                );
+              })}
         </ul>
       </div>
       <div className="uk-flex uk-flex-between">

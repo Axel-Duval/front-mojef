@@ -1,10 +1,11 @@
+import { IBookingSummarize } from "../../utils/types";
 import Heading from "../Heading";
 
 interface IBookingGames {
-  bookingId: string;
+  booking: IBookingSummarize;
 }
 
-const BookingGames = ({ bookingId }: IBookingGames) => {
+const BookingGames = ({ booking }: IBookingGames) => {
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       <Heading title="Jeux présentés" subtitle="Jeux trouvés : 10">

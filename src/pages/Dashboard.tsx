@@ -9,7 +9,7 @@ import {
   IFestival,
   IPartialCompany,
   IPrice,
-  ITableQuantitie,
+  ITableQuantitieDashboard,
 } from "../utils/types";
 import Modal from "../components/Modal";
 import PriceForm from "../components/dashboard/PriceForm";
@@ -35,9 +35,9 @@ const Dashboard = () => {
   const [bookings, loadingBookings] = useGet<IBooking[]>(
     `/api/booking/festival/${currentFestival?.id}`
   );
-  const [table_quantities, loadingQuantities] = useGet<ITableQuantitie[]>(
-    `/api/festival/${currentFestival?.id}/summarize`
-  );
+  const [table_quantities, loadingQuantities] = useGet<
+    ITableQuantitieDashboard[]
+  >(`/api/festival/${currentFestival?.id}/summarize`);
 
   useEffect(() => {
     setPrices(festival?.prices || []);
@@ -140,7 +140,7 @@ const Dashboard = () => {
   //   }, 0);
   // };
 
-  const getQuantitie = (id: string): ITableQuantitie => {
+  const getQuantitie = (id: string): ITableQuantitieDashboard => {
     return table_quantities!.filter((q) => q.prices_id === id)[0] || null;
   };
 

@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
-import { IContact } from "../../utils/types";
+import {
+  IBooking,
+  IBookingSummarize,
+  ICompany,
+  IContact,
+} from "../../utils/types";
 import Heading from "../Heading";
 import ContactsTable from "../Tables/Contacts";
 import ContactModal from "../Contact/ContactModal";
+import { useGet } from "../../hooks/useGet";
 
 interface IBookingContacts {
-  contacts: IContact[];
-  companyId: string;
+  booking: IBookingSummarize;
 }
 
-const Contacts = ({ contacts, companyId }: IBookingContacts) => {
-  const [reactiveContact, setContacts] = useState(contacts);
+const Contacts = ({ booking }: IBookingContacts) => {
+  const [company, loading] = useGet<ICompany>(
+    `api/company/${booking.company.id}`
+  );
+  const [contacts, setContacts] = useState<IContact[]>(new Array());
   const [showContactModal, setShowContactModal] = useState(false);
   const [editContact, setEditContact] = useState<IContact | null>(null);
   const instance = useAxios();
+
+  useEffect(() => {
+    company && setContacts(company.contacts);
+  }, [company]);
 
   const handleDelete = (contact: IContact) => {
     UIkit.modal
@@ -24,7 +36,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
         instance
           .delete(`/api/contact/${contact.id}`)
           .then(() => {
-            setContacts(reactiveContact.filter((item) => item !== contact));
+            setContacts(contacts.filter((item) => item !== contact));
           })
           .catch(() => {
             UIkit.notification({
@@ -39,7 +51,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
   const handleToggle = (contact: IContact) => {
     //Toggle isPrimary
     setContacts(
-      reactiveContact.map((c) => {
+      contacts.map((c) => {
         if (c.id === contact.id) {
           return {
             ...c,
@@ -55,7 +67,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
       .catch(() => {
         //Error => re-toggle isPrimary
         setContacts(
-          reactiveContact.map((c) => {
+          contacts.map((c) => {
             if (c.id === contact.id) {
               return contact;
             }
@@ -76,7 +88,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
       //Edit mode
       setEditContact(null);
       setContacts(
-        reactiveContact.map((c) => {
+        contacts.map((c) => {
           if (c.id !== contact.id) {
             return c;
           } else {
@@ -86,7 +98,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
       );
     } else {
       //Add mode
-      setContacts([contact, ...reactiveContact]);
+      setContacts([contact, ...contacts]);
     }
   };
 
@@ -104,7 +116,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
             !!editContact && setEditContact(null);
           }}
           handleSuccess={handleSuccess}
-          companyId={companyId}
+          companyId={booking.companyId}
           contact={editContact}
         />
       )}
@@ -112,7 +124,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
         <div className="uk-flex uk-flex-column -fullheight">
           <Heading
             title="Contacts"
-            subtitle={"Contacts trouvés: " + reactiveContact.length}
+            subtitle={"Contacts trouvés: " + contacts.length}
           >
             <span
               className="uk-icon-link uk-margin-small-right -pointer"
@@ -133,7 +145,7 @@ const Contacts = ({ contacts, companyId }: IBookingContacts) => {
           <div className="-booking-contacts">
             <div className="-booking-contact-container">
               <ContactsTable
-                contacts={reactiveContact}
+                contacts={contacts}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
                 onToggle={handleToggle}

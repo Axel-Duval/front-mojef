@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { IBooking } from "../../utils/types";
 import Heading from "../Heading";
 import Loading from "../Loading";
 interface IBookingCompta {
-  bookingId: string;
+  booking: IBooking;
 }
-const BookingCompta = ({ bookingId }: IBookingCompta) => {
+const BookingCompta = ({ booking }: IBookingCompta) => {
   const [loading, setLoading] = useState(false);
   //TODO: fetch prices, table-quantities from API
 

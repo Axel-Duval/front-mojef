@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import BookingCommand from "../components/bookings/Command";
 import BookingGames from "../components/bookings/Games";
 import BookingContacts from "../components/bookings/Contacts";
 import Notes from "../components/bookings/Notes";
 import Timeline from "../components/bookings/Timeline";
 import { useHistory, useParams } from "react-router-dom";
-import { IBooking, ICompany } from "../utils/types";
+import { IBookingSummarize } from "../utils/types";
 import { useAxios } from "../hooks/useAxios";
 import UIkit from "uikit";
 import Loading from "../components/Loading";
@@ -13,35 +13,16 @@ import { UserContext } from "../contexts/user";
 import BookingCompta from "../components/bookings/BookingCompta";
 import Heading from "../components/Heading";
 import SuiviCompta from "../components/bookings/SuiviCompta";
+import { useGet } from "../hooks/useGet";
 
 const Booking = () => {
   const { id: bookingId } = useParams<{ id: string }>();
-  const [booking, setBooking] = useState<IBooking | null>(null);
-  const [company, setCompany] = useState<ICompany | null>(null);
+  const [booking, loading] = useGet<IBookingSummarize>(
+    `api/booking/${bookingId}`
+  );
   const user = useContext(UserContext);
   const history = useHistory();
   const instance = useAxios();
-
-  useEffect(() => {
-    const fetchData = () => {
-      instance
-        .get(`/api/booking/${bookingId}`)
-        .then((res) => {
-          setBooking(res.data);
-          instance.get(`/api/company/${res.data.companyId}`).then((res) => {
-            setCompany(res.data);
-          });
-        })
-        .catch(() => {
-          UIkit.notification({
-            message: `Impossible de récupérer ce suivi`,
-            status: "danger",
-            pos: "top-center",
-          });
-        });
-    };
-    fetchData();
-  }, [bookingId, instance]);
 
   const remove = () => {
     UIkit.modal
@@ -69,13 +50,13 @@ const Booking = () => {
 
   return (
     <>
-      {!company || !booking ? (
+      {loading || !booking ? (
         <Loading />
       ) : (
         <div className="uk-flex uk-flex-column -fullheight">
           <div className="uk-flex uk-flex-between uk-flex-middle">
             <h1 className="uk-heading-bullet">
-              {company.name}
+              {booking.company.name}
               {booking.billPaidOn ? (
                 <span className="uk-label uk-label-success uk-margin-left">
                   Payé
@@ -119,19 +100,13 @@ const Booking = () => {
             <li className="-fullheight">
               <div className="uk-flex -fullheight -booking-responsive">
                 <div className="-flex-1">
-                  <Timeline
-                    exchanges={booking.exchanges}
-                    bookingId={booking.id!}
-                  />
+                  <Timeline booking={booking} />
                 </div>
                 <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
                 <div className="-flex-1">
                   <div className="uk-flex uk-flex-column -fullheight">
-                    <BookingContacts
-                      contacts={company.contacts}
-                      companyId={company.id!}
-                    />
-                    <Notes notes={booking.notes} bookingId={booking.id!} />
+                    <BookingContacts booking={booking} />
+                    <Notes booking={booking} />
                   </div>
                 </div>
               </div>
@@ -143,7 +118,7 @@ const Booking = () => {
                 </div>
                 <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
                 <div className="-flex-1">
-                  <BookingGames bookingId={booking.id!} />
+                  <BookingGames booking={booking} />
                 </div>
               </div>
             </li>
@@ -151,7 +126,7 @@ const Booking = () => {
               <li className="-fullheight">
                 <div className="uk-flex -fullheight -booking-responsive">
                   <div className="-flex-1">
-                    <BookingCompta bookingId={booking.id!} />
+                    <BookingCompta booking={booking} />
                   </div>
                   <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
                   <div className="-flex-1">
@@ -165,7 +140,7 @@ const Booking = () => {
                         uk-tooltip="auto-sync"
                       />
                     </Heading>
-                    <SuiviCompta bookingId={booking.id!} />
+                    <SuiviCompta booking={booking} />
                   </div>
                 </div>
               </li>

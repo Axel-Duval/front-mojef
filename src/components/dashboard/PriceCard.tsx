@@ -1,10 +1,10 @@
 import React from "react";
 import table from "../../assets/images/table.svg";
 import floor from "../../assets/images/selection.svg";
-import { IPrice, ITableQuantitie } from "../../utils/types";
+import { IPrice, ITableQuantitieDashboard } from "../../utils/types";
 interface IPriceCard {
   price: IPrice;
-  quantitie: ITableQuantitie | null;
+  quantitie: ITableQuantitieDashboard | null;
   onEdit: Function;
   onDelete: Function;
 }

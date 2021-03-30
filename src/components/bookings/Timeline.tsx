@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
-import { ITimelineElement } from "../../utils/types";
+import { IBookingSummarize, ITimelineElement } from "../../utils/types";
 import Heading from "../Heading";
 
 interface ITimeline {
-  exchanges: string;
-  bookingId: string;
+  booking: IBookingSummarize;
 }
 
-const Timeline = ({ exchanges, bookingId }: ITimeline) => {
+const Timeline = ({ booking }: ITimeline) => {
   const instance = useAxios();
   const [timeline, setTimeline] = useState<ITimelineElement[]>(
-    timelineFromString(exchanges)
+    timelineFromString(booking.exchanges)
   );
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const Timeline = ({ exchanges, bookingId }: ITimeline) => {
         .join("<#>");
     }
     instance
-      .patch(`/api/booking/${bookingId}`, { exchanges: format() })
+      .patch(`/api/booking/${booking.id}`, { exchanges: format() })
       .catch(() => {
         UIkit.notification({
           message: `Impossible de sauvegarder les échanges`,
@@ -32,7 +31,7 @@ const Timeline = ({ exchanges, bookingId }: ITimeline) => {
           pos: "top-center",
         });
       });
-  }, [timeline, bookingId, instance]);
+  }, [timeline, booking.id, instance]);
 
   const add = (element: ITimelineElement) => {
     setTimeline((timeline) => [element, ...timeline]);

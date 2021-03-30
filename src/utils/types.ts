@@ -88,6 +88,25 @@ export interface IBookingJoinCompany {
   company: ICompany;
 }
 
+export interface IBookingSummarize {
+  id: string;
+  notes: string;
+  exchanges: string;
+  needVolunteers: boolean;
+  isPresent: boolean;
+  isPlaced: boolean;
+  discount: number;
+  fees: number;
+  createdOn: Date;
+  billSentOn?: Date;
+  billPaidOn?: Date;
+  festival: string;
+  companyId: string;
+  tablesQuantities: ITableQuantities[];
+  gamesQuantities: IGameQuantities[];
+  company: IPartialCompany;
+}
+
 /**
  * COMPANIES
  */
@@ -196,9 +215,22 @@ export enum FilterState {
  * TABLE QUANTITIES
  */
 
-export interface ITableQuantitie {
+export interface ITableQuantitieDashboard {
   prices_id: string;
   prices_label: string;
   tables: number;
   floors: number;
 }
+
+export interface ITableQuantities {
+  tables: number;
+  floors: number;
+  priceId: string;
+  bookingId: string;
+  price: IPrice;
+}
+
+/**
+ * GAME QUANTITIES
+ */
+export interface IGameQuantities {}
