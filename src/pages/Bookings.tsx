@@ -124,6 +124,7 @@ const Bookings = () => {
           <hr />
           <div id="filter-bookings" hidden={!useFilter} className="-noselect">
             <BookingsFilter setFilters={setFilters} />
+            <hr />
           </div>
           <TableBookings bookings={filteredBookings(bookings)} />
         </div>

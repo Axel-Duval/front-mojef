@@ -7,19 +7,22 @@ const BookingsFilter: FC<{ setFilters: (filters: any) => void }> = ({
 }) => {
   return (
     <div className="uk-flex uk-flex-center uk-flex-middle">
-      <input
-        type="text"
-        placeholder="Aa"
-        className="uk-input uk-width-medium "
-        onChange={(e) =>
-          setFilters((filters: any) => {
-            return {
-              ...filters,
-              input: e.target.value,
-            };
-          })
-        }
-      />
+      <label className="uk-margin-remove-bottom uk-margin-large-right">
+        Contient
+        <input
+          type="text"
+          placeholder="Aa"
+          className="uk-input"
+          onChange={(e) =>
+            setFilters((filters: any) => {
+              return {
+                ...filters,
+                input: e.target.value,
+              };
+            })
+          }
+        />
+      </label>
       <label className="uk-margin-remove-bottom uk-margin-left">
         Etat paiement
         <select

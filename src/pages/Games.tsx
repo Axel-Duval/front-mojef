@@ -154,6 +154,7 @@ const Games = () => {
           <hr />
           <div id="toggle-filter-games" hidden={!useFilter}>
             <GamesFilter setFilters={setFilters} />
+            <hr />
           </div>
           {modalState && (
             <Modal
