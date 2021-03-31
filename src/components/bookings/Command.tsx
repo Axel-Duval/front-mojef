@@ -78,6 +78,30 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
     }
   };
 
+  const handleDelete = (quantity: ITableQuantities) => {
+    UIkit.modal
+      .confirm("Etes vous sûr de vouloir supprimer cette commande ?")
+      .then(() => {
+        instance
+          .delete(
+            `api/table-quantities/${quantity.bookingId}/${quantity.priceId}`
+          )
+          .then(() => {
+            setTablesQuantities(
+              tablesQuantities.filter((tq) => tq.priceId !== quantity.priceId)
+            );
+          })
+          .catch(() => {
+            UIkit.notification({
+              message: `Impossible de supprimer la commande`,
+              status: "danger",
+              pos: "top-center",
+            });
+          });
+      })
+      .catch(() => {});
+  };
+
   const toggleCheckbox = (item: any) => {
     //Toggle checkboxes
     const tmp = checkboxes;
@@ -173,7 +197,13 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
                           setShowCommandModal(true);
                         }}
                       />
-                      <span className="uk-icon-link" uk-icon="trash" />
+                      <span
+                        className="uk-icon-link"
+                        uk-icon="trash"
+                        onClick={() => {
+                          handleDelete(quantity);
+                        }}
+                      />
                     </div>
                   </li>
                 );

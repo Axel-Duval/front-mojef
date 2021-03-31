@@ -313,12 +313,11 @@ const Areas = () => {
                       e.stopPropagation();
                       selectArea(area);
                     }}
-                    style={{
-                      border:
-                        activeArea && activeArea.id === area.id
-                          ? "solid 5px black"
-                          : undefined,
-                    }}
+                    className={
+                      activeArea && activeArea.id === area.id
+                        ? "active-area"
+                        : ""
+                    }
                   >
                     <td>
                       {area.label === editedArea.label ? (
@@ -393,7 +392,7 @@ const Areas = () => {
               <Loading />
             ) : (
               <>
-                <h2>{activeArea.label}</h2>
+                <h2 className="uk-margin-medium-top">{activeArea.label}</h2>
                 <GamesTable games={areaGames} />
               </>
             )}

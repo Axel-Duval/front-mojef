@@ -102,3 +102,8 @@
   color: #666;
   border-color: #1e87f0;
 }
+
+.active-area {
+  box-shadow: 4px 10px 20px 4px rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
+}

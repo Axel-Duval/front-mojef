@@ -1,7 +1,7 @@
 /**
 * ALL
 */
-tbody tr:nth-child(2n + 1) {
+tbody tr {
   background-color: white;
 }
 tbody tr:hover {

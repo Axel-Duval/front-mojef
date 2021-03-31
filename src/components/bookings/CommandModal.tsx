@@ -25,11 +25,11 @@ const CommandModal = ({
   const [form, formErrors] = useForm({
     tables: {
       default: tableQuantitie?.tables || 0,
-      validators: [required()],
+      validators: [],
     },
     floors: {
       default: tableQuantitie?.floors || 0,
-      validators: [required()],
+      validators: [],
     },
     price: {
       default: tableQuantitie?.priceId || "",
@@ -41,21 +41,39 @@ const CommandModal = ({
     floors: number;
     price: string;
   }) {
-    instance
-      .post(`api/table-quantities`, {
-        tablesCount: quantity.tables,
-        floorsCount: quantity.floors,
-        price: quantity.price,
-        booking: bookingId,
-      })
-      .then((res) => onSuccess(res.data, !!tableQuantitie))
-      .catch(() =>
-        UIkit.notification({
-          message: `Impossible de créer la commande`,
-          status: "danger",
-          pos: "top-center",
+    if (tableQuantitie) {
+      //Edit
+      instance
+        .patch(`api/table-quantities/${bookingId}/${quantity.price}`, {
+          tablesCount: quantity.tables,
+          floorsCount: quantity.floors,
         })
-      );
+        .then((res) => onSuccess(res.data, !!tableQuantitie))
+        .catch(() =>
+          UIkit.notification({
+            message: `Impossible de créer la commande`,
+            status: "danger",
+            pos: "top-center",
+          })
+        );
+    } else {
+      //Add
+      instance
+        .post(`api/table-quantities`, {
+          tablesCount: quantity.tables,
+          floorsCount: quantity.floors,
+          price: quantity.price,
+          booking: bookingId,
+        })
+        .then((res) => onSuccess(res.data, !!tableQuantitie))
+        .catch(() =>
+          UIkit.notification({
+            message: `Impossible de créer la commande`,
+            status: "danger",
+            pos: "top-center",
+          })
+        );
+    }
   }
   return (
     <Modal
