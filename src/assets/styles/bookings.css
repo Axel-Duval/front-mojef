@@ -121,6 +121,23 @@
 }
 
 /** 
+*   BOOKING GAMES
+*/
+.-booking-games-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
+
+.-booking-games {
+  position: relative;
+  height: 100%;
+}
+
+/** 
 *   BOOKING CONTACTS
 */
 .-booking-contact-container {

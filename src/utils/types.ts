@@ -233,4 +233,15 @@ export interface ITableQuantities {
 /**
  * GAME QUANTITIES
  */
-export interface IGameQuantities {}
+export interface IGameQuantities {
+  exhibited: number;
+  donation: number;
+  raffle: number;
+  needsReturn: boolean;
+  receivedOn: Date;
+  returnedOn: Date;
+  tablesCount: number;
+  bookingId: string;
+  gameId: string;
+  areaId: string;
+}

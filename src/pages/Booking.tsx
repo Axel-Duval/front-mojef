@@ -89,6 +89,9 @@ const Booking = () => {
             <li>
               <a href="#informations">Informations</a>
             </li>
+            <li>
+              <a href="#informations">Jeux</a>
+            </li>
             {user && user.jwtPayload?.isAdmin && (
               <li>
                 <a href="#comptabilite">Comptabilité</a>
@@ -112,15 +115,10 @@ const Booking = () => {
               </div>
             </li>
             <li className="-fullheight">
-              <div className="uk-flex -fullheight -booking-responsive">
-                <div className="-flex-1">
-                  <BookingCommand booking={booking} />
-                </div>
-                <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
-                <div className="-flex-1">
-                  <BookingGames booking={booking} />
-                </div>
-              </div>
+              <BookingCommand booking={booking} />
+            </li>
+            <li className="-fullheight">
+              <BookingGames booking={booking} />
             </li>
             {user && user.jwtPayload?.isAdmin && (
               <li className="-fullheight">
