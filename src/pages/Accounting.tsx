@@ -15,62 +15,91 @@ const Accounting = () => {
     <div className="uk-flex uk-flex-column -fullheight">
       <div className="uk-flex uk-flex-between uk-flex-middle">
         <h1 className="uk-heading-bullet">Comptabilité</h1>
+        <div>
+          <span
+            className="uk-icon-link -pointer"
+            uk-icon="cloud-upload"
+            uk-tooltip="auto-sync"
+          />
+        </div>
       </div>
+      <hr />
       {loading || errored ? (
         <Loading />
       ) : (
-        <div>
-          <h5>Avancement des factures</h5>
-          Montant reçu / montant demandé : {data.totalPaidBillsEuro}€ / {data.totalSentBillsEuro}€ 
-          <progress
-            className="uk-progress"
-            value={data.totalPaidBillsEuro}
-            max={data.totalSentBillsEuro}
-          />
-          <hr />
-          Quantité envoyé / quantité totale: {data.totalSentBills} / {data.totalBills} factures
-          <progress
-            className="uk-progress"
-            value={data.totalSentBills}
-            max={data.totalBills}
-          />
-          <hr />
-          Quantité payé / quantité demandé: {data.totalPaidBills} / {data.totalSentBills} factures
-          <progress
-            className="uk-progress"
-            value={data.totalPaidBills}
-            max={data.totalSentBills}
-          />
-          <div className="uk-flex uk-flex-wrap">
-            <Tile
-              title={`de recette effectué${data.recipes >= 2 ? "s" : ""}`}
-              body={`${data.recipes}€`}
-              color="primary"
-            />
-            <Tile
-              title={`de réduction accordé${data.discounts >= 2 ? "s" : ""}`}
-              body={`${data.discounts}€`}
-              color="default"
-            />
-            <Tile
-              title={`de frais supplémentaires facturé${
-                data.fees >= 2 ? "s" : ""
-              }`}
-              body={`${data.fees}€`}
-              color="default"
-            />
-            <Tile
-              title={`jeu${data.donations >= 2 ? "x" : ""} offert${
-                data.donations >= 2 ? "s" : ""
-              }`}
-              body={data.donations}
-              color={data.donations > 0 ? "primary" : "secondary"}
-            />
-            <Tile
-              title={`jeu${data.raffle >= 2 ? "x" : ""} pour la tombola`}
-              body={data.raffle}
-              color={data.raffle > 0 ? "primary" : "secondary"}
-            />
+        <div className="-fullheight -dashboard-prices-wrapper">
+          <div className="uk-margin-top uk-flex uk-flex-column uk-flex-middle">
+            <div className="uk-flex uk-flex-wrap uk-margin-top">
+              <Tile title="Recette" body={`${data.recipes}€`} color="primary" />
+              <Tile
+                title="Réductions"
+                body={`${data.discounts}€`}
+                color="default"
+              />
+              <Tile
+                title="Frais supplémentaires"
+                body={`${data.fees}€`}
+                color="default"
+              />
+              <Tile
+                title="Jeux offerts"
+                body={data.donations}
+                color={data.donations > 0 ? "primary" : "secondary"}
+              />
+              <Tile
+                title="Jeux tombola"
+                body={data.raffle}
+                color={data.raffle > 0 ? "primary" : "secondary"}
+              />
+            </div>
+
+            <div className="uk-flex uk-flex-wrap uk-margin-medium-top">
+              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect">
+                <h2 className="uk-text-center">{data.totalPaidBillsEuro}€</h2>
+                <p className="uk-text-center uk-text-meta uk-text-light">
+                  Montant reçu / Montant facturé
+                </p>
+                <progress
+                  className="uk-progress uk-width-medium uk-margin-remove"
+                  value={data.totalPaidBillsEuro}
+                  max={data.totalSentBillsEuro}
+                />
+                <div className="uk-flex uk-flex-between uk-flex-middle">
+                  <span>0€</span>
+                  <span>{data.totalSentBillsEuro}€</span>
+                </div>
+              </div>
+              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect">
+                <h2 className="uk-text-center">{data.totalSentBills}</h2>
+                <p className="uk-text-center uk-text-meta uk-text-light">
+                  Factures envoyées / Toutes les factures
+                </p>
+                <progress
+                  className="uk-progress uk-width-medium uk-margin-remove"
+                  value={data.totalSentBills}
+                  max={data.totalBills}
+                />
+                <div className="uk-flex uk-flex-between uk-flex-middle">
+                  <span>0</span>
+                  <span>{data.totalBills}</span>
+                </div>
+              </div>
+              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect">
+                <h2 className="uk-text-center">{data.totalPaidBills}</h2>
+                <p className="uk-text-center uk-text-meta uk-text-light">
+                  Factures payées / Factures envoyées
+                </p>
+                <progress
+                  className="uk-progress uk-width-medium uk-margin-remove"
+                  value={data.totalPaidBills}
+                  max={data.totalSentBills}
+                />
+                <div className="uk-flex uk-flex-between uk-flex-middle">
+                  <span>0</span>
+                  <span>{data.totalSentBills}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

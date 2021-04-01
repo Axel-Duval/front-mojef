@@ -14,7 +14,7 @@ const Navbar = () => {
   const user = useContext(UserContext);
 
   return (
-    <div className="uk-container -nav-scroll-container">
+    <div className="uk-container -nav-scroll-container -noselect">
       <img
         src={logo}
         alt="Montpellier Jeu Festival Logo"
