@@ -107,3 +107,25 @@
   box-shadow: 4px 10px 20px 4px rgba(0, 0, 0, 0.2);
   transform: scale(1.03);
 }
+
+.-table-input > input {
+  text-align: right;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+}
+
+.-table-input {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}

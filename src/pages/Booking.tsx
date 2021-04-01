@@ -124,7 +124,7 @@ const Booking = () => {
               <li className="-fullheight">
                 <div className="uk-flex -fullheight -booking-responsive">
                   <div className="-flex-1">
-                    <BookingCompta booking={booking} />
+                    <BookingCompta bookingId={booking.id} />
                   </div>
                   <hr className="uk-divider-vertical -fullheight uk-margin-medium-left uk-margin-medium-right" />
                   <div className="-flex-1">
