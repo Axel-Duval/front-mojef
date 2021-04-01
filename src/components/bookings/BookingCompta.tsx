@@ -1,14 +1,10 @@
-import React, { useState } from "react";
-import { IBooking } from "../../utils/types";
+import React from "react";
+import { IBookingSummarize } from "../../utils/types";
 import Heading from "../Heading";
-import Loading from "../Loading";
 interface IBookingCompta {
-  booking: IBooking;
+  booking: IBookingSummarize;
 }
 const BookingCompta = ({ booking }: IBookingCompta) => {
-  const [loading, setLoading] = useState(false);
-  //TODO: fetch prices, table-quantities from API
-
   return (
     <>
       <Heading title="Facture" subtitle="Les prix spécifiés sont TTC">
@@ -18,9 +14,7 @@ const BookingCompta = ({ booking }: IBookingCompta) => {
           uk-tooltip="auto-sync"
         />
       </Heading>
-      {loading ? (
-        <Loading />
-      ) : (
+      {booking.tablesQuantities && booking.tablesQuantities.length > 0 ? (
         <table className="uk-table uk-table-divider uk-table-middle uk-table-small -noselect">
           <thead>
             <tr>
@@ -33,54 +27,59 @@ const BookingCompta = ({ booking }: IBookingCompta) => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th>
-                <label className="uk-label uk-margin-remove-bottom">
-                  Tarif 1
-                </label>
-              </th>
-              <td>15€</td>
-              <td>5€</td>
-              <td>10</td>
-              <td>20</td>
-              <td>250€</td>
-            </tr>
-            <tr>
-              <th>
-                <label className="uk-label uk-margin-remove-bottom">
-                  Tarif 2
-                </label>
-              </th>
-              <td>15€</td>
-              <td>5€</td>
-              <td>10</td>
-              <td>20</td>
-              <td>250€</td>
-            </tr>
-            <tr>
-              <th>
-                <label className="uk-label uk-margin-remove-bottom">
-                  Tarif 3
-                </label>
-              </th>
-              <td>15€</td>
-              <td>5€</td>
-              <td>10</td>
-              <td>20</td>
-              <td>250€</td>
-            </tr>
+            {booking.tablesQuantities.map((quantity, index) => {
+              return (
+                <tr key={index}>
+                  <th>
+                    <label className="uk-label uk-margin-remove-bottom">
+                      {quantity.price.label}
+                    </label>
+                  </th>
+                  <td>{quantity.price.tablePrice}€</td>
+                  <td>{quantity.price.floorPrice}€</td>
+                  <td>{quantity.tables}</td>
+                  <td>{quantity.floors}</td>
+                  <td>
+                    {quantity.price.tablePrice * quantity.tables +
+                      quantity.price.floorPrice * quantity.floors}
+                    €
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
           <tfoot>
             <tr className="uk-text-bold">
               <th>TOTAL</th>
               <td></td>
               <td></td>
-              <td>30</td>
-              <td>60</td>
-              <td>250€</td>
+              <td>
+                {booking.tablesQuantities
+                  .map((quantity) => quantity.tables)
+                  .reduce((prev, curr) => prev + curr, 0)}
+              </td>
+              <td>
+                {booking.tablesQuantities
+                  .map((quantity) => quantity.floors)
+                  .reduce((prev, curr) => prev + curr, 0)}
+              </td>
+              <td>
+                {booking.tablesQuantities
+                  .map(
+                    (quantity) =>
+                      quantity.tables * quantity.price.tablePrice +
+                      quantity.floors * quantity.price.floorPrice
+                  )
+                  .reduce((prev, curr) => prev + curr, 0)}
+                €
+              </td>
             </tr>
           </tfoot>
         </table>
+      ) : (
+        <div className="uk-placeholder uk-text-center">
+          Pas de commandes de tables ni de m²
+        </div>
       )}
     </>
   );
