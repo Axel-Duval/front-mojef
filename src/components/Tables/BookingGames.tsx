@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useAxios } from "../../hooks/useAxios";
+import React from "react";
 import { useGet } from "../../hooks/useGet";
-import { IGame, IGameQuantities } from "../../utils/types";
+import { IArea, IGame, IGameQuantities } from "../../utils/types";
 
 interface IBookingGamesTable {
   gameQuantities: IGameQuantities[];
@@ -15,6 +14,19 @@ function GameNameCell(props: { id: string }) {
   return (
     <td className="uk-text-bold">{gameData ? gameData.name : "Loading ..."}</td>
   );
+}
+
+function GameAreaCell(props: { id: string }) {
+  const [areaData, ,] = useGet<IArea>(`/api/area/${props.id}`);
+  if (areaData) {
+    return (
+      <td>
+        <label className="uk-label uk-label-success">{areaData.label}</label>
+      </td>
+    );
+  } else {
+    return <td></td>;
+  }
 }
 
 const BookingGames = ({
@@ -32,10 +44,10 @@ const BookingGames = ({
             <th>Exposés</th>
             <th>Dons</th>
             <th>Tombola</th>
-            <th>Retour?</th>
+            <th>Besoin retour</th>
             <th>Reçu</th>
             <th>Renvoyé</th>
-            <th>Place</th>
+            <th>Tables</th>
             <th>Zone</th>
             <th>Actions</th>
           </tr>
@@ -48,11 +60,37 @@ const BookingGames = ({
                 <td>{game.exhibited}</td>
                 <td>{game.donation}</td>
                 <td>{game.raffle}</td>
-                <td>{game.needsReturn}</td>
-                <td>{game.receivedOn}</td>
-                <td>{game.returnedOn}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    className="uk-input uk-checkbox"
+                    checked={game.needsReturn}
+                  />
+                </td>
+                <td>
+                  {game.receivedOn && (
+                    <label className="uk-label">
+                      {new Date(game.receivedOn).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                      })}
+                    </label>
+                  )}
+                </td>
+                <td>
+                  {game.returnedOn && (
+                    <label className="uk-label uk-label-warning">
+                      {new Date(game.returnedOn).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                      })}
+                    </label>
+                  )}
+                </td>
                 <td>{game.tablesCount}</td>
-                <td>{game.areaId}</td>
+                <GameAreaCell id={game.areaId} />
                 <td>
                   {onEdit && (
                     <span

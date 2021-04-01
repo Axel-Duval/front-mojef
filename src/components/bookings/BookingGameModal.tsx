@@ -31,6 +31,14 @@ const BookingGameModal = ({
     `/api/festival/${festivalId}`
   );
 
+  function getDate(data: any) {
+    if (data) {
+      return data.toString().slice(0, 10);
+    } else {
+      return null;
+    }
+  }
+
   const [form, formErrors] = useForm({
     game: { default: gameQuantity?.gameId || null, validators: [required()] },
     exhibited: {
@@ -39,8 +47,14 @@ const BookingGameModal = ({
     },
     donation: { default: gameQuantity?.donation || 0, validators: [] },
     raffle: { default: gameQuantity?.raffle || 0, validators: [] },
-    returnedOn: { default: gameQuantity?.returnedOn || null, validators: [] },
-    receivedOn: { default: gameQuantity?.receivedOn || null, validators: [] },
+    returnedOn: {
+      default: getDate(gameQuantity?.returnedOn),
+      validators: [],
+    },
+    receivedOn: {
+      default: getDate(gameQuantity?.receivedOn),
+      validators: [],
+    },
     needsReturn: {
       default: gameQuantity?.needsReturn || true,
       validators: [],
@@ -285,6 +299,7 @@ const BookingGameModal = ({
               <select
                 className="uk-select"
                 id="GameQuantityZone"
+                value={form.area.get()}
                 onChange={(e) => form.area.set(e.target.value)}
               >
                 <option value="">-</option>
