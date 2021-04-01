@@ -37,20 +37,16 @@ const Accounting = () => {
                 color="default"
               />
               <Tile
-                title="Frais supplémentaires"
+                title="Suppléments"
                 body={`${data.fees}€`}
                 color="default"
               />
               <Tile
                 title="Jeux offerts"
                 body={data.donations}
-                color={data.donations > 0 ? "primary" : "secondary"}
+                color="secondary"
               />
-              <Tile
-                title="Jeux tombola"
-                body={data.raffle}
-                color={data.raffle > 0 ? "primary" : "secondary"}
-              />
+              <Tile title="Jeux tombola" body={data.raffle} color="secondary" />
             </div>
 
             <div className="uk-flex uk-flex-wrap uk-margin-medium-top">
