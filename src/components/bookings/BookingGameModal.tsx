@@ -261,7 +261,7 @@ const BookingGameModal = ({
               htmlFor="GameQuantitiesTablesNeeded"
               className="uk-form-label"
             >
-              Tables nécéssaires
+              Tables nécessaires
             </label>
             <div className="uk-form-controls">
               <input
