@@ -16,7 +16,10 @@ const ContactModal = ({
   companyId,
 }: IContactModal) => {
   return (
-    <Modal onClose={onClose} title="Contact">
+    <Modal
+      onClose={onClose}
+      title={contact ? "Modifier contact" : "Créer contact"}
+    >
       <ContactForm
         onSuccess={handleSuccess}
         contact={contact}

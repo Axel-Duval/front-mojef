@@ -17,7 +17,10 @@ function GameNameCell(props: { id: string }) {
 }
 
 function GameAreaCell(props: { id: string }) {
-  const [areaData, ,] = useGet<IArea>(`/api/area/${props.id}`);
+  const [areaData, ,] = useGet<IArea>(
+    `/api/area/${props.id}`,
+    props.id != null
+  );
   if (areaData) {
     return (
       <td>
@@ -65,6 +68,7 @@ const BookingGames = ({
                     type="checkbox"
                     className="uk-input uk-checkbox"
                     checked={game.needsReturn}
+                    onChange={() => {}}
                   />
                 </td>
                 <td>

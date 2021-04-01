@@ -64,8 +64,12 @@ const GamesFilter: FC<{
             }
           >
             <option value={FilterState.NONE}>-</option>
-            {gameTypes!.map((gameType) => {
-              return <option value={gameType.type}>{gameType.type}</option>;
+            {gameTypes!.map((gameType, index) => {
+              return (
+                <option value={gameType.type} key={index}>
+                  {gameType.type}
+                </option>
+              );
             })}
           </select>
         </label>

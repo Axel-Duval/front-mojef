@@ -16,7 +16,7 @@ interface INewBookingModal {
 const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
   const instance = useAxios();
   const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
-  const [bookingsCompaniesId, setBookingsCompaniesId] = useState(new Array());
+  const [bookingsCompaniesId, setBookingsCompaniesId] = useState<string[]>([]);
   const [form, formErrors] = useForm({
     needVolunteers: { default: false, validators: [] },
     isPresent: { default: false, validators: [] },
@@ -93,12 +93,14 @@ const NewBookingModal = ({ onClose, handleSuccess }: INewBookingModal) => {
               <option value="">-</option>
               {companies &&
                 companies.map((company, index) => {
-                  if (!bookingsCompaniesId.includes(company.id)) {
+                  if (!bookingsCompaniesId.includes(company.id!)) {
                     return (
                       <option key={index} value={company.id}>
                         {company.name}
                       </option>
                     );
+                  } else {
+                    return null;
                   }
                 })}
             </select>

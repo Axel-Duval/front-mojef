@@ -13,7 +13,7 @@ interface IBookingContacts {
 
 const Contacts = ({ booking }: IBookingContacts) => {
   const [company] = useGet<ICompany>(`api/company/${booking.company.id}`);
-  const [contacts, setContacts] = useState<IContact[]>(new Array());
+  const [contacts, setContacts] = useState<IContact[]>([]);
   const [showContactModal, setShowContactModal] = useState(false);
   const [editContact, setEditContact] = useState<IContact | null>(null);
   const instance = useAxios();
@@ -77,10 +77,8 @@ const Contacts = ({ booking }: IBookingContacts) => {
   };
 
   const handleSuccess = (contact: IContact, isEdit: boolean) => {
-    setShowContactModal(false);
     if (isEdit) {
       //Edit mode
-      setEditContact(null);
       setContacts(
         contacts.map((c) => {
           if (c.id !== contact.id) {
@@ -94,6 +92,8 @@ const Contacts = ({ booking }: IBookingContacts) => {
       //Add mode
       setContacts([contact, ...contacts]);
     }
+    setEditContact(null);
+    setShowContactModal(false);
   };
 
   const handleEdit = (contact: IContact) => {

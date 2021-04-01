@@ -13,10 +13,10 @@ import { ICompany, IPartialCompany } from "../utils/types";
 const CompaniesPage = () => {
   const instance = useAxios();
   const currentFestivalId = useContext(FestivalContext).currentFestival?.id;
-  const [companies, setCompanies] = useState<IPartialCompany[]>(new Array());
+  const [companies, setCompanies] = useState<IPartialCompany[]>([]);
   const [modalState, setModalState] = useState<boolean>(false);
   const [data, loading] = useGet<IPartialCompany[]>("/api/company");
-  const [bookingsCompaniesId, setBookingsCompaniesId] = useState(new Array());
+  const [bookingsCompaniesId, setBookingsCompaniesId] = useState<string[]>([]);
   const [useFilter, setUseFilter] = useState(false);
   const [filters, setFilters] = useState<{
     input: string;
@@ -96,7 +96,7 @@ const CompaniesPage = () => {
         festival: currentFestivalId!,
       })
       .then(() => {
-        setBookingsCompaniesId([...bookingsCompaniesId, company.id]);
+        setBookingsCompaniesId([...bookingsCompaniesId, company.id!]);
       })
       .catch(() => {
         UIkit.notification({

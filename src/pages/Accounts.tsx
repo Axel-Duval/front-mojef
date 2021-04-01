@@ -9,7 +9,7 @@ import { IUser } from "../utils/types";
 
 const Accounts = () => {
   const instance = useAxios();
-  const [users, setUsers] = useState<IUser[]>(new Array());
+  const [users, setUsers] = useState<IUser[]>([]);
   const [editUser, setEditUser] = useState<IUser | null>(null);
   const [showUserModal, setShowUserModal] = useState(false);
 
