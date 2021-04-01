@@ -19,6 +19,9 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
   const handleEditModeChange = (): void => {
     if (editMode === true) {
       setEditMode(false);
+      if (inputAddress === "") {
+        return;
+      }
       const lastAddress = company.address;
       setCompany((company) => {
         return {
@@ -89,33 +92,41 @@ const Infos: FC<{ companyInfos: ICompany }> = ({ companyInfos }) => {
       <div className="uk-card uk-card-default uk-card-body uk-padding-small -timeline-card uk-margin-medium-bottom uk-margin-top">
         <div className="uk-flex uk-flex-middle">
           {!editMode ? (
-            <p className=" uk-margin-remove-vertical uk-width-expand">
-              {company.address}
-            </p>
+            <>
+              <p className=" uk-margin-remove-vertical">{company.address}</p>
+              <span
+                className="uk-icon-link uk-margin-small-left"
+                uk-icon="file-edit"
+                onClick={handleEditModeChange}
+              />
+            </>
           ) : (
-            <input
-              className="uk-input"
-              id="form-stacked-text"
-              type="text"
-              placeholder="entrer l'adresse'..."
-              value={inputAddress}
-              onChange={(e) => {
-                setInputAddress(e.currentTarget.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleEditModeChange();
-                }
-              }}
-            />
+            <>
+              <input
+                className="uk-input uk-width-xlarge uk-margin-remove"
+                id="form-stacked-text"
+                type="text"
+                placeholder="entrer l'adresse'..."
+                value={inputAddress}
+                onBlur={() => setEditMode(false)}
+                onChange={(e) => {
+                  setInputAddress(e.currentTarget.value);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleEditModeChange();
+                  } else if (e.key === "Escape") {
+                    setEditMode(false);
+                  }
+                }}
+              />
+              <span
+                className="uk-icon-link uk-margin-small-left"
+                uk-icon="check"
+                onClick={handleEditModeChange}
+              />
+            </>
           )}
-          <div className="uk-flex uk-flex-middle uk-width-auto -timeline-hover-expand">
-            <span
-              className="uk-icon-link uk-margin-small-left"
-              uk-icon="file-edit"
-              onClick={handleEditModeChange}
-            />
-          </div>
         </div>
       </div>
 
