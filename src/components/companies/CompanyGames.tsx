@@ -117,7 +117,7 @@ const CompanyGames: FC<{ companyGames: IGame[]; companyId: string }> = ({
         <span
           className="uk-icon-link -pointer uk-margin-small-right"
           uk-icon="info"
-          uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des contacts"
+          uk-tooltip="Vous pouvez ajouter, modifier ou supprimer des jeux"
         />
         <span
           className="uk-icon-link -pointer"
