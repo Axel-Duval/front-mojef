@@ -119,7 +119,9 @@ function App() {
   return (
     <FestivalContext.Provider value={festivalCtxValue}>
       {!loaded ? (
-        <Loading />
+        <div className="-fullheight -fullwidth">
+          <Loading />
+        </div>
       ) : festivalCtxValue.currentFestival ? (
         <div className="uk-flex" id="app-layout">
           <aside>
