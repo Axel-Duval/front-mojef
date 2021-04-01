@@ -23,7 +23,7 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
     booking.tablesQuantities
   );
   const festivalId = useContext(FestivalContext).currentFestival?.id;
-  const [festival, loading] = useGet<IFestival>(`api/festival/${festivalId}`);
+  const [festival] = useGet<IFestival>(`api/festival/${festivalId}`);
   const [showCommandModal, setShowCommandModal] = useState(false);
   const [
     editTableQuantitie,

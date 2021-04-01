@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import UIkit from "uikit";
 import { useAxios } from "../../hooks/useAxios";
-import {
-  IBooking,
-  IBookingSummarize,
-  ICompany,
-  IContact,
-} from "../../utils/types";
+import { IBookingSummarize, ICompany, IContact } from "../../utils/types";
 import Heading from "../Heading";
 import ContactsTable from "../Tables/Contacts";
 import ContactModal from "../Contact/ContactModal";
@@ -17,9 +12,7 @@ interface IBookingContacts {
 }
 
 const Contacts = ({ booking }: IBookingContacts) => {
-  const [company, loading] = useGet<ICompany>(
-    `api/company/${booking.company.id}`
-  );
+  const [company] = useGet<ICompany>(`api/company/${booking.company.id}`);
   const [contacts, setContacts] = useState<IContact[]>(new Array());
   const [showContactModal, setShowContactModal] = useState(false);
   const [editContact, setEditContact] = useState<IContact | null>(null);
@@ -45,7 +38,8 @@ const Contacts = ({ booking }: IBookingContacts) => {
               pos: "top-center",
             });
           });
-      }).catch(() => {});
+      })
+      .catch(() => {});
   };
 
   const handleToggle = (contact: IContact) => {

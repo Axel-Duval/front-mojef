@@ -10,9 +10,7 @@ const GameTypeInputForm: FC<{
   defaultValue: string;
   setType: (gameTypeId: string) => void;
 }> = ({ defaultValue, setType }) => {
-  const [gameTypes, isLoading, isErrored] = useGet<IRequestResult[]>(
-    "/api/game/types"
-  );
+  const [gameTypes, isLoading] = useGet<IRequestResult[]>("/api/game/types");
   const [userInput, setUserInput] = useState<string>(defaultValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
 

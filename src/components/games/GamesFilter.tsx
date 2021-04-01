@@ -10,9 +10,7 @@ interface IRequestResult {
 const GamesFilter: FC<{
   setFilters: (filters: any) => void;
 }> = ({ setFilters }) => {
-  const [gameTypes, isLoading, isErrored] = useGet<IRequestResult[]>(
-    "/api/game/types"
-  );
+  const [gameTypes, isLoading] = useGet<IRequestResult[]>("/api/game/types");
 
   return (
     <div className="uk-flex uk-flex-center uk-flex-middle">

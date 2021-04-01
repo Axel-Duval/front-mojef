@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { FestivalContext, FestivalContextValue } from "../../contexts/festival";
+import { FestivalContext } from "../../contexts/festival";
 import { UserContext } from "../../contexts/user";
-import { IFestival } from "../../utils/types";
 import Modal from "../Modal";
 
 interface IFestivalModal {

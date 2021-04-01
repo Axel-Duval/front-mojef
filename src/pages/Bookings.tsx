@@ -28,7 +28,7 @@ const Bookings = () => {
     placed: null,
     present: null,
   });
-  const [_bookings, isLoading, isErrored] = useGet<IBookingJoinCompany[]>(
+  const [_bookings, , isErrored] = useGet<IBookingJoinCompany[]>(
     "/api/booking/festival/" + festivals.currentFestival?.id
   );
 

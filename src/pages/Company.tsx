@@ -13,7 +13,7 @@ const CompanyPage = () => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const [company, setCompany] = useState<ICompany | null>(null);
-  const [data, isLoading, isErrored] = useGet<ICompany>(`/api/company/${id}`);
+  const [data] = useGet<ICompany>(`/api/company/${id}`);
   const [loading, setLoading] = useState<boolean>(true);
   const instance = useAxios();
 

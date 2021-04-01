@@ -40,7 +40,7 @@ const Account = () => {
         status: "success",
       });
     }
-  }, [data]);
+  }, [data]); //Do not depend on formData !
 
   useEffect(() => {
     if (errored) {

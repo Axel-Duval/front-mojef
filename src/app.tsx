@@ -19,7 +19,6 @@ import {
 import { useGet } from "./hooks/useGet";
 import Loading from "./components/Loading";
 import NoFestival from "./pages/NoFestival";
-import { usePost } from "./hooks/usePost";
 import { useAxios } from "./hooks/useAxios";
 import UIkit from "uikit";
 
@@ -79,9 +78,9 @@ function App() {
     },
   });
 
-  const [festivals, loading, errored] = useGet<
-    (FestivalData & { date: string })[]
-  >("/api/festival");
+  const [festivals] = useGet<(FestivalData & { date: string })[]>(
+    "/api/festival"
+  );
 
   useEffect(() => {
     if (festivals) {
