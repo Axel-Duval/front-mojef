@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Heading from "../Heading";
 import table from "../../assets/images/table.svg";
 import selection from "../../assets/images/selection.svg";
@@ -119,6 +119,24 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
       });
     });
   };
+
+  /**
+   * SET discound & fees = 0 if no command
+   */
+  useEffect(() => {
+    if (tablesQuantities && tablesQuantities.length == 0) {
+      instance
+        .patch(`/api/booking/${booking.id}`, { discount: 0, fees: 0 })
+        .catch(() => {
+          UIkit.notification({
+            message: `Impossible de retirer les suppléments et la réduction`,
+            status: "danger",
+            pos: "top-center",
+          });
+        });
+    }
+  }, [tablesQuantities, instance, booking]);
+
   return (
     <div className="uk-flex uk-flex-column -fullheight -noselect">
       {showCommandModal && (
