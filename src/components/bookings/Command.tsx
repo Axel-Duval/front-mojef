@@ -124,7 +124,7 @@ const Bookingcommand = ({ booking }: IBookingCommand) => {
    * SET discound & fees = 0 if no command
    */
   useEffect(() => {
-    if (tablesQuantities && tablesQuantities.length == 0) {
+    if (tablesQuantities && tablesQuantities.length === 0) {
       instance
         .patch(`/api/booking/${booking.id}`, { discount: 0, fees: 0 })
         .catch(() => {

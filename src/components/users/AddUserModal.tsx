@@ -119,6 +119,7 @@ const AddUserModal = ({ onClose, onSuccess, user }: IAddUserModal) => {
               type="checkbox"
               onChange={() => form.isAdmin.set(!form.isAdmin.get())}
               checked={form.isAdmin.get()}
+              disabled={user?.isAdmin}
             />{" "}
             Admin
           </label>

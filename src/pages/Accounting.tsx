@@ -50,7 +50,7 @@ const Accounting = () => {
             </div>
 
             <div className="uk-flex uk-flex-wrap uk-margin-medium-top">
-              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect">
+              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect uk-margin-top">
                 <h2 className="uk-text-center">{data.totalPaidBillsEuro}€</h2>
                 <p className="uk-text-center uk-text-meta uk-text-light">
                   Montant reçu / Montant facturé
@@ -65,7 +65,7 @@ const Accounting = () => {
                   <span>{data.totalSentBillsEuro}€</span>
                 </div>
               </div>
-              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect">
+              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect uk-margin-top">
                 <h2 className="uk-text-center">{data.totalSentBills}</h2>
                 <p className="uk-text-center uk-text-meta uk-text-light">
                   Factures envoyées / Toutes les factures
@@ -80,7 +80,7 @@ const Accounting = () => {
                   <span>{data.totalBills}</span>
                 </div>
               </div>
-              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect">
+              <div className="uk-card uk-card-default uk-card-body -timeline-card uk-margin-left uk-margin-right -noselect uk-margin-top">
                 <h2 className="uk-text-center">{data.totalPaidBills}</h2>
                 <p className="uk-text-center uk-text-meta uk-text-light">
                   Factures payées / Factures envoyées
